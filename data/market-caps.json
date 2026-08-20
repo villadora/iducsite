@@ -1,0 +1,830 @@
+{
+  "兆易创新": {
+    "code": "603986",
+    "symbol": "sh603986",
+    "price": 404.58,
+    "market_cap_cny": 2839.12,
+    "market_cap_raw": 2839.12,
+    "currency": "CNY",
+    "market_cap_display": "2,839.12 亿元"
+  },
+  "中芯国际": {
+    "code": "688981",
+    "symbol": "sh688981",
+    "price": 127.72,
+    "market_cap_cny": 10934.19,
+    "market_cap_raw": 10934.19,
+    "currency": "CNY",
+    "market_cap_display": "10,934.19 亿元"
+  },
+  "华虹半导体": {
+    "code": "688347",
+    "symbol": "sh688347",
+    "price": 234.94,
+    "market_cap_cny": 4082.61,
+    "market_cap_raw": 4082.61,
+    "currency": "CNY",
+    "market_cap_display": "4,082.61 亿元"
+  },
+  "长鑫科技": {
+    "code": "688825",
+    "symbol": "sh688825",
+    "price": 57.39,
+    "market_cap_cny": 38382.94,
+    "market_cap_raw": 38382.94,
+    "currency": "CNY",
+    "market_cap_display": "38,382.94 亿元"
+  },
+  "长电科技": {
+    "code": "600584",
+    "symbol": "sh600584",
+    "price": 78.42,
+    "market_cap_cny": 1403.26,
+    "market_cap_raw": 1403.26,
+    "currency": "CNY",
+    "market_cap_display": "1,403.26 亿元"
+  },
+  "华天科技": {
+    "code": "002185",
+    "symbol": "sz002185",
+    "price": 17.46,
+    "market_cap_cny": 580.27,
+    "market_cap_raw": 580.27,
+    "currency": "CNY",
+    "market_cap_display": "580.27 亿元"
+  },
+  "通富微电": {
+    "code": "002156",
+    "symbol": "sz002156",
+    "price": 63.59,
+    "market_cap_cny": 965.04,
+    "market_cap_raw": 965.04,
+    "currency": "CNY",
+    "market_cap_display": "965.04 亿元"
+  },
+  "Meta": {
+    "code": "META",
+    "symbol": "usMETA",
+    "price": 543.67,
+    "market_cap_cny": 100412.7,
+    "market_cap_raw": 13850.02709,
+    "currency": "USD",
+    "market_cap_display": "$13,850.0 亿美元 (约 100,412.7 亿元 RMB)"
+  },
+  "比亚迪": {
+    "code": "002594",
+    "symbol": "sz002594",
+    "price": 88.72,
+    "market_cap_cny": 8088.78,
+    "market_cap_raw": 8088.78,
+    "currency": "CNY",
+    "market_cap_display": "8,088.78 亿元"
+  },
+  "蔚来": {
+    "code": "NIO",
+    "symbol": "usNIO",
+    "price": 4.53,
+    "market_cap_cny": 822.92,
+    "market_cap_raw": 113.50672,
+    "currency": "USD",
+    "market_cap_display": "$113.5 亿美元 (约 822.9 亿元 RMB)"
+  },
+  "理想汽车": {
+    "code": "LI",
+    "symbol": "usLI",
+    "price": 12.12,
+    "market_cap_cny": 912.97,
+    "market_cap_raw": 125.9268,
+    "currency": "USD",
+    "market_cap_display": "$125.9 亿美元 (约 913.0 亿元 RMB)"
+  },
+  "阿里巴巴": {
+    "code": "BABA",
+    "symbol": "hk09988",
+    "price": 125.0,
+    "market_cap_cny": 22051.24,
+    "market_cap_raw": 23968.7361,
+    "currency": "HKD",
+    "market_cap_display": "23,968.7 亿港币 (约 22,051.2 亿元 RMB)"
+  },
+  "腾讯控股": {
+    "code": "00700",
+    "symbol": "hk00700",
+    "price": 447.6,
+    "market_cap_cny": 37485.93,
+    "market_cap_raw": 40745.5776,
+    "currency": "HKD",
+    "market_cap_display": "40,745.6 亿港币 (约 37,485.9 亿元 RMB)"
+  },
+  "联创光电": {
+    "code": "600363",
+    "symbol": "sh600363",
+    "price": 18.41,
+    "market_cap_cny": 83.01,
+    "market_cap_raw": 83.01,
+    "currency": "CNY",
+    "market_cap_display": "83.01 亿元"
+  },
+  "拓邦股份": {
+    "code": "002139",
+    "symbol": "sz002139",
+    "price": 9.79,
+    "market_cap_cny": 122.07,
+    "market_cap_raw": 122.07,
+    "currency": "CNY",
+    "market_cap_display": "122.07 亿元"
+  },
+  "和而泰": {
+    "code": "002402",
+    "symbol": "sz002402",
+    "price": 19.49,
+    "market_cap_cny": 179.97,
+    "market_cap_raw": 179.97,
+    "currency": "CNY",
+    "market_cap_display": "179.97 亿元"
+  },
+  "锐科激光": {
+    "code": "300747",
+    "symbol": "sz300747",
+    "price": 34.82,
+    "market_cap_cny": 195.55,
+    "market_cap_raw": 195.55,
+    "currency": "CNY",
+    "market_cap_display": "195.55 亿元"
+  },
+  "长光华芯": {
+    "code": "688048",
+    "symbol": "sh688048",
+    "price": 296.0,
+    "market_cap_cny": 521.79,
+    "market_cap_raw": 521.79,
+    "currency": "CNY",
+    "market_cap_display": "521.79 亿元"
+  },
+  "永鼎股份": {
+    "code": "600105",
+    "symbol": "sh600105",
+    "price": 37.96,
+    "market_cap_cny": 554.97,
+    "market_cap_raw": 554.97,
+    "currency": "CNY",
+    "market_cap_display": "554.97 亿元"
+  },
+  "宝钛股份": {
+    "code": "600456",
+    "symbol": "sh600456",
+    "price": 26.59,
+    "market_cap_cny": 127.04,
+    "market_cap_raw": 127.04,
+    "currency": "CNY",
+    "market_cap_display": "127.04 亿元"
+  },
+  "格力电器": {
+    "code": "000651",
+    "symbol": "sz000651",
+    "price": 41.36,
+    "market_cap_cny": 2316.74,
+    "market_cap_raw": 2316.74,
+    "currency": "CNY",
+    "market_cap_display": "2,316.74 亿元"
+  },
+  "美的集团": {
+    "code": "000333",
+    "symbol": "sz000333",
+    "price": 84.65,
+    "market_cap_cny": 6457.75,
+    "market_cap_raw": 6457.75,
+    "currency": "CNY",
+    "market_cap_display": "6,457.75 亿元"
+  },
+  "中核科技": {
+    "code": "000777",
+    "symbol": "sz000777",
+    "price": 16.68,
+    "market_cap_cny": 63.95,
+    "market_cap_raw": 63.95,
+    "currency": "CNY",
+    "market_cap_display": "63.95 亿元"
+  },
+  "宁德时代": {
+    "code": "300750",
+    "symbol": "sz300750",
+    "price": 389.67,
+    "market_cap_cny": 18028.69,
+    "market_cap_raw": 18028.69,
+    "currency": "CNY",
+    "market_cap_display": "18,028.69 亿元"
+  },
+  "宏发股份": {
+    "code": "600885",
+    "symbol": "sh600885",
+    "price": 35.14,
+    "market_cap_cny": 543.82,
+    "market_cap_raw": 543.82,
+    "currency": "CNY",
+    "market_cap_display": "543.82 亿元"
+  },
+  "京东方Ａ": {
+    "code": "000725",
+    "symbol": "sz000725",
+    "price": 6.06,
+    "market_cap_cny": 2244.89,
+    "market_cap_raw": 2244.89,
+    "currency": "CNY",
+    "market_cap_display": "2,244.89 亿元"
+  },
+  "TCL科技": {
+    "code": "000100",
+    "symbol": "sz000100",
+    "price": 5.05,
+    "market_cap_cny": 1050.44,
+    "market_cap_raw": 1050.44,
+    "currency": "CNY",
+    "market_cap_display": "1,050.44 亿元"
+  },
+  "深天马Ａ": {
+    "code": "000050",
+    "symbol": "sz000050",
+    "price": 6.43,
+    "market_cap_cny": 156.62,
+    "market_cap_raw": 156.62,
+    "currency": "CNY",
+    "market_cap_display": "156.62 亿元"
+  },
+  "*ST东智": {
+    "code": "002175",
+    "symbol": "sz000005",
+    "price": 0.83,
+    "market_cap_cny": 8.79,
+    "market_cap_raw": 8.79,
+    "currency": "CNY",
+    "market_cap_display": "8.79 亿元"
+  },
+  "*ST亚士": {
+    "code": "603378",
+    "symbol": "sh603378",
+    "price": 5.48,
+    "market_cap_cny": 23.49,
+    "market_cap_raw": 23.49,
+    "currency": "CNY",
+    "market_cap_display": "23.49 亿元"
+  },
+  "龙佰集团": {
+    "code": "002601",
+    "symbol": "sz002601",
+    "price": 15.31,
+    "market_cap_cny": 365.03,
+    "market_cap_raw": 365.03,
+    "currency": "CNY",
+    "market_cap_display": "365.03 亿元"
+  },
+  "苹果公司": {
+    "code": "AAPL",
+    "symbol": "usAAPL",
+    "price": 310.03,
+    "market_cap_cny": 328035.94,
+    "market_cap_raw": 45246.33625,
+    "currency": "USD",
+    "market_cap_display": "$45,246.3 亿美元 (约 328,035.9 亿元 RMB)"
+  },
+  "芯原股份": {
+    "code": "688521",
+    "symbol": "sh688521",
+    "price": 186.18,
+    "market_cap_cny": 979.15,
+    "market_cap_raw": 979.15,
+    "currency": "CNY",
+    "market_cap_display": "979.15 亿元"
+  },
+  "台积电": {
+    "code": "TSM",
+    "symbol": "usTSM",
+    "price": 413.41,
+    "market_cap_cny": 155450.17,
+    "market_cap_raw": 21441.40222,
+    "currency": "USD",
+    "market_cap_display": "$21,441.4 亿美元 (约 155,450.2 亿元 RMB)"
+  },
+  "芯源微": {
+    "code": "688037",
+    "symbol": "sh688037",
+    "price": 343.96,
+    "market_cap_cny": 694.0,
+    "market_cap_raw": 694.0,
+    "currency": "CNY",
+    "market_cap_display": "694.00 亿元"
+  },
+  "瓦轴": {
+    "code": "200706",
+    "symbol": "sz200706",
+    "price": 2.8,
+    "market_cap_cny": 11.27,
+    "market_cap_raw": 11.27,
+    "currency": "CNY",
+    "market_cap_display": "11.27 亿元"
+  },
+  "绿的谐波": {
+    "code": "688017",
+    "symbol": "sh688017",
+    "price": 319.89,
+    "market_cap_cny": 586.45,
+    "market_cap_raw": 586.45,
+    "currency": "CNY",
+    "market_cap_display": "586.45 亿元"
+  },
+  "上海电力": {
+    "code": "600021",
+    "symbol": "sh600021",
+    "price": 13.65,
+    "market_cap_cny": 385.19,
+    "market_cap_raw": 385.19,
+    "currency": "CNY",
+    "market_cap_display": "385.19 亿元"
+  },
+  "士兰微": {
+    "code": "600460",
+    "symbol": "sh600460",
+    "price": 34.77,
+    "market_cap_cny": 578.6,
+    "market_cap_raw": 578.6,
+    "currency": "CNY",
+    "market_cap_display": "578.60 亿元"
+  },
+  "华润微": {
+    "code": "688396",
+    "symbol": "sh688396",
+    "price": 61.83,
+    "market_cap_cny": 821.23,
+    "market_cap_raw": 821.23,
+    "currency": "CNY",
+    "market_cap_display": "821.23 亿元"
+  },
+  "燕东微": {
+    "code": "688172",
+    "symbol": "sh688172",
+    "price": 53.81,
+    "market_cap_cny": 768.2,
+    "market_cap_raw": 768.2,
+    "currency": "CNY",
+    "market_cap_display": "768.20 亿元"
+  },
+  "三安光电": {
+    "code": "600703",
+    "symbol": "sh600703",
+    "price": 13.6,
+    "market_cap_cny": 678.51,
+    "market_cap_raw": 678.51,
+    "currency": "CNY",
+    "market_cap_display": "678.51 亿元"
+  },
+  "英诺赛科": {
+    "code": "02577",
+    "symbol": "hk02577",
+    "price": 43.28,
+    "market_cap_cny": 364.37,
+    "market_cap_raw": 396.0556,
+    "currency": "HKD",
+    "market_cap_display": "396.1 亿港币 (约 364.4 亿元 RMB)"
+  },
+  "盛新锂能": {
+    "code": "002240",
+    "symbol": "sz002240",
+    "price": 31.94,
+    "market_cap_cny": 292.34,
+    "market_cap_raw": 292.34,
+    "currency": "CNY",
+    "market_cap_display": "292.34 亿元"
+  },
+  "小米集团": {
+    "code": "01810",
+    "symbol": "hk01810",
+    "price": 27.66,
+    "market_cap_cny": 6554.83,
+    "market_cap_raw": 7124.8155,
+    "currency": "HKD",
+    "market_cap_display": "7,124.8 亿港币 (约 6,554.8 亿元 RMB)"
+  },
+  "三星电气": {
+    "code": "601567",
+    "symbol": "sh601567",
+    "price": 15.11,
+    "market_cap_cny": 212.33,
+    "market_cap_raw": 212.33,
+    "currency": "CNY",
+    "market_cap_display": "212.33 亿元"
+  },
+  "美鼎生物": {
+    "code": "VIVO",
+    "symbol": "usVIVO",
+    "price": 4.4,
+    "market_cap_cny": 9.8,
+    "market_cap_raw": 1.35186,
+    "currency": "USD",
+    "market_cap_display": "$1.4 亿美元 (约 9.8 亿元 RMB)"
+  },
+  "南网科技": {
+    "code": "688248",
+    "symbol": "sh688248",
+    "price": 42.7,
+    "market_cap_cny": 241.13,
+    "market_cap_raw": 241.13,
+    "currency": "CNY",
+    "market_cap_display": "241.13 亿元"
+  },
+  "特斯拉": {
+    "code": "TSLA",
+    "symbol": "usTSLA",
+    "price": 336.87,
+    "market_cap_cny": 96460.09,
+    "market_cap_raw": 13304.84031,
+    "currency": "USD",
+    "market_cap_display": "$13,304.8 亿美元 (约 96,460.1 亿元 RMB)"
+  },
+  "梅赛德斯奔驰(adr)": {
+    "code": "MBGYY",
+    "symbol": "usMBGYY",
+    "price": 13.04,
+    "market_cap_cny": 3589.62,
+    "market_cap_raw": 495.11958,
+    "currency": "USD",
+    "market_cap_display": "$495.1 亿美元 (约 3,589.6 亿元 RMB)"
+  },
+  "丰田汽车公司": {
+    "code": "TM",
+    "symbol": "usTM",
+    "price": 188.25,
+    "market_cap_cny": 16161.88,
+    "market_cap_raw": 2229.22519,
+    "currency": "USD",
+    "market_cap_display": "$2,229.2 亿美元 (约 16,161.9 亿元 RMB)"
+  },
+  "*ST三六五": {
+    "code": "300295",
+    "symbol": "sz300295",
+    "price": 11.53,
+    "market_cap_cny": 21.86,
+    "market_cap_raw": 21.86,
+    "currency": "CNY",
+    "market_cap_display": "21.86 亿元"
+  },
+  "*ST中迪": {
+    "code": "000609",
+    "symbol": "sz000609",
+    "price": 10.52,
+    "market_cap_cny": 31.48,
+    "market_cap_raw": 31.48,
+    "currency": "CNY",
+    "market_cap_display": "31.48 亿元"
+  },
+  "阿斯麦公司": {
+    "code": "ASML",
+    "symbol": "usASML",
+    "price": 1802.98,
+    "market_cap_cny": 50208.03,
+    "market_cap_raw": 6925.24618,
+    "currency": "USD",
+    "market_cap_display": "$6,925.2 亿美元 (约 50,208.0 亿元 RMB)"
+  },
+  "应用材料公司": {
+    "code": "AMAT",
+    "symbol": "usAMAT",
+    "price": 514.33,
+    "market_cap_cny": 29605.89,
+    "market_cap_raw": 4083.57154,
+    "currency": "USD",
+    "market_cap_display": "$4,083.6 亿美元 (约 29,605.9 亿元 RMB)"
+  },
+  "*ST三房": {
+    "code": "600370",
+    "symbol": "sh600370",
+    "price": 1.44,
+    "market_cap_cny": 57.93,
+    "market_cap_raw": 57.93,
+    "currency": "CNY",
+    "market_cap_display": "57.93 亿元"
+  },
+  "可口可乐凡萨瓶装": {
+    "code": "KOF",
+    "symbol": "usKOF",
+    "price": 109.59,
+    "market_cap_cny": 1669.17,
+    "market_cap_raw": 230.23021,
+    "currency": "USD",
+    "market_cap_display": "$230.2 亿美元 (约 1,669.2 亿元 RMB)"
+  },
+  "百事可乐": {
+    "code": "PEP",
+    "symbol": "usPEP",
+    "price": 140.13,
+    "market_cap_cny": 13866.51,
+    "market_cap_raw": 1912.62254,
+    "currency": "USD",
+    "market_cap_display": "$1,912.6 亿美元 (约 13,866.5 亿元 RMB)"
+  },
+  "康师傅控股": {
+    "code": "00322",
+    "symbol": "hk00322",
+    "price": 13.86,
+    "market_cap_cny": 718.83,
+    "market_cap_raw": 781.3417,
+    "currency": "HKD",
+    "market_cap_display": "781.3 亿港币 (约 718.8 亿元 RMB)"
+  },
+  "农夫山泉": {
+    "code": "09633",
+    "symbol": "hk09633",
+    "price": 42.34,
+    "market_cap_cny": 4380.81,
+    "market_cap_raw": 4761.7539,
+    "currency": "HKD",
+    "market_cap_display": "4,761.8 亿港币 (约 4,380.8 亿元 RMB)"
+  },
+  "久泰邦达能源": {
+    "code": "02798",
+    "symbol": "hk02798",
+    "price": 0.78,
+    "market_cap_cny": 11.48,
+    "market_cap_raw": 12.48,
+    "currency": "HKD",
+    "market_cap_display": "12.5 亿港币 (约 11.5 亿元 RMB)"
+  },
+  "金龙鱼": {
+    "code": "300999",
+    "symbol": "sz300999",
+    "price": 25.41,
+    "market_cap_cny": 1377.63,
+    "market_cap_raw": 1377.63,
+    "currency": "CNY",
+    "market_cap_display": "1,377.63 亿元"
+  },
+  "紫江企业": {
+    "code": "600210",
+    "symbol": "sh600210",
+    "price": 5.95,
+    "market_cap_cny": 90.25,
+    "market_cap_raw": 90.25,
+    "currency": "CNY",
+    "market_cap_display": "90.25 亿元"
+  },
+  "五 粮 液": {
+    "code": "000858",
+    "symbol": "sz000858",
+    "price": 71.9,
+    "market_cap_cny": 2790.88,
+    "market_cap_raw": 2790.88,
+    "currency": "CNY",
+    "market_cap_display": "2,790.88 亿元"
+  },
+  "*ST亿晶": {
+    "code": "600537",
+    "symbol": "sh600537",
+    "price": 2.08,
+    "market_cap_cny": 24.62,
+    "market_cap_raw": 24.62,
+    "currency": "CNY",
+    "market_cap_display": "24.62 亿元"
+  },
+  "中润光学": {
+    "code": "688307",
+    "symbol": "sh688307",
+    "price": 47.73,
+    "market_cap_cny": 59.32,
+    "market_cap_raw": 59.32,
+    "currency": "CNY",
+    "market_cap_display": "59.32 亿元"
+  },
+  "华电国际": {
+    "code": "600027",
+    "symbol": "sh600027",
+    "price": 4.5,
+    "market_cap_cny": 522.53,
+    "market_cap_raw": 522.53,
+    "currency": "CNY",
+    "market_cap_display": "522.53 亿元"
+  },
+  "华能国际电力股份有限公司": {
+    "code": "HNP",
+    "symbol": "usHNP",
+    "price": 21.51,
+    "market_cap_cny": 612.02,
+    "market_cap_raw": 84.4165,
+    "currency": "USD",
+    "market_cap_display": "$84.4 亿美元 (约 612.0 亿元 RMB)"
+  },
+  "国电南瑞": {
+    "code": "600406",
+    "symbol": "sh600406",
+    "price": 23.42,
+    "market_cap_cny": 1881.04,
+    "market_cap_raw": 1881.04,
+    "currency": "CNY",
+    "market_cap_display": "1,881.04 亿元"
+  },
+  "中国电建": {
+    "code": "601669",
+    "symbol": "sh601669",
+    "price": 4.63,
+    "market_cap_cny": 797.57,
+    "market_cap_raw": 797.57,
+    "currency": "CNY",
+    "market_cap_display": "797.57 亿元"
+  },
+  "ARM Holdings PLC": {
+    "code": "ARM",
+    "symbol": "usARM",
+    "price": 253.32,
+    "market_cap_cny": 19614.54,
+    "market_cap_raw": 2705.45397,
+    "currency": "USD",
+    "market_cap_display": "$2,705.5 亿美元 (约 19,614.5 亿元 RMB)"
+  },
+  "英特尔": {
+    "code": "INTC",
+    "symbol": "usINTC",
+    "price": 96.69,
+    "market_cap_cny": 37053.81,
+    "market_cap_raw": 5110.87087,
+    "currency": "USD",
+    "market_cap_display": "$5,110.9 亿美元 (约 37,053.8 亿元 RMB)"
+  },
+  "博通": {
+    "code": "AVGO",
+    "symbol": "usAVGO",
+    "price": 380.0,
+    "market_cap_cny": 131071.33,
+    "market_cap_raw": 18078.80475,
+    "currency": "USD",
+    "market_cap_display": "$18,078.8 亿美元 (约 131,071.3 亿元 RMB)"
+  },
+  "晶晨股份": {
+    "code": "688099",
+    "symbol": "sh688099",
+    "price": 93.9,
+    "market_cap_cny": 397.5,
+    "market_cap_raw": 397.5,
+    "currency": "CNY",
+    "market_cap_display": "397.50 亿元"
+  },
+  "瑞芯微": {
+    "code": "603893",
+    "symbol": "sh603893",
+    "price": 183.2,
+    "market_cap_cny": 775.2,
+    "market_cap_raw": 775.2,
+    "currency": "CNY",
+    "market_cap_display": "775.20 亿元"
+  },
+  "谷歌": {
+    "code": "GOOGL",
+    "symbol": "usGOOGL",
+    "price": 344.2,
+    "market_cap_cny": 305191.91,
+    "market_cap_raw": 42095.43569,
+    "currency": "USD",
+    "market_cap_display": "$42,095.4 亿美元 (约 305,191.9 亿元 RMB)"
+  },
+  "微软": {
+    "code": "MSFT",
+    "symbol": "usMSFT",
+    "price": 481.63,
+    "market_cap_cny": 259286.5,
+    "market_cap_raw": 35763.65475,
+    "currency": "USD",
+    "market_cap_display": "$35,763.7 亿美元 (约 259,286.5 亿元 RMB)"
+  },
+  "亚马逊": {
+    "code": "AMZN",
+    "symbol": "usAMZN",
+    "price": 259.45,
+    "market_cap_cny": 202891.91,
+    "market_cap_raw": 27985.09056,
+    "currency": "USD",
+    "market_cap_display": "$27,985.1 亿美元 (约 202,891.9 亿元 RMB)"
+  },
+  "百度": {
+    "code": "BIDU",
+    "symbol": "usBIDU",
+    "price": 90.87,
+    "market_cap_cny": 2234.59,
+    "market_cap_raw": 308.2188,
+    "currency": "USD",
+    "market_cap_display": "$308.2 亿美元 (约 2,234.6 亿元 RMB)"
+  },
+  "阿维斯塔": {
+    "code": "AVA",
+    "symbol": "usAVA",
+    "price": 38.43,
+    "market_cap_cny": 233.35,
+    "market_cap_raw": 32.18621,
+    "currency": "USD",
+    "market_cap_display": "$32.2 亿美元 (约 233.3 亿元 RMB)"
+  },
+  "*ST亿通": {
+    "code": "300211",
+    "symbol": "sz300211",
+    "price": 7.23,
+    "market_cap_cny": 21.97,
+    "market_cap_raw": 21.97,
+    "currency": "CNY",
+    "market_cap_display": "21.97 亿元"
+  },
+  "华大九天": {
+    "code": "301269",
+    "symbol": "sz301269",
+    "price": 97.75,
+    "market_cap_cny": 535.55,
+    "market_cap_raw": 535.55,
+    "currency": "CNY",
+    "market_cap_display": "535.55 亿元"
+  },
+  "新思科技": {
+    "code": "SNPS",
+    "symbol": "usSNPS",
+    "price": 404.41,
+    "market_cap_cny": 5614.12,
+    "market_cap_raw": 774.36154,
+    "currency": "USD",
+    "market_cap_display": "$774.4 亿美元 (约 5,614.1 亿元 RMB)"
+  },
+  "铿腾电子": {
+    "code": "CDNS",
+    "symbol": "usCDNS",
+    "price": 316.52,
+    "market_cap_cny": 6319.64,
+    "market_cap_raw": 871.67392,
+    "currency": "USD",
+    "market_cap_display": "$871.7 亿美元 (约 6,319.6 亿元 RMB)"
+  },
+  "*ST发展": {
+    "code": "000838",
+    "symbol": "sz000838",
+    "price": 2.62,
+    "market_cap_cny": 28.83,
+    "market_cap_raw": 28.83,
+    "currency": "CNY",
+    "market_cap_display": "28.83 亿元"
+  },
+  "*ST新元": {
+    "code": "300472",
+    "symbol": "sz300472",
+    "price": 6.49,
+    "market_cap_cny": 17.86,
+    "market_cap_raw": 17.86,
+    "currency": "CNY",
+    "market_cap_display": "17.86 亿元"
+  },
+  "*ST明德": {
+    "code": "002932",
+    "symbol": "sz002932",
+    "price": 15.08,
+    "market_cap_cny": 35.06,
+    "market_cap_raw": 35.06,
+    "currency": "CNY",
+    "market_cap_display": "35.06 亿元"
+  },
+  "*ST易录": {
+    "code": "300212",
+    "symbol": "sz300212",
+    "price": 8.57,
+    "market_cap_cny": 61.69,
+    "market_cap_raw": 61.69,
+    "currency": "CNY",
+    "market_cap_display": "61.69 亿元"
+  },
+  "*ST准油": {
+    "code": "002207",
+    "symbol": "sz002207",
+    "price": 5.69,
+    "market_cap_cny": 14.91,
+    "market_cap_raw": 14.91,
+    "currency": "CNY",
+    "market_cap_display": "14.91 亿元"
+  },
+  "字节跳动": {
+    "code": "BYTEDANCE",
+    "symbol": "unlisted",
+    "price": null,
+    "market_cap_cny": 16300.0,
+    "market_cap_raw": 16300.0,
+    "currency": "CNY",
+    "market_cap_display": "一级市场估值约 $2,250 亿美元 (约 1.63 万亿 RMB)"
+  },
+  "华为": {
+    "code": "UNLISTED",
+    "symbol": "unlisted",
+    "price": null,
+    "market_cap_cny": 12000.0,
+    "market_cap_raw": 12000.0,
+    "currency": "CNY",
+    "market_cap_display": "全球领先 ICT 巨头 (估值约 1.2 万亿 RMB)"
+  },
+  "中国国家电网": {
+    "code": "UNLISTED",
+    "symbol": "unlisted",
+    "price": null,
+    "market_cap_cny": 30000.0,
+    "market_cap_raw": 30000.0,
+    "currency": "CNY",
+    "market_cap_display": "特大型骨干央企 (净资产 > 3 万亿 RMB)"
+  }
+}

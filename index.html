@@ -1,0 +1,2301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PE6Q8682K3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PE6Q8682K3');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>产业链关联图谱 · 知识图谱系统</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0D13;
+    --bg-grid: rgba(255,255,255,0.035);
+    --panel:#11151F;
+    --panel-2:#161B27;
+    --line:#232938;
+    --line-soft:#1A1F2C;
+    --ink:#E7ECF6;
+    --sub:#8991A6;
+    --sub-2:#5C6478;
+
+    --supplier:#33D6B6;
+    --supplier-ink:#0E2620;
+    --material:#F2B84B;
+    --material-ink:#2E2103;
+    --company:#6E8CFF;
+    --company-ink:#0D1230;
+    --product:#C58CFF;
+    --product-ink:#20122F;
+    --customer:#FF8FB0;
+    --customer-ink:#2C1017;
+
+    --direct-edge:#33D6B6;
+    --inferred-edge:#F2B84B;
+
+    --radius:14px;
+    --font-display:'Space Grotesk',sans-serif;
+    --font-body:'Inter',sans-serif;
+    --font-mono:'JetBrains Mono',monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(110,140,255,0.10), transparent 60%),
+      radial-gradient(1000px 500px at 100% 10%, rgba(197,140,255,0.08), transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    min-height:100vh;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(var(--bg-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+    background-size:42px 42px;
+    pointer-events:none;
+    mask-image:radial-gradient(1200px 900px at 50% 0%, black, transparent 75%);
+    z-index:0;
+  }
+
+  .page{position:relative; z-index:1; max-width:1520px; margin:0 auto; padding:32px 28px 60px;}
+
+  header.top{
+    display:flex; justify-content:space-between; align-items:flex-end; gap:24px;
+    flex-wrap:wrap; margin-bottom:22px; padding-bottom:20px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--company); margin:0 0 8px; display:flex; align-items:center; gap:8px;
+  }
+  .live-dot{width:6px; height:6px; border-radius:50%; background:#33D6B6; box-shadow:0 0 8px #33D6B6;}
+  h1{
+    font-family:var(--font-display); font-weight:600; font-size:28px; letter-spacing:-0.01em;
+    margin:0 0 6px; color:var(--ink);
+  }
+  .lede{color:var(--sub); font-size:13.5px; max-width:760px; line-height:1.6; margin:0;}
+  .lede b{color:var(--ink); font-weight:500;}
+
+  .stats{display:flex; gap:10px; flex-wrap:wrap;}
+  .stat{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:10px 14px; min-width:100px;
+  }
+  .stat .n{font-family:var(--font-mono); font-size:19px; font-weight:700; color:var(--ink); line-height:1;}
+  .stat .l{font-size:11px; color:var(--sub-2); margin-top:5px;}
+
+  .header-actions{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    gap:16px; margin-bottom:16px;
+  }
+
+  .tabs{
+    display:flex; align-items:center; gap:4px;
+    background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:4px; width:fit-content;
+  }
+  .tab{
+    padding:8px 16px; font-size:13px; color:var(--sub); border-radius:8px; cursor:pointer;
+    border:none; background:transparent; font-family:inherit; font-weight:500;
+    transition:background .2s, color .2s;
+    display:flex; align-items:center; gap:8px;
+  }
+  .tab:hover{color:var(--ink);}
+  .tab.active{background:var(--panel-2); color:var(--ink); border:1px solid var(--line);}
+  .tab .tab-num{
+    font-family:var(--font-mono); font-size:10px; color:var(--sub-2);
+    border:1px solid var(--line); padding:1px 5px; border-radius:4px;
+  }
+  .tab.active .tab-num{color:var(--company); border-color:rgba(110,140,255,0.4);}
+
+  .company-selector-wrap{
+    display:flex; align-items:center; gap:10px;
+    background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:4px 10px;
+  }
+  .company-selector-wrap label{
+    font-size:11.5px; color:var(--sub-2); font-family:var(--font-mono); text-transform:uppercase; font-weight:600; white-space:nowrap;
+  }
+
+  /* 可搜索下拉选择器组件 (Searchable Combobox) */
+  .searchable-select{
+    position:relative; min-width:260px;
+  }
+  .searchable-input-wrap{
+    display:flex; align-items:center; background:var(--panel-2); border:1px solid var(--line);
+    border-radius:8px; padding:5px 10px; transition:border-color .2s, box-shadow .2s;
+  }
+  .searchable-input-wrap:focus-within{
+    border-color:var(--company); box-shadow:0 0 0 2px rgba(110,140,255,0.25);
+  }
+  .searchable-input-wrap .search-icon{
+    font-size:12px; margin-right:6px; opacity:0.65; pointer-events:none;
+  }
+  .searchable-input{
+    background:transparent; border:none; color:var(--ink); font-family:inherit;
+    font-size:13px; font-weight:500; width:100%; outline:none;
+  }
+  .searchable-input::placeholder{
+    color:var(--sub-2); font-size:12px; font-weight:400;
+  }
+  .searchable-clear{
+    background:transparent; border:none; color:var(--sub-2); font-size:16px;
+    cursor:pointer; padding:0 2px; line-height:1; display:none;
+  }
+  .searchable-clear:hover{ color:var(--ink); }
+  .searchable-dropdown{
+    position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:999;
+    background:var(--panel-2); border:1px solid var(--line); border-radius:10px;
+    box-shadow:0 14px 35px rgba(0,0,0,0.55); max-height:280px; overflow-y:auto;
+    display:none; backdrop-filter:blur(10px);
+  }
+  .searchable-dropdown.open{ display:block; }
+  .searchable-item{
+    padding:8px 12px; font-size:12.5px; color:var(--ink); cursor:pointer;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    border-bottom:1px solid rgba(255,255,255,0.03); transition:background .15s;
+  }
+  .searchable-item:hover, .searchable-item.active{
+    background:rgba(110,140,255,0.15); color:var(--ink);
+  }
+  .searchable-item.selected{
+    background:rgba(110,140,255,0.25); font-weight:600;
+  }
+  .searchable-item .c-name{
+    display:flex; align-items:center; gap:6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .searchable-item .c-code{
+    font-family:var(--font-mono); font-size:11px; color:var(--sub-2);
+    background:rgba(255,255,255,0.06); padding:2px 5px; border-radius:4px;
+  }
+  .searchable-empty{
+    padding:16px; text-align:center; color:var(--sub-2); font-size:12px;
+  }
+
+  .view{display:none;}
+  .view.active{display:block;}
+
+  .controls{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    gap:16px; margin-bottom:20px;
+    background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:12px 16px;
+  }
+  .legend{display:flex; gap:20px; flex-wrap:wrap; align-items:center;}
+  .legend-group{display:flex; align-items:center; gap:8px;}
+  .legend-group span.lbl{font-size:12px; color:var(--sub);}
+  .swatch{width:10px;height:10px;border-radius:3px;display:inline-block;}
+  .swatch.supplier{background:var(--supplier);}
+  .swatch.material{background:var(--material);}
+  .swatch.company{background:var(--company);}
+  .swatch.product{background:var(--product);}
+  .swatch.customer{background:var(--customer);}
+  .swatch.direct-edge{background:var(--direct-edge);}
+  .swatch.inferred-edge{background:var(--inferred-edge);}
+  .swatch.core-subject{background:var(--company); border-radius:50%; box-shadow:0 0 6px var(--company);}
+  .swatch.supplier-node{background:var(--supplier); border-radius:50%;}
+  .swatch.customer-node{background:var(--product); border-radius:50%;}
+
+  .line-sample{width:30px; height:0; display:inline-block;}
+  .line-sample.direct{border-top:2px solid var(--direct-edge);}
+  .line-sample.inferred{border-top:2px dashed var(--inferred-edge); opacity:.85;}
+
+  /* 全局网状拓扑图谱样式 (View 01) */
+  .network-shell{
+    position:relative; width:100%; height:700px; min-height:640px; padding:0 !important;
+    background:radial-gradient(circle at center, #141926 0%, #090C13 100%);
+    border:1px solid var(--line); border-radius:16px; overflow:hidden;
+    user-select:none; cursor:grab;
+  }
+  .network-shell:active{cursor:grabbing;}
+  .network-svg{width:100%; height:100%; display:block;}
+
+  .network-hud{
+    position:absolute; top:16px; left:18px; display:flex; align-items:center; gap:12px;
+    background:rgba(17,21,31,0.88); backdrop-filter:blur(10px);
+    border:1px solid var(--line); border-radius:10px; padding:6px 14px; z-index:10;
+    pointer-events:none;
+  }
+  .hud-item{font-family:var(--font-mono); font-size:11.5px; color:var(--ink); font-weight:600;}
+  .hud-hint{font-size:11px; color:var(--sub-2); margin-left:8px;}
+
+  .network-actions{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+  .net-search-wrap{position:relative;}
+  .net-search-input{
+    background:var(--panel-2); border:1px solid var(--line); border-radius:8px;
+    color:var(--ink); font-family:inherit; font-size:12.5px; padding:6px 12px 6px 28px;
+    width:190px; transition:border-color .2s, width .2s;
+  }
+  .net-search-input:focus{outline:none; border-color:var(--company); width:240px;}
+  .net-search-icon{
+    position:absolute; left:8px; top:50%; transform:translateY(-50%);
+    font-size:11px; color:var(--sub-2); pointer-events:none;
+  }
+  .btn-ctrl{
+    background:var(--panel-2); border:1px solid var(--line); border-radius:8px;
+    color:var(--sub); font-family:inherit; font-size:12px; padding:6px 12px;
+    cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:6px;
+  }
+  .btn-ctrl:hover{color:var(--ink); border-color:var(--sub-2); background:var(--line-soft);}
+
+  /* Node & Link SVG Styles */
+  .net-node{cursor:pointer; transition:opacity .2s;}
+  .net-node circle.glow-ring{
+    fill:none; stroke-width:3px; opacity:0; transition:opacity .2s, stroke-width .2s;
+  }
+  .net-node:hover circle.glow-ring, .net-node.highlighted circle.glow-ring{
+    opacity:0.85; stroke-width:6px;
+  }
+  .net-node circle.core-circle{
+    transition:transform .15s, filter .15s;
+  }
+  .net-node:hover circle.core-circle{
+    filter:drop-shadow(0 0 8px currentColor);
+  }
+  .net-node text.node-label{
+    font-family:var(--font-body); font-size:11px; font-weight:500; fill:var(--ink);
+    text-anchor:middle; pointer-events:none; transition:opacity .2s;
+    paint-order:stroke; stroke:#0A0D13; stroke-width:3px; stroke-linejoin:round;
+  }
+  .net-link{
+    stroke-linecap:round; transition:stroke-opacity .2s, stroke-width .2s;
+  }
+  .net-link.supply{stroke:var(--supplier); stroke-opacity:0.45;}
+  .net-link.customer{stroke:var(--product); stroke-opacity:0.5;}
+  .net-link.inferred{stroke:var(--inferred-edge); stroke-opacity:0.45; stroke-dasharray:4,4;}
+  .net-link.highlighted{stroke-opacity:0.95; stroke-width:2.5px !important;}
+  .net-link.dimmed{stroke-opacity:0.04;}
+  .net-node.dimmed{opacity:0.12;}
+
+  /* Leiden Community Legend */
+  .community-legend{
+    display:flex; flex-wrap:wrap; gap:6px; align-items:center; width:100%;
+    margin-top:10px; padding-top:10px; border-top:1px solid var(--line-soft);
+  }
+  .comm-badge{
+    display:inline-flex; align-items:center; gap:6px; font-size:11px;
+    font-family:var(--font-mono); padding:3px 9px; border-radius:6px;
+    background:var(--panel-2); border:1px solid var(--line);
+    color:var(--sub); cursor:pointer; transition:all .15s ease;
+  }
+  .comm-badge:hover, .comm-badge.active{
+    border-color:currentColor; color:var(--ink);
+    background:rgba(255,255,255,0.06); box-shadow:0 0 10px rgba(0,0,0,0.3);
+  }
+  .comm-badge .comm-dot{
+    width:7px; height:7px; border-radius:50%; flex:none;
+  }
+  .comm-badge .comm-count{
+    font-size:10px; opacity:0.65;
+  }
+
+  /* Network Tooltip */
+  .network-tooltip{
+    position:absolute; pointer-events:none; z-index:100; display:none;
+    background:rgba(17,21,31,0.95); backdrop-filter:blur(14px);
+    border:1px solid rgba(110,140,255,0.45); border-radius:12px;
+    padding:12px 16px; min-width:210px; max-width:320px;
+    box-shadow:0 12px 36px rgba(0,0,0,0.7);
+    font-size:12px; color:var(--ink); line-height:1.5;
+    transform:translate(-50%, -100%); margin-top:-14px;
+    transition:opacity .15s ease-out;
+  }
+  .network-tooltip .tt-title{font-size:14px; font-weight:600; color:var(--ink); margin-bottom:4px; display:flex; align-items:center; gap:8px;}
+  .network-tooltip .tt-dot{width:8px; height:8px; border-radius:50%; flex:none;}
+  .network-tooltip .tt-code{font-family:var(--font-mono); font-size:11px; color:var(--company); margin-left:auto;}
+  .network-tooltip .tt-row{display:flex; justify-content:space-between; margin-top:4px; font-size:11.5px; color:var(--sub);}
+  .network-tooltip .tt-row span:last-child{color:var(--ink); font-weight:500;}
+  .network-tooltip .tt-desc{font-size:11px; color:var(--sub-2); margin-top:8px; border-top:1px solid var(--line-soft); padding-top:6px; line-height:1.4;}
+
+  .toggle-wrap{display:flex; align-items:center; gap:10px;}
+  .toggle-wrap span{font-size:12.5px; color:var(--sub);}
+  .switch{
+    width:38px; height:22px; border-radius:999px; background:var(--line-soft);
+    border:1px solid var(--line); position:relative; cursor:pointer; flex:none;
+    transition:background .2s;
+  }
+  .switch.on{background:rgba(110,140,255,0.35); border-color:var(--company);}
+  .switch .knob{
+    position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%;
+    background:var(--ink); transition:left .2s;
+  }
+  .switch.on .knob{left:18px; background:var(--company);}
+
+  .control-row{display:flex; gap:14px; flex-wrap:wrap; align-items:center;}
+  .ctrl-field{display:flex; align-items:center; gap:8px;}
+  .ctrl-field label{font-size:12px; color:var(--sub); font-family:var(--font-mono); letter-spacing:.04em;}
+  .ctrl-field select, .ctrl-field input[type="number"]{
+    background:var(--panel-2); border:1px solid var(--line); border-radius:8px;
+    color:var(--ink); font-family:inherit; font-size:12.5px; padding:6px 10px;
+    cursor:pointer;
+  }
+  .ctrl-field select:focus, .ctrl-field input:focus{outline:none; border-color:var(--company);}
+  .ctrl-field input[type="number"]{width:56px; cursor:text;}
+  .ctrl-field .unit{font-size:11px; color:var(--sub-2); font-family:var(--font-mono);}
+
+  .diagram-shell{
+    background:var(--panel); border:1px solid var(--line); border-radius:16px;
+    padding:26px 10px; overflow-x:auto; min-height:480px; position:relative;
+  }
+  .diagram-shell.chain{padding:30px 24px;}
+  .diagram-shell.overview{padding:30px 20px;}
+
+  #diagram-container, #overview-container, #chain-container{
+    position:relative; display:flex; gap:56px; min-width:1220px; padding:6px 26px;
+  }
+  #overview-container{gap:36px; min-width:1100px;}
+  #chain-container{display:block; min-width:1100px; min-height:520px; padding:30px 20px;}
+
+  .edges-svg{position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible;}
+
+  .col{display:flex; flex-direction:column; justify-content:center; gap:14px; flex:1; min-width:200px; position:relative; z-index:2;}
+  .col-company{min-width:260px; justify-content:center;}
+
+  .col-title{
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--sub-2); text-align:center; margin-bottom:2px;
+  }
+
+  .node{
+    background:var(--panel-2); border:1px solid var(--line); border-radius:10px;
+    padding:10px 12px; cursor:pointer; transition:transform .15s, border-color .15s, opacity .2s;
+    position:relative;
+  }
+  .node:hover{transform:translateY(-1px); border-color:var(--sub-2);}
+  .node.dim{opacity:.25;}
+  .node.active{border-color:var(--ink); box-shadow:0 0 12px rgba(110,140,255,0.25);}
+
+  .node .head{display:flex; align-items:center; gap:8px; margin-bottom:5px;}
+  .dot{width:7px; height:7px; border-radius:50%; flex:none;}
+  .node .name{font-size:12.5px; font-weight:500; color:var(--ink); line-height:1.3;}
+  .node .meta{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+  .node .share{font-family:var(--font-mono); font-size:12px; font-weight:700;}
+  .node .tag{
+    font-size:10px; padding:2px 6px; border-radius:5px; font-family:var(--font-mono);
+    letter-spacing:.02em;
+  }
+  .tag.direct{background:rgba(51,214,182,0.12); color:var(--supplier); border:1px solid rgba(51,214,182,0.3);}
+  .tag.inferred{background:rgba(242,184,75,0.12); color:var(--inferred-edge); border:1px dashed rgba(242,184,75,0.45);}
+
+  .node.n-supplier .dot{background:var(--supplier);}
+  .node.n-material .dot{background:var(--material);}
+  .node.n-product .dot{background:var(--product);}
+  .node.n-customer .dot{background:var(--customer);}
+  .node.n-supplier .share{color:var(--supplier);}
+  .node.n-material .share{color:var(--material);}
+  .node.n-product .share{color:var(--product);}
+  .node.n-customer .share{color:var(--customer);}
+
+  .node.inferred-node{border-style:dashed; opacity:.92;}
+  .node.hidden-inferred{display:none;}
+  .node.clickable-hint{cursor:pointer;}
+  .node.clickable-hint::after{
+    content:"切换";
+    position:absolute; top:6px; right:6px;
+    font-family:var(--font-mono); font-size:9px; color:var(--company);
+    background:var(--bg); padding:1px 5px; border-radius:3px;
+    opacity:0; transition:opacity .15s; border:1px solid rgba(110,140,255,0.3);
+  }
+  .node.clickable-hint:hover::after{opacity:1;}
+
+  .hub{
+    background:linear-gradient(180deg, rgba(110,140,255,0.14), rgba(110,140,255,0.05));
+    border:1px solid rgba(110,140,255,0.45); border-radius:16px; padding:20px 18px;
+    position:relative;
+  }
+  .hub::before{
+    content:""; position:absolute; inset:-10px; border-radius:22px;
+    border:1px solid rgba(110,140,255,0.15); pointer-events:none;
+  }
+  .hub .tick{font-family:var(--font-mono); font-size:10.5px; color:var(--company); letter-spacing:.08em;}
+  .hub h2{font-family:var(--font-display); font-size:17px; font-weight:600; margin:6px 0 4px; color:var(--ink); line-height:1.3;}
+  .hub p{font-size:12px; color:var(--sub); line-height:1.6; margin:0 0 14px;}
+  .hub .mini-block{margin-top:12px;}
+  .hub .mini-title{font-size:10.5px; color:var(--sub-2); margin-bottom:6px; letter-spacing:.03em;}
+  .stack-bar{display:flex; width:100%; height:9px; border-radius:5px; overflow:hidden; background:var(--line-soft);}
+  .stack-bar span{height:100%; display:block;}
+
+  .chain-levels{display:flex; gap:0; align-items:stretch; min-height:480px; position:relative;}
+  .chain-level{
+    flex:1; min-width:170px; display:flex; flex-direction:column; justify-content:center;
+    gap:12px; position:relative; padding:0 8px;
+  }
+  .chain-level.center{flex:1.4; min-width:240px;}
+  .chain-level-title{
+    font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--sub-2); text-align:center; margin-bottom:6px;
+  }
+  .chain-level-title.up{color:var(--supplier);}
+  .chain-level-title.down{color:var(--customer);}
+  .chain-level-title.center{color:var(--company);}
+
+  .chain-node{
+    background:var(--panel-2); border:1px solid var(--line); border-radius:9px;
+    padding:9px 11px; cursor:pointer; position:relative;
+    transition:transform .15s, border-color .15s;
+  }
+  .chain-node:hover{transform:translateY(-1px); border-color:var(--sub-2);}
+  .chain-node .cn-name{font-size:12px; color:var(--ink); font-weight:500; line-height:1.3; margin-bottom:4px;}
+  .chain-node .cn-share{font-family:var(--font-mono); font-size:11.5px; font-weight:700;}
+  .chain-node.up .cn-share{color:var(--supplier);}
+  .chain-node.down .cn-share{color:var(--customer);}
+  .chain-node.inferred{border-style:dashed; opacity:.92;}
+  .chain-node .cn-via{
+    font-family:var(--font-mono); font-size:9.5px; color:var(--sub-2);
+    margin-top:4px; letter-spacing:.02em;
+  }
+
+  .chain-hub{
+    background:linear-gradient(180deg, rgba(110,140,255,0.14), rgba(110,140,255,0.05));
+    border:1px solid rgba(110,140,255,0.45); border-radius:14px;
+    padding:16px 14px; position:relative;
+  }
+  .chain-hub::before{
+    content:""; position:absolute; inset:-8px; border-radius:20px;
+    border:1px solid rgba(110,140,255,0.15); pointer-events:none;
+  }
+  .chain-hub .tick{font-family:var(--font-mono); font-size:10px; color:var(--company); letter-spacing:.08em;}
+  .chain-hub h3{font-family:var(--font-display); font-size:14.5px; font-weight:600; margin:5px 0 2px; color:var(--ink); line-height:1.3;}
+  .chain-hub p{font-size:11px; color:var(--sub); margin:0; line-height:1.5;}
+
+  .ov-col{display:flex; flex-direction:column; gap:12px; flex:1; min-width:240px; position:relative; z-index:2;}
+  .ov-col.center{flex:1.3; min-width:280px; align-items:center; justify-content:center;}
+
+  .drawer{
+    position:fixed; top:0; right:-440px; width:420px; height:100%;
+    background:var(--panel); border-left:1px solid var(--line);
+    box-shadow:-20px 0 60px rgba(0,0,0,0.55);
+    transition:right .25s ease; z-index:50; padding:26px 24px; overflow-y:auto;
+  }
+  .drawer.open{right:0;}
+  .drawer-close{
+    position:absolute; top:20px; right:20px; width:28px; height:28px; border-radius:8px;
+    background:var(--panel-2); border:1px solid var(--line); color:var(--sub);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px;
+  }
+  .drawer-close:hover{color:var(--ink); border-color:var(--sub-2);}
+  .drawer-kind{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px;}
+  .drawer h3{font-family:var(--font-display); font-size:19px; margin:0 0 4px; padding-right:30px; line-height:1.3;}
+  .drawer .drawer-sub{font-size:12px; color:var(--sub-2); margin-bottom:18px; font-family:var(--font-mono);}
+  .drawer-section{margin-top:18px;}
+  .drawer-section .st{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--sub-2); margin-bottom:10px;}
+  .rel-row{
+    display:flex; flex-direction:column; gap:4px; padding:10px 0; border-bottom:1px solid var(--line-soft);
+  }
+  .rel-row:last-child{border-bottom:none;}
+  .rel-top{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .rel-name{font-size:13px; color:var(--ink); font-weight:500;}
+  .rel-share{font-family:var(--font-mono); font-size:12.5px; color:var(--ink); font-weight:700;}
+  .rel-note{font-size:11.5px; color:var(--sub); line-height:1.55;}
+
+  .empty-state{
+    text-align:center; padding:60px 20px; color:var(--sub);
+  }
+  .empty-state h4{color:var(--ink); margin:0 0 8px; font-size:16px;}
+
+  footer{margin-top:26px; padding-top:18px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+  footer p{font-size:11.5px; color:var(--sub-2); max-width:880px; line-height:1.7; margin:0;}
+  footer .badge{font-family:var(--font-mono); font-size:10.5px; color:var(--company); border:1px solid rgba(110,140,255,0.3); padding:5px 10px; border-radius:7px; height:fit-content;}
+
+  @media (max-width:720px){
+    header.top{align-items:flex-start;}
+    .controls{flex-direction:column; align-items:stretch;}
+    .drawer{width:88vw; right:-88vw;}
+    .tabs{width:100%; overflow-x:auto;}
+  }
+  @keyframes dashmove { to { stroke-dashoffset:-26; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="top">
+    <div>
+      <p class="eyebrow"><span class="live-dot"></span> 产业链关联图谱 · 知识图谱系统</p>
+      <h1 id="app-title">上市公司产业链智能分析</h1>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="header-actions">
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-view="overview"><span class="tab-num">01</span>全图概览</button>
+      <button class="tab" data-view="chain"><span class="tab-num">02</span>产业链展开</button>
+      <button class="tab" data-view="single"><span class="tab-num">03</span>单公司视图</button>
+    </div>
+
+    <div class="company-selector-wrap" id="company-selector-wrap" style="display:none;">
+      <label for="company-search-input">核心公司</label>
+      <div class="searchable-select" id="company-searchable-select">
+        <div class="searchable-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="searchable-input" id="company-search-input" placeholder="搜索公司名称或股票代码..." autocomplete="off">
+          <button class="searchable-clear" id="company-search-clear" type="button" title="清除">×</button>
+        </div>
+        <div class="searchable-dropdown" id="company-search-dropdown">
+          <div class="searchable-list" id="company-search-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 01: 全图概览 (全局网络拓扑) -->
+  <div class="view active" id="view-overview">
+    <div class="controls">
+      <div class="legend">
+        <div class="legend-group"><span class="swatch core-subject"></span><span class="lbl">核心研报公司 (大圆点)</span></div>
+        <div class="legend-group"><span class="swatch supplier-node"></span><span class="lbl">上游供应商 (青绿)</span></div>
+        <div class="legend-group"><span class="swatch customer-node"></span><span class="lbl">下游客户 (粉紫)</span></div>
+        <div class="legend-group"><span class="line-sample direct"></span><span class="lbl">直接披露供需 (实线)</span></div>
+        <div class="legend-group"><span class="line-sample inferred"></span><span class="lbl">间接推断关联 (虚线)</span></div>
+      </div>
+      <div class="network-actions">
+        <div class="net-search-wrap">
+          <span class="net-search-icon">🔍</span>
+          <input type="text" id="net-search-input" class="net-search-input" placeholder="搜索图谱中任意企业...">
+        </div>
+        <button class="btn-ctrl" id="net-btn-reset" title="重置缩放与视角">🔄 视角居中</button>
+        <div class="ctrl-field" title="过滤连接数(度数)低于该阈值的边缘节点，默认最低为 3 条，可向上调整">
+          <label for="ov-min-degree">最低度数</label>
+          <input type="number" id="ov-min-degree" min="1" max="50" value="3" step="1">
+          <span class="unit">条</span>
+        </div>
+        <div class="ctrl-field" title="过滤已知市值低于该阈值的企业，支持向上或向下调整 (设为 0 表示不限市值)">
+          <label for="ov-min-mc">最低市值</label>
+          <input type="number" id="ov-min-mc" min="0" max="10000" value="10" step="5">
+          <span class="unit">亿元</span>
+        </div>
+        <div class="toggle-wrap">
+          <span>显示推断关联</span>
+          <div class="switch" id="ov-toggle-inferred"><div class="knob"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="diagram-shell network-shell" id="network-shell">
+      <div class="network-hud" id="network-hud">
+        <span class="hud-item" id="hud-nodes">加载中...</span>
+        <span class="hud-item" id="hud-links"></span>
+        <span class="hud-hint">💡 鼠标滚轮缩放 · 拖拽平移画布 · 点击圆点展开详情</span>
+      </div>
+      <svg id="network-svg" class="network-svg">
+        <defs>
+          <marker id="net-arr-sup" viewBox="0 -5 10 10" refX="10" refY="0" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M0,-5L10,0L0,5" fill="#33D6B6" opacity="0.85"/>
+          </marker>
+          <marker id="net-arr-cust" viewBox="0 -5 10 10" refX="10" refY="0" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M0,-5L10,0L0,5" fill="#C58CFF" opacity="0.85"/>
+          </marker>
+          <marker id="net-arr-inf" viewBox="0 -5 10 10" refX="10" refY="0" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M0,-5L10,0L0,5" fill="#F2B84B" opacity="0.85"/>
+          </marker>
+          <filter id="net-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <g id="network-panzoom">
+          <g id="network-links-layer"></g>
+          <g id="network-nodes-layer"></g>
+        </g>
+      </svg>
+      <!-- Tooltip 悬浮卡片 -->
+      <div class="network-tooltip" id="network-tooltip"></div>
+    </div>
+  </div>
+
+  <!-- VIEW 02: 产业链展开 -->
+  <div class="view" id="view-chain">
+    <div class="controls">
+      <div class="control-row">
+        <div class="ctrl-field">
+          <label for="chain-search-input">中心公司</label>
+          <div class="searchable-select" id="chain-searchable-select">
+            <div class="searchable-input-wrap">
+              <span class="search-icon">🔍</span>
+              <input type="text" class="searchable-input" id="chain-search-input" placeholder="搜索中心公司..." autocomplete="off">
+              <button class="searchable-clear" id="chain-search-clear" type="button" title="清除">×</button>
+            </div>
+            <div class="searchable-dropdown" id="chain-search-dropdown">
+              <div class="searchable-list" id="chain-search-list"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ctrl-field">
+          <label for="chain-depth-up">向上展开</label>
+          <input type="number" id="chain-depth-up" min="1" max="3" value="2">
+          <span class="unit">层</span>
+        </div>
+        <div class="ctrl-field">
+          <label for="chain-depth-down">向下展开</label>
+          <input type="number" id="chain-depth-down" min="1" max="3" value="2">
+          <span class="unit">层</span>
+        </div>
+        <div class="ctrl-field">
+          <label for="chain-top-up">上游TOP</label>
+          <input type="number" id="chain-top-up" min="1" max="5" value="3">
+          <span class="unit">个/层</span>
+        </div>
+        <div class="ctrl-field">
+          <label for="chain-top-down">下游TOP</label>
+          <input type="number" id="chain-top-down" min="1" max="5" value="2">
+          <span class="unit">个/层</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="diagram-shell chain">
+      <div id="chain-container">
+        <svg class="edges-svg" id="chain-edges-svg"></svg>
+        <div class="chain-levels" id="chain-levels"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 03: 单公司视图 -->
+  <div class="view" id="view-single">
+    <div class="controls">
+      <div class="legend">
+        <div class="legend-group"><span class="swatch supplier"></span><span class="lbl">供应商</span></div>
+        <div class="legend-group"><span class="swatch material"></span><span class="lbl">原材料</span></div>
+        <div class="legend-group"><span class="swatch company"></span><span class="lbl">公司</span></div>
+        <div class="legend-group"><span class="swatch product"></span><span class="lbl">产品</span></div>
+        <div class="legend-group"><span class="swatch customer"></span><span class="lbl">客户</span></div>
+        <div class="legend-group"><span class="line-sample direct"></span><span class="lbl">直接披露</span></div>
+        <div class="legend-group"><span class="line-sample inferred"></span><span class="lbl">产业链推断关联</span></div>
+      </div>
+      <div class="toggle-wrap">
+        <span>显示推断关联</span>
+        <div class="switch" id="toggle-inferred"><div class="knob"></div></div>
+      </div>
+    </div>
+
+    <div class="diagram-shell single">
+      <div id="diagram-container">
+        <svg class="edges-svg" id="edges-svg"></svg>
+        <div class="col" id="col-suppliers">
+          <div class="col-title">上游供应商</div>
+        </div>
+        <div class="col" id="col-materials">
+          <div class="col-title">原材料</div>
+        </div>
+        <div class="col col-company" id="col-company">
+          <div class="col-title">核心公司</div>
+        </div>
+        <div class="col" id="col-products">
+          <div class="col-title">主营产品</div>
+        </div>
+        <div class="col" id="col-customers">
+          <div class="col-title">下游客户</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>数据源自各上市公司研报与财报自动化抽取，结合产业链实体对齐与 Neo4j 知识图谱图内推断。点击图谱中的企业卡片可直接切换分析中心。</p>
+    <span class="badge">IDUXGRAPH · LIVE GRAPH DATA</span>
+  </footer>
+
+</div>
+
+<!-- 侧边详情抽屉 -->
+<div class="drawer" id="drawer">
+  <div class="drawer-close" id="drawer-close">✕</div>
+  <div class="drawer-kind" id="d-kind"></div>
+  <h3 id="d-name"></h3>
+  <div class="drawer-sub" id="d-sub"></div>
+  <div id="d-body"></div>
+</div>
+
+<script>
+window.__STATIC_EXPORT__ = true;
+
+const COLORS = {
+  supplier:'#33D6B6', material:'#F2B84B', company:'#6E8CFF', product:'#C58CFF', customer:'#FF8FB0',
+  direct:'#33D6B6', inferred:'#F2B84B'
+};
+
+/* ==================== API 数据加载 (支持 FastAPI 动态服务 与 GitHub Pages 静态站点双模式) ==================== */
+
+const IS_STATIC_MODE = (function(){
+  if (window.__STATIC_EXPORT__ === true) return true;
+  if (window.location.protocol === 'file:') return true;
+  if (window.location.hostname.endsWith('github.io')) return true;
+  if (window.location.hostname.includes('vercel.app') || window.location.hostname.includes('pages.dev')) return true;
+  if (window.location.port && window.location.port !== '8008' && window.location.port !== '8000') return true;
+  return false;
+})();
+
+let COMPANIES = {};
+let MARKET_CAPS = {};
+let STATIC_RAW_NETWORK_DATA = null;
+let currentCenterId = '';
+let ovInferredVisible = false;
+let singleInferredVisible = false;
+
+function el(tag, cls, text){
+  const e = document.createElement(tag);
+  if(cls) e.className = cls;
+  if(text !== undefined) e.textContent = text;
+  return e;
+}
+
+function resolveCompanyId(rawNameOrCode){
+  if(!rawNameOrCode) return null;
+  const s = String(rawNameOrCode).trim();
+  if(COMPANIES[s]) return s;
+  for(const k in COMPANIES){
+    if(COMPANIES[k].name === s || COMPANIES[k].code === s) return k;
+  }
+  return s;
+}
+
+function getCurrentCenter(){
+  return COMPANIES[currentCenterId] || Object.values(COMPANIES)[0] || {
+    id:'empty', name:'暂无数据', code:'', desc:'', materials:[], products:[]
+  };
+}
+
+async function loadGraphData(){
+  try {
+    let statsRes = null, compList = [], mcData = {}, allViewData = null;
+
+    if (IS_STATIC_MODE) {
+      const [sRes, cList, mData, vData] = await Promise.all([
+        fetch('./data/stats.json').then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch('./data/companies.json').then(r => r.ok ? r.json() : []).catch(() => []),
+        fetch('./data/market-caps.json').then(r => r.ok ? r.json() : {}).catch(() => ({})),
+        fetch('./data/view-data-all.json').then(r => r.ok ? r.json() : null).catch(() => null)
+      ]);
+      statsRes = sRes; compList = cList || []; mcData = mData || {}; allViewData = vData;
+    } else {
+      try {
+        const [sRes, cList, mData] = await Promise.all([
+          fetch('/api/v1/stats').then(r => r.ok ? r.json() : null).catch(() => null),
+          fetch('/api/v1/companies').then(r => r.ok ? r.json() : []).catch(() => []),
+          fetch('/api/v1/market-caps').then(r => r.ok ? r.json() : {}).catch(() => ({}))
+        ]);
+        statsRes = sRes; compList = cList || []; mcData = mData || {};
+      } catch(e) {}
+
+      if (!statsRes && (!compList || compList.length === 0)) {
+        const [sRes, cList, mData, vData] = await Promise.all([
+          fetch('./data/stats.json').then(r => r.ok ? r.json() : null).catch(() => null),
+          fetch('./data/companies.json').then(r => r.ok ? r.json() : []).catch(() => []),
+          fetch('./data/market-caps.json').then(r => r.ok ? r.json() : {}).catch(() => ({})),
+          fetch('./data/view-data-all.json').then(r => r.ok ? r.json() : null).catch(() => null)
+        ]);
+        statsRes = sRes; compList = cList || []; mcData = mData || {}; allViewData = vData;
+      }
+    }
+
+    if(allViewData && allViewData.companies) {
+      COMPANIES = allViewData.companies;
+    } else if(!IS_STATIC_MODE) {
+      fetch('/api/v1/graph/view-data/all').then(r => r.ok ? r.json() : null).then(d => {
+        if(d && d.companies) COMPANIES = d.companies;
+      }).catch(() => {});
+    }
+
+    if(statsRes) renderStats(statsRes);
+    if(mcData && Object.keys(mcData).length > 0) MARKET_CAPS = mcData;
+
+    populateCompanySelectors(compList);
+
+    const hash = window.location.hash.replace('#', '').trim();
+    if(hash && compList.find(c => c.code === hash || c.name === hash)){
+      currentCenterId = hash;
+    } else if(compList.length > 0){
+      currentCenterId = compList[0].code || compList[0].name;
+    }
+
+    if(currentCenterId){
+      await switchCenterCompany(currentCenterId);
+    }
+  } catch(e) {
+    console.error('Failed to load graph data:', e);
+  }
+}
+
+function renderStats(data){
+  const el = document.getElementById('stats');
+  if(!el || !data) return;
+
+  const totalComps = data.companies ?? (data.nodes_by_label ? data.nodes_by_label.Company : 0) ?? (Array.isArray(COMPANIES) ? COMPANIES.length : Object.keys(COMPANIES).length) ?? 0;
+  const totalItems = data.items ?? (data.nodes_by_label ? ((data.nodes_by_label.Item || 0) + (data.nodes_by_label.Product || 0) + (data.nodes_by_label.Material || 0)) : 0) ?? 0;
+  const totalDirect = data.relationships ?? data.total_edges ?? 0;
+
+  el.innerHTML = `
+    <div class="stat"><div class="n">${Number(totalComps).toLocaleString()}</div><div class="l">上市公司主体</div></div>
+    <div class="stat"><div class="n">${Number(totalItems).toLocaleString()}</div><div class="l">核心产品与物料</div></div>
+    <div class="stat"><div class="n">${Number(totalDirect).toLocaleString()}</div><div class="l">产业链供需链路</div></div>
+  `;
+}
+
+let ALL_COMPANIES_LIST = [];
+
+function setupSearchableCompanySelect(config) {
+  const { inputId, dropdownId, listId, clearBtnId } = config;
+  const input = document.getElementById(inputId);
+  const dropdown = document.getElementById(dropdownId);
+  const listEl = document.getElementById(listId);
+  const clearBtn = clearBtnId ? document.getElementById(clearBtnId) : null;
+  if (!input || !dropdown || !listEl) return;
+
+  if (input.__boundSearchSelect) return;
+  input.__boundSearchSelect = true;
+
+  let activeIndex = -1;
+  let currentFiltered = [];
+
+  function renderList(items) {
+    currentFiltered = items;
+    activeIndex = -1;
+    listEl.innerHTML = '';
+
+    if (!items || items.length === 0) {
+      listEl.innerHTML = '<div class="searchable-empty">未找到匹配的公司</div>';
+      return;
+    }
+
+    const currentId = currentCenterId;
+    items.forEach((c) => {
+      const itemEl = document.createElement('div');
+      const isSelected = (c.code === currentId || c.name === currentId);
+      itemEl.className = 'searchable-item' + (isSelected ? ' selected' : '');
+      itemEl.dataset.code = c.code || c.name;
+      itemEl.dataset.name = c.name;
+
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'c-name';
+      nameSpan.textContent = c.name;
+
+      const codeSpan = document.createElement('span');
+      codeSpan.className = 'c-code';
+      codeSpan.textContent = c.code || '未上市';
+
+      itemEl.appendChild(nameSpan);
+      itemEl.appendChild(codeSpan);
+
+      itemEl.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        selectCompany(c.code || c.name, c.name);
+      });
+
+      listEl.appendChild(itemEl);
+    });
+  }
+
+  function filterCompanies(keyword) {
+    const q = (keyword || '').trim().toLowerCase();
+    if (!q) {
+      renderList(ALL_COMPANIES_LIST.slice(0, 100));
+      return;
+    }
+    const filtered = ALL_COMPANIES_LIST.filter(c => {
+      const name = (c.name || '').toLowerCase();
+      const code = (c.code || '').toLowerCase();
+      return name.includes(q) || code.includes(q);
+    });
+    renderList(filtered.slice(0, 100));
+  }
+
+  function selectCompany(code, name) {
+    input.value = `${name} (${code || '未上市'})`;
+    dropdown.classList.remove('open');
+    if (clearBtn) clearBtn.style.display = 'inline-block';
+    switchCenterCompany(code);
+  }
+
+  input.addEventListener('focus', () => {
+    dropdown.classList.add('open');
+    input.select();
+    filterCompanies('');
+    if (clearBtn && input.value) clearBtn.style.display = 'inline-block';
+  });
+
+  input.addEventListener('input', (e) => {
+    dropdown.classList.add('open');
+    filterCompanies(e.target.value);
+    if (clearBtn) clearBtn.style.display = e.target.value ? 'inline-block' : 'none';
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (!dropdown.classList.contains('open')) {
+      if (e.key === 'ArrowDown' || e.key === 'Enter') {
+        dropdown.classList.add('open');
+        filterCompanies('');
+      }
+      return;
+    }
+
+    const items = listEl.querySelectorAll('.searchable-item');
+    if (!items.length) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      activeIndex = (activeIndex + 1) % items.length;
+      updateActiveItem(items);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      activeIndex = (activeIndex - 1 + items.length) % items.length;
+      updateActiveItem(items);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (activeIndex >= 0 && activeIndex < items.length) {
+        const item = items[activeIndex];
+        selectCompany(item.dataset.code, item.dataset.name);
+      } else if (currentFiltered.length > 0) {
+        selectCompany(currentFiltered[0].code || currentFiltered[0].name, currentFiltered[0].name);
+      }
+    } else if (e.key === 'Escape') {
+      dropdown.classList.remove('open');
+    }
+  });
+
+  function updateActiveItem(items) {
+    items.forEach((it, idx) => {
+      it.classList.toggle('active', idx === activeIndex);
+      if (idx === activeIndex) {
+        it.scrollIntoView({ block: 'nearest' });
+      }
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      input.value = '';
+      input.focus();
+      filterCompanies('');
+      clearBtn.style.display = 'none';
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.classList.remove('open');
+      const cur = ALL_COMPANIES_LIST.find(c => c.code === currentCenterId || c.name === currentCenterId) || getCurrentCenter();
+      if (cur && cur.name) {
+        input.value = `${cur.name} (${cur.code || '未上市'})`;
+      }
+    }
+  });
+}
+
+function updateSearchableInputs(code){
+  const comp = ALL_COMPANIES_LIST.find(c => c.code === code || c.name === code) || (COMPANIES && COMPANIES[code]) || getCurrentCenter();
+  if(!comp || !comp.name) return;
+  const label = `${comp.name} (${comp.code || '未上市'})`;
+  const inp1 = document.getElementById('company-search-input');
+  const inp2 = document.getElementById('chain-search-input');
+  if(inp1) inp1.value = label;
+  if(inp2) inp2.value = label;
+}
+
+function populateCompanySelectors(list){
+  ALL_COMPANIES_LIST = list || [];
+
+  setupSearchableCompanySelect({
+    inputId: 'company-search-input',
+    dropdownId: 'company-search-dropdown',
+    listId: 'company-search-list',
+    clearBtnId: 'company-search-clear'
+  });
+
+  setupSearchableCompanySelect({
+    inputId: 'chain-search-input',
+    dropdownId: 'chain-search-dropdown',
+    listId: 'chain-search-list',
+    clearBtnId: 'chain-search-clear'
+  });
+
+  updateSearchableInputs(currentCenterId);
+}
+
+async function switchCenterCompany(code){
+  currentCenterId = code;
+  window.location.hash = code;
+
+  // 同步更新可搜索输入框的内容
+  updateSearchableInputs(code);
+
+  // 若内存中尚未缓存该公司的详细图谱，按需从 API 获取 (动态模式)
+  if(!COMPANIES[code] && !IS_STATIC_MODE){
+    try {
+      const vdata = await fetch('/api/v1/companies/' + encodeURIComponent(code) + '/view-data').then(r => r.ok ? r.json() : null);
+      if(vdata) COMPANIES[code] = vdata;
+    } catch(e){}
+  }
+
+  // 重新渲染当前活动的视图
+  const activeTab = document.querySelector('.tab.active').dataset.view;
+  if(activeTab === 'overview') renderOverview();
+  else if(activeTab === 'chain') renderChain();
+  else renderSingle();
+}
+
+/* ==================== VIEW 01: 全图全局网状拓扑 (Leiden + ForceAtlas2) ==================== */
+
+let netGraph = {
+  nodes: [],
+  links: [],
+  nodeMap: new Map(),
+  communities: [],
+  activeCommunityId: null,
+  animId: null,
+  transform: { x: 0, y: 0, k: 1 },
+  isDragging: false,
+  dragNode: null,
+  isPanning: false,
+  panStart: { x: 0, y: 0 },
+  highlightedNodeId: null,
+  width: 1200,
+  height: 700,
+  alpha: 1.0,
+  alphaDecay: 0.955
+};
+
+// 预定义 16 套现代暗色系高辨识度社区色板
+const COMMUNITY_PALETTES = [
+  { id: 0, name: '芯片设计算力集群', primary: '#3B82F6', secondary: '#60A5FA', light: '#93C5FD', bg: 'rgba(59, 130, 246, 0.16)', glow: 'rgba(59, 130, 246, 0.65)' },
+  { id: 1, name: '激光光电制造集群', primary: '#10B981', secondary: '#34D399', light: '#6EE7B7', bg: 'rgba(16, 185, 129, 0.16)', glow: 'rgba(16, 185, 129, 0.65)' },
+  { id: 2, name: '新能源与储能电池集群', primary: '#06B6D4', secondary: '#22D3EE', light: '#67E8F9', bg: 'rgba(6, 182, 212, 0.16)', glow: 'rgba(6, 182, 212, 0.65)' },
+  { id: 3, name: '极光存储与先进计算集群', primary: '#8B5CF6', secondary: '#A78BFA', light: '#C4B5FD', bg: 'rgba(139, 92, 246, 0.16)', glow: 'rgba(139, 92, 246, 0.65)' },
+  { id: 4, name: '航空航天高端钛材集群', primary: '#F43F5E', secondary: '#FB7185', light: '#FDA4AF', bg: 'rgba(244, 63, 94, 0.16)', glow: 'rgba(244, 63, 94, 0.65)' },
+  { id: 5, name: '半导体前道装备制造集群', primary: '#F59E0B', secondary: '#FBBF24', light: '#FDE68A', bg: 'rgba(245, 158, 11, 0.16)', glow: 'rgba(245, 158, 11, 0.65)' },
+  { id: 6, name: '聚酯化纤高分子材料集群', primary: '#F97316', secondary: '#FB923C', light: '#FDBA74', bg: 'rgba(249, 115, 22, 0.16)', glow: 'rgba(249, 115, 22, 0.65)' },
+  { id: 7, name: '先进微电子封测集群', primary: '#EC4899', secondary: '#F472B6', light: '#FBCFE8', bg: 'rgba(236, 72, 153, 0.16)', glow: 'rgba(236, 72, 153, 0.65)' },
+  { id: 8, name: '高端数控精工智造集群', primary: '#84CC16', secondary: '#A3E635', light: '#BEF264', bg: 'rgba(132, 204, 22, 0.16)', glow: 'rgba(132, 204, 22, 0.65)' },
+  { id: 9, name: '云计算与软件互联网集群', primary: '#6366F1', secondary: '#818CF8', light: '#A5B4FC', bg: 'rgba(99, 102, 241, 0.16)', glow: 'rgba(99, 102, 241, 0.65)' },
+  { id: 10, name: '清洁电网电力工程集群', primary: '#14B8A6', secondary: '#2DD4BF', light: '#5EEAD4', bg: 'rgba(20, 184, 166, 0.16)', glow: 'rgba(20, 184, 166, 0.65)' },
+  { id: 11, name: '特种精细化工新材料集群', primary: '#D946EF', secondary: '#E879F9', light: '#F0ABFC', bg: 'rgba(217, 70, 239, 0.16)', glow: 'rgba(217, 70, 239, 0.65)' },
+  { id: 12, name: '石油天然气开采服务集群', primary: '#0EA5E9', secondary: '#38BDF8', light: '#7DD3FC', bg: 'rgba(14, 165, 233, 0.16)', glow: 'rgba(14, 165, 233, 0.65)' },
+  { id: 13, name: '矿产资源与冶金材料集群', primary: '#E11D48', secondary: '#FB7185', light: '#FDA4AF', bg: 'rgba(225, 29, 72, 0.16)', glow: 'rgba(225, 29, 72, 0.65)' },
+  { id: 14, name: '前沿合成生物科技集群', primary: '#7C3AED', secondary: '#A78BFA', light: '#DDD6FE', bg: 'rgba(124, 58, 237, 0.16)', glow: 'rgba(124, 58, 237, 0.65)' },
+  { id: 15, name: '独立产业链配套企业群', primary: '#94A3B8', secondary: '#CBD5E1', light: '#E2E8F0', bg: 'rgba(148, 163, 184, 0.16)', glow: 'rgba(148, 163, 184, 0.35)' }
+];
+
+function getCompanyScaleProfile(name, code, isSubject){
+  const sName = String(name || '').trim();
+  const sCode = String(code || '').trim();
+
+  // 从真实市值数据库中检索
+  const mc = MARKET_CAPS[sName] || MARKET_CAPS[sCode] || (code ? MARKET_CAPS[code] : null);
+  const rawMvCny = mc ? mc.market_cap_cny : null;
+
+  // 1. ST 风险警示类微盘股 (通常 <30 亿) -> 固定 5.0px 警示微盘
+  const isST = sName.startsWith('*ST') || sName.startsWith('ST') || sName.startsWith('S*ST') || sName.startsWith('SST');
+  if(isST){
+    return {
+      tier: 'ST',
+      scaleText: 'ST风险警示 / 微盘股 (通常 <30 亿元)',
+      radius: 5.0,
+      color: '#F59E0B',
+      market_cap_cny: rawMvCny,
+      badge: 'ST'
+    };
+  }
+
+  // 2. 如果存在真实市值数据：
+  // 规则：万亿以下严格固定阶梯大小；万亿以上按 log10 对数幂指数曲线缩放（大10倍增量大1倍），并严格设置 25px 上限
+  if(rawMvCny && rawMvCny > 0){
+    if(rawMvCny >= 10000){
+      // 【万亿以上全球巨头】: 基准 1 万亿为 18.5px，超出部分按 log10(市值/1万亿) 递增，上限严格封顶 25.0px
+      // 1万亿(中芯 1.09万亿) -> 18.7px; 1.63万亿(字节) -> 19.7px; 3.75万亿(腾讯) -> 21.7px; 10万亿 -> 24.0px; 20万亿(苹果/亚马逊) -> 25.0px(封顶)
+      const multiple = Math.max(1.0, rawMvCny / 10000.0);
+      const r = Math.min(25.0, Math.max(18.5, 18.5 + 5.5 * Math.log10(multiple)));
+      return {
+        tier: 'MEGA',
+        scaleText: '万亿级全球科技巨头 / 产业航母 (> 1 万亿元)',
+        radius: r,
+        color: '#6E8CFF',
+        market_cap_cny: rawMvCny,
+        badge: '万亿级'
+      };
+    } else if(rawMvCny >= 1000){
+      // 【千亿级行业龙头】(1,000亿 ~ 1万亿, 如 比亚迪 8000亿, 兆易创新 2800亿): 固定 14.5px
+      return {
+        tier: 'LARGE',
+        scaleText: '千亿级行业领军龙头 (1000~10000 亿元)',
+        radius: 14.5,
+        color: '#818CF8',
+        market_cap_cny: rawMvCny,
+        badge: '千亿级'
+      };
+    } else if(rawMvCny >= 100){
+      // 【中大型骨干上市公司】(100亿 ~ 1000亿, 如 芯原 968亿, 通富 965亿): 固定 10.5px
+      return {
+        tier: 'MID',
+        scaleText: '中大型骨干上市公司 (100~1000 亿元)',
+        radius: 10.5,
+        color: '#38BDF8',
+        market_cap_cny: rawMvCny,
+        badge: '中盘'
+      };
+    } else {
+      // 【成长型细分骨干企业】(< 100亿, 如 联创光电 82亿): 固定 7.0px
+      return {
+        tier: 'SMALL',
+        scaleText: '成长型细分骨干企业 (< 100 亿元)',
+        radius: 7.0,
+        color: '#33D6B6',
+        market_cap_cny: rawMvCny,
+        badge: '成长型'
+      };
+    }
+  }
+
+  // 3. 兜底未匹配到实时行情的未上市/配套企业
+  return {
+    tier: isSubject ? 'MID' : 'PEER',
+    scaleText: isSubject ? '中盘上市公司 (研报主体标的 100~500 亿元)' : '产业链配套企业 / 采购应用端',
+    radius: isSubject ? 10.5 : 6.5,
+    color: isSubject ? '#38BDF8' : '#33D6B6',
+    market_cap_cny: null,
+    badge: '配套'
+  };
+}
+
+let ovMinDegree = 3;
+let ovMinMarketCap = 10.0;
+
+/* ==================== 1. 全局网络图数据构建（支持静态站点纯前端内存切片与动态服务两级 Leiden 计算） ==================== */
+async function buildGlobalNetwork(forceRefresh = false){
+  const shell = document.getElementById('network-shell');
+  const rect = shell ? shell.getBoundingClientRect() : null;
+  const cx = (rect && rect.width ? rect.width : netGraph.width) / 2 || 600;
+  const cy = (rect && rect.height ? rect.height : netGraph.height) / 2 || 350;
+
+  try {
+    const degInput = document.getElementById('ov-min-degree');
+    const mcInput = document.getElementById('ov-min-mc');
+    if(degInput) ovMinDegree = Math.max(1, parseInt(degInput.value, 10) || 3);
+    if(mcInput) ovMinMarketCap = Math.max(0, parseFloat(mcInput.value) || 0);
+
+    let data;
+    if(IS_STATIC_MODE){
+      if(!STATIC_RAW_NETWORK_DATA){
+        try {
+          STATIC_RAW_NETWORK_DATA = await fetch('./data/network-data.json').then(r => r.ok ? r.json() : null);
+        } catch(e) {
+          STATIC_RAW_NETWORK_DATA = null;
+        }
+      }
+      // 纯前端内存极速过滤度数与市值 (毫秒级 In-Browser Filtering)
+      const rawNodes = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.nodes) || [];
+      const rawLinks = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.links) || [];
+
+      const filteredNodes = rawNodes.filter(n => {
+        const deg = (n.degree !== undefined && n.degree !== null) ? n.degree : 0;
+        if(deg < ovMinDegree) return false;
+        const mc = (n.market_cap_cny !== null && n.market_cap_cny !== undefined) ? n.market_cap_cny : null;
+        if(ovMinMarketCap > 0 && (mc === null || mc < ovMinMarketCap)) return false;
+        return true;
+      });
+
+      const validIdSet = new Set(filteredNodes.map(n => n.id));
+      const filteredLinks = rawLinks.filter(l => validIdSet.has(l.source) && validIdSet.has(l.target));
+
+      data = {
+        nodes: filteredNodes,
+        links: filteredLinks,
+        macro_communities: (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.macro_communities) || []
+      };
+    } else {
+      const incIso = false;
+      const url = `/api/v1/graph/network-data?min_degree=${ovMinDegree}&min_market_cap=${ovMinMarketCap}&include_isolated=${incIso}&refresh=${forceRefresh}`;
+      try {
+        const resp = await fetch(url);
+        data = resp.ok ? await resp.json() : null;
+      } catch(e) {
+        data = null;
+      }
+
+      if(!data || !Array.isArray(data.nodes)){
+        if(!STATIC_RAW_NETWORK_DATA){
+          try {
+            STATIC_RAW_NETWORK_DATA = await fetch('./data/network-data.json').then(r => r.ok ? r.json() : null);
+          } catch(e) {
+            STATIC_RAW_NETWORK_DATA = null;
+          }
+        }
+        const rawNodes = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.nodes) || [];
+        const rawLinks = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.links) || [];
+        const filteredNodes = rawNodes.filter(n => {
+          const deg = (n.degree !== undefined && n.degree !== null) ? n.degree : 0;
+          if(deg < ovMinDegree) return false;
+          const mc = (n.market_cap_cny !== null && n.market_cap_cny !== undefined) ? n.market_cap_cny : null;
+          if(ovMinMarketCap > 0 && (mc === null || mc < ovMinMarketCap)) return false;
+          return true;
+        });
+        const validIdSet = new Set(filteredNodes.map(n => n.id));
+        const filteredLinks = rawLinks.filter(l => validIdSet.has(l.source) && validIdSet.has(l.target));
+        data = {
+          nodes: filteredNodes,
+          links: filteredLinks,
+          macro_communities: (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.macro_communities) || []
+        };
+      }
+    }
+
+    const hudNodes = document.getElementById('hud-nodes');
+    const hudLinks = document.getElementById('hud-links');
+
+    if(data && Array.isArray(data.nodes)){
+      const nodeMap = new Map();
+      data.nodes.forEach(n => {
+        n.x = (n.init_x !== undefined) ? n.init_x : (cx + (Math.random() - 0.5) * 200);
+        n.y = (n.init_y !== undefined) ? n.init_y : (cy + (Math.random() - 0.5) * 200);
+        n.vx = 0;
+        n.vy = 0;
+        n.hier = {
+          macroId: n.macroId || 0,
+          macroName: n.macroName || '宏观产业集群',
+          subId: n.subId || 0,
+          subName: n.subName || '细分产业子链',
+          palette: COMMUNITY_PALETTES[(n.macroId || 0) % (COMMUNITY_PALETTES.length - 1)]
+        };
+        nodeMap.set(n.id, n);
+      });
+
+      netGraph.nodes = data.nodes;
+      netGraph.links = data.links || [];
+      netGraph.nodeMap = nodeMap;
+      netGraph.macroCommunities = data.macro_communities || [];
+
+      // 更新 HUD 统计
+      if(hudNodes) {
+        if(netGraph.nodes.length > 0){
+          hudNodes.textContent = `共 ${netGraph.nodes.length} 家企业 (度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'})`;
+        } else {
+          hudNodes.textContent = `无匹配企业 (度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'})`;
+        }
+      }
+      if(hudLinks) hudLinks.textContent = `${netGraph.links.length} 条供需直连`;
+      return;
+    }
+  } catch(e) {
+    console.warn('Failed to fetch precomputed network data:', e);
+  }
+}
+
+/* ==================== 3. ForceAtlas2 空间布局物理引擎 (防重叠彻底优化) ==================== */
+function runForceAtlas2Step(alpha, cx, cy){
+  const nodes = netGraph.nodes;
+  const links = netGraph.links;
+  const N = nodes.length;
+
+  // 1. ForceAtlas2 LinLog 度数加权排斥力 + 强力防中心重叠弹簧
+  for(let i = 0; i < N; i++){
+    const n1 = nodes[i];
+    for(let j = i + 1; j < N; j++){
+      const n2 = nodes[j];
+      const dx = n2.x - n1.x;
+      const dy = n2.y - n1.y;
+      const dist = Math.hypot(dx, dy) || 1;
+      if(dist > 350) continue;
+
+      // 充足的防重叠安全距离（包含文字标签和边框）
+      const minDist = n1.radius + n2.radius + 28.0;
+      const sameMacro = (n1.hier && n2.hier && n1.hier.macroId === n2.hier.macroId);
+      const sameSub = sameMacro && (n1.hier.subId === n2.hier.subId);
+
+      // 基础 LinLog 度数排斥（跨宏观集群排斥力增强 1.4 倍，拉开不同集群中心）
+      let repBase = ((n1.degree + 1) * (n2.degree + 1) * 4.6) / (dist + 6.0);
+      if(!sameMacro) repBase *= 1.40;
+      let rep = repBase * alpha;
+
+      // 强力防中心重叠斥力（距离小于 minDist 时非线性爆发）
+      if(dist < minDist){
+        rep += (minDist - dist) * 0.48 * alpha;
+      }
+
+      const fx = (dx / dist) * rep;
+      const fy = (dy / dist) * rep;
+      if(n1 !== netGraph.dragNode){ n1.vx -= fx; n1.vy -= fy; }
+      if(n2 !== netGraph.dragNode){ n2.vx += fx; n2.vy += fy; }
+    }
+  }
+
+  // 2. ForceAtlas2 层次连线引力 (同子链强凝聚，同大集群中度凝聚，跨大集群舒缓拉伸)
+  links.forEach(l => {
+    if(l.type === 'inferred' && !ovInferredVisible) return;
+    const n1 = netGraph.nodeMap.get(l.source);
+    const n2 = netGraph.nodeMap.get(l.target);
+    if(!n1 || !n2) return;
+
+    const dx = n2.x - n1.x;
+    const dy = n2.y - n1.y;
+    const dist = Math.hypot(dx, dy) || 1;
+    const sameMacro = (n1.hier && n2.hier && n1.hier.macroId === n2.hier.macroId);
+    const sameSub = sameMacro && (n1.hier.subId === n2.hier.subId);
+
+    const mult = sameSub ? 1.65 : (sameMacro ? 1.10 : 0.60);
+    const targetDist = sameSub ? 50.0 : (sameMacro ? 75.0 : 110.0);
+
+    const force = (dist - targetDist) * 0.075 * mult * alpha;
+    const fx = (dx / dist) * force;
+    const fy = (dy / dist) * force;
+    if(n1 !== netGraph.dragNode){ n1.vx -= fx; n1.vy -= fy; }
+    if(n2 !== netGraph.dragNode){ n2.vx += fx; n2.vy += fy; }
+  });
+
+  // 3. 向心重力、高阻尼与速度硬截断
+  const maxSpeed = 12.0 * alpha + 0.15;
+  nodes.forEach(n => {
+    if(n === netGraph.dragNode) return;
+
+    if(n.degree === 0){
+      // 孤立企业稳定在最外圈卫星轨道 (半径 320px)
+      const dx = n.x - cx;
+      const dy = n.y - cy;
+      const d = Math.hypot(dx, dy) || 1;
+      const ringForce = (d - 320) * 0.05 * alpha;
+      n.vx -= (dx / d) * ringForce;
+      n.vy -= (dy / d) * ringForce;
+    } else {
+      const gravFactor = 0.030 * Math.log2(n.degree + 2);
+      n.vx += (cx - n.x) * gravFactor * alpha;
+      n.vy += (cy - n.y) * gravFactor * alpha;
+    }
+
+    n.vx *= 0.60;
+    n.vy *= 0.60;
+
+    const spd = Math.hypot(n.vx, n.vy);
+    if(spd > maxSpeed){
+      n.vx = (n.vx / spd) * maxSpeed;
+      n.vy = (n.vy / spd) * maxSpeed;
+    }
+
+    n.x += n.vx;
+    n.y += n.vy;
+  });
+
+  // 4. 几何刚体位置松弛消除重叠 (Position-based Anti-Collision Relaxation)
+  // 彻底保证任何两个公司的中心距离严格大于安全阈值，绝对无重叠！
+  for(let pass = 0; pass < 2; pass++){
+    for(let i = 0; i < N; i++){
+      const n1 = nodes[i];
+      for(let j = i + 1; j < N; j++){
+        const n2 = nodes[j];
+        const dx = n2.x - n1.x;
+        const dy = n2.y - n1.y;
+        const dist = Math.hypot(dx, dy) || 1;
+        const safeDist = n1.radius + n2.radius + 22.0;
+        if(dist < safeDist){
+          const overlap = (safeDist - dist) * 0.5;
+          const ux = dx / dist;
+          const uy = dy / dist;
+          if(n1 !== netGraph.dragNode){ n1.x -= ux * overlap; n1.y -= uy * overlap; }
+          if(n2 !== netGraph.dragNode){ n2.x += ux * overlap; n2.y += uy * overlap; }
+        }
+      }
+    }
+  }
+}
+
+/* ==================== 4. 视图居中与渲染调度 ==================== */
+function autoFitOverview(padding = 50){
+  if(!netGraph.nodes || netGraph.nodes.length === 0) return;
+  const shell = document.getElementById('network-shell');
+  if(!shell) return;
+  const rect = shell.getBoundingClientRect();
+  const shellW = rect.width || netGraph.width || 1200;
+  const shellH = rect.height || netGraph.height || 700;
+
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  netGraph.nodes.forEach(n => {
+    minX = Math.min(minX, n.x - n.radius - 12);
+    maxX = Math.max(maxX, n.x + n.radius + 12);
+    minY = Math.min(minY, n.y - n.radius - 12);
+    maxY = Math.max(maxY, n.y + n.radius + 12);
+  });
+
+  const graphW = Math.max(100, maxX - minX);
+  const graphH = Math.max(100, maxY - minY);
+
+  const scaleX = (shellW - padding * 2) / graphW;
+  const scaleY = (shellH - padding * 2) / graphH;
+  const targetK = Math.max(0.4, Math.min(1.2, Math.min(scaleX, scaleY)));
+
+  const graphMidX = (minX + maxX) / 2;
+  const graphMidY = (minY + maxY) / 2;
+
+  netGraph.transform.k = targetK;
+  netGraph.transform.x = (shellW / 2) - graphMidX * targetK;
+  netGraph.transform.y = (shellH / 2) - graphMidY * targetK;
+  drawNetworkSVG();
+}
+
+async function renderOverview(forceRefresh = false){
+  const shell = document.getElementById('network-shell');
+  if(!shell) return;
+  const rect = shell.getBoundingClientRect();
+  netGraph.width = rect.width || 1200;
+  netGraph.height = rect.height || 700;
+
+  await buildGlobalNetwork(forceRefresh);
+  initNetworkInteractions();
+
+  // 1. ForceAtlas2 同步快速预热 50 轮，瞬间收敛至无重叠平衡态
+  const cx = netGraph.width / 2;
+  const cy = netGraph.height / 2;
+  for(let warm = 0; warm < 50; warm++){
+    const alpha = Math.pow(0.95, warm);
+    runForceAtlas2Step(alpha, cx, cy);
+  }
+
+  // 2. 预热完成后立即全屏居中适配
+  autoFitOverview();
+
+  // 3. 启动平滑微调退火动画
+  startNetworkSimulation(0.20);
+}
+
+function startNetworkSimulation(reheatAlpha = 1.0){
+  if(netGraph.animId) cancelAnimationFrame(netGraph.animId);
+  netGraph.alpha = reheatAlpha;
+
+  function step(){
+    if(!netGraph.isDragging && netGraph.alpha < 0.003){
+      netGraph.alpha = 0;
+      return;
+    }
+
+    const alpha = netGraph.alpha;
+    const cx = netGraph.width / 2;
+    const cy = netGraph.height / 2;
+
+    runForceAtlas2Step(alpha, cx, cy);
+
+    if(!netGraph.isDragging){
+      netGraph.alpha *= 0.955;
+    }
+
+    drawNetworkSVG();
+    netGraph.animId = requestAnimationFrame(step);
+  }
+
+  netGraph.animId = requestAnimationFrame(step);
+}
+
+function drawNetworkSVG(){
+  const linksLayer = document.getElementById('network-links-layer');
+  const nodesLayer = document.getElementById('network-nodes-layer');
+  const panzoom = document.getElementById('network-panzoom');
+  if(!linksLayer || !nodesLayer || !panzoom) return;
+
+  panzoom.setAttribute('transform', `translate(${netGraph.transform.x}, ${netGraph.transform.y}) scale(${netGraph.transform.k})`);
+
+  // 1. 渲染连接直线
+  let linksHTML = '';
+  netGraph.links.forEach((l, idx) => {
+    if(l.type === 'inferred' && !ovInferredVisible) return;
+    const s = netGraph.nodeMap.get(l.source);
+    const t = netGraph.nodeMap.get(l.target);
+    if(!s || !t) return;
+
+    const dx = t.x - s.x;
+    const dy = t.y - s.y;
+    const dist = Math.hypot(dx, dy) || 1;
+    const ux = dx / dist;
+    const uy = dy / dist;
+
+    const x1 = s.x + ux * (s.radius + 2);
+    const y1 = s.y + uy * (s.radius + 2);
+    const x2 = t.x - ux * (t.radius + 5);
+    const y2 = t.y - uy * (t.radius + 5);
+
+    const sameMacro = (s.hier && t.hier && s.hier.macroId === t.hier.macroId);
+    const sameSub = sameMacro && (s.hier.subId === t.hier.subId);
+    const commColor = sameMacro ? s.hier.palette.primary : '#64748B';
+
+    let isHigh = false;
+    let isDim = false;
+
+    if(netGraph.activeCommunityId !== null){
+      const matchComm = (s.hier && s.hier.macroId === netGraph.activeCommunityId) || (t.hier && t.hier.macroId === netGraph.activeCommunityId);
+      isHigh = matchComm;
+      isDim = !matchComm;
+    } else if(netGraph.highlightedNodeId){
+      isHigh = (l.source === netGraph.highlightedNodeId || l.target === netGraph.highlightedNodeId);
+      isDim = !isHigh;
+    }
+
+    const marker = l.type === 'inferred' ? 'url(#net-arr-inf)' : (l.kind === 'supply' ? 'url(#net-arr-sup)' : 'url(#net-arr-cust)');
+
+    linksHTML += `
+      <line class="net-link ${l.kind} ${l.type} ${isHigh ? 'highlighted' : ''} ${isDim ? 'dimmed' : ''}"
+            x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}"
+            x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"
+            stroke="${commColor}"
+            stroke-width="${isHigh ? 2.5 : (sameSub ? 1.8 : (sameMacro ? 1.3 : 1.0))}"
+            stroke-opacity="${isHigh ? 0.95 : (sameSub ? 0.65 : (sameMacro ? 0.45 : 0.25))}"
+            stroke-dasharray="${sameMacro ? 'none' : '3,3'}"
+            marker-end="${marker}"
+            data-link-idx="${idx}" />
+    `;
+  });
+  linksLayer.innerHTML = linksHTML;
+
+  // 2. 渲染圆点节点
+  let nodesHTML = '';
+  netGraph.nodes.forEach(n => {
+    let isHigh = false;
+    let isDim = false;
+
+    if(netGraph.activeCommunityId !== null){
+      isHigh = (n.hier && n.hier.macroId === netGraph.activeCommunityId);
+      isDim = !isHigh;
+    } else if(netGraph.highlightedNodeId){
+      isHigh = (netGraph.highlightedNodeId === n.id);
+      const isNeighbor = isHigh || netGraph.links.some(l => 
+        (l.source === netGraph.highlightedNodeId && l.target === n.id) ||
+        (l.target === netGraph.highlightedNodeId && l.source === n.id)
+      );
+      isDim = !isNeighbor;
+    }
+
+    const glowStroke = n.glowColor || n.color;
+    const showLabel = n.is_subject || n.radius >= 10 || isHigh;
+    const glowRingR = n.radius >= 18 ? (n.radius + 5).toFixed(1) : (n.radius + 3.5).toFixed(1);
+    const labelY = n.radius >= 18 ? (n.radius + 13).toFixed(1) : (n.radius + 10).toFixed(1);
+    const labelStyle = n.radius >= 18 ? 'font-weight:700; font-size:12px;' : '';
+
+    nodesHTML += `
+      <g class="net-node ${isHigh ? 'highlighted' : ''} ${isDim ? 'dimmed' : ''}"
+         transform="translate(${n.x.toFixed(1)}, ${n.y.toFixed(1)})"
+         data-node-id="${n.id}">
+        <circle class="glow-ring" r="${glowRingR}" stroke="${glowStroke}" stroke-width="${n.radius >= 18 ? 2 : 1}" />
+        <circle class="core-circle" r="${n.radius.toFixed(1)}" fill="${n.color}"
+                stroke="${n.is_subject ? '#FFFFFF' : 'rgba(255,255,255,0.45)'}"
+                stroke-width="${n.is_subject ? 2.2 : (n.radius >= 18 ? 1.8 : 1)}" />
+        ${showLabel ? `<text class="node-label" y="${labelY}" style="${labelStyle}">${n.name}</text>` : ''}
+      </g>
+    `;
+  });
+  nodesLayer.innerHTML = nodesHTML;
+
+  // 挂载节点事件
+  let dragCandidate = null;
+  let dragStartPos = null;
+  let hasMoved = false;
+
+  nodesLayer.querySelectorAll('.net-node').forEach(el => {
+    const nid = el.getAttribute('data-node-id');
+    const node = netGraph.nodeMap.get(nid);
+    if(!node) return;
+
+    el.addEventListener('mouseenter', (ev) => showNetworkTooltip(node, ev));
+    el.addEventListener('mousemove', (ev) => updateNetworkTooltipPos(ev));
+    el.addEventListener('mouseleave', hideNetworkTooltip);
+
+    el.addEventListener('mousedown', (ev) => {
+      ev.stopPropagation();
+      dragCandidate = node;
+      dragStartPos = { x: ev.clientX, y: ev.clientY };
+      hasMoved = false;
+    });
+
+    el.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      if(hasMoved) return; // 真实拖拽后不触发点击事件
+      netGraph.highlightedNodeId = (netGraph.highlightedNodeId === node.id) ? null : node.id;
+      drawNetworkSVG();
+      openDrawer(node.code || node.name, node.role, node);
+    });
+  });
+
+  window.addEventListener('mousemove', (ev) => {
+    if(dragCandidate && dragStartPos && !netGraph.isDragging){
+      const d = Math.hypot(ev.clientX - dragStartPos.x, ev.clientY - dragStartPos.y);
+      if(d > 4){
+        hasMoved = true;
+        netGraph.isDragging = true;
+        netGraph.dragNode = dragCandidate;
+      }
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    dragCandidate = null;
+    dragStartPos = null;
+  });
+}
+
+function initNetworkInteractions(){
+  const shell = document.getElementById('network-shell');
+  const svg = document.getElementById('network-svg');
+  const searchInput = document.getElementById('net-search-input');
+  const resetBtn = document.getElementById('net-btn-reset');
+  if(!shell || !svg) return;
+
+  if(svg.__netInteractionsBound) return;
+  svg.__netInteractionsBound = true;
+
+  // 画布平移与拖拽
+  svg.addEventListener('mousedown', (ev) => {
+    netGraph.isPanning = true;
+    netGraph.panStart = { x: ev.clientX - netGraph.transform.x, y: ev.clientY - netGraph.transform.y };
+  });
+
+  window.addEventListener('mousemove', (ev) => {
+    if(netGraph.isDragging && netGraph.dragNode){
+      const rect = shell.getBoundingClientRect();
+      const rawX = (ev.clientX - rect.left - netGraph.transform.x) / netGraph.transform.k;
+      const rawY = (ev.clientY - rect.top - netGraph.transform.y) / netGraph.transform.k;
+      netGraph.dragNode.x = rawX;
+      netGraph.dragNode.y = rawY;
+      netGraph.dragNode.vx = 0;
+      netGraph.dragNode.vy = 0;
+      drawNetworkSVG();
+    } else if(netGraph.isPanning){
+      netGraph.transform.x = ev.clientX - netGraph.panStart.x;
+      netGraph.transform.y = ev.clientY - netGraph.panStart.y;
+      drawNetworkSVG();
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    netGraph.isDragging = false;
+    netGraph.dragNode = null;
+    netGraph.isPanning = false;
+  });
+
+  // 细腻平滑的阻尼滚轮与触控板缩放 (完美兼容 Mac Trackpad 与普通滚轮鼠标)
+  svg.addEventListener('wheel', (ev) => {
+    ev.preventDefault();
+    const rect = shell.getBoundingClientRect();
+    const mouseX = ev.clientX - rect.left;
+    const mouseY = ev.clientY - rect.top;
+
+    // 限制单次增量并采用连续平滑阻尼缩放系数
+    const delta = Math.max(-80, Math.min(80, ev.deltaY));
+    const zoomFactor = Math.pow(2, -delta * 0.0012);
+    const newK = Math.max(0.15, Math.min(4.0, netGraph.transform.k * zoomFactor));
+
+    netGraph.transform.x = mouseX - (mouseX - netGraph.transform.x) * (newK / netGraph.transform.k);
+    netGraph.transform.y = mouseY - (mouseY - netGraph.transform.y) * (newK / netGraph.transform.k);
+    netGraph.transform.k = newK;
+
+    drawNetworkSVG();
+  }, { passive: false });
+
+  // 搜索定位
+  if(searchInput){
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.trim().toLowerCase();
+      if(!q){
+        netGraph.highlightedNodeId = null;
+        drawNetworkSVG();
+        return;
+      }
+      const match = netGraph.nodes.find(n => n.name.toLowerCase().includes(q) || n.code.toLowerCase().includes(q));
+      if(match){
+        focusNode(match);
+      }
+    });
+  }
+
+  // 动态筛选：最低度数与最低市值实时响应
+  const degInput = document.getElementById('ov-min-degree');
+  const mcInput = document.getElementById('ov-min-mc');
+
+  let filterDebounce = null;
+  const onFilterParamChange = () => {
+    const hudNodes = document.getElementById('hud-nodes');
+    if(hudNodes) hudNodes.textContent = '筛选计算中...';
+    if(filterDebounce) clearTimeout(filterDebounce);
+    filterDebounce = setTimeout(async () => {
+      await renderOverview(false);
+    }, 120);
+  };
+
+  if(degInput){
+    degInput.addEventListener('input', onFilterParamChange);
+    degInput.addEventListener('change', onFilterParamChange);
+  }
+
+  if(mcInput){
+    mcInput.addEventListener('input', onFilterParamChange);
+    mcInput.addEventListener('change', onFilterParamChange);
+  }
+
+  // 重置视角（自动全屏居中适配）
+  if(resetBtn){
+    resetBtn.addEventListener('click', () => {
+      netGraph.highlightedNodeId = null;
+      netGraph.activeCommunityId = null;
+      startNetworkSimulation(0.35);
+      setTimeout(autoFitOverview, 100);
+    });
+  }
+}
+
+function focusNode(node){
+  netGraph.highlightedNodeId = node.id;
+  netGraph.transform.k = 1.35;
+  netGraph.transform.x = (netGraph.width / 2) - node.x * netGraph.transform.k;
+  netGraph.transform.y = (netGraph.height / 2) - node.y * netGraph.transform.k;
+  drawNetworkSVG();
+}
+
+function showNetworkTooltip(node, ev){
+  const tt = document.getElementById('network-tooltip');
+  if(!tt) return;
+
+  const roleText = node.is_subject ? '核心主体研报公司' : (node.role === 'supplier' ? '上游供应商企业' : '下游采购企业');
+  const scaleText = node.scaleText || (node.tier === 'ST' ? 'ST风险警示 / 微盘股' : (node.radius >= 22 ? '万亿级全球科技巨头' : '产业链企业'));
+
+  tt.innerHTML = `
+    <div class="tt-title">
+      <span class="tt-dot" style="background:${node.color}; box-shadow:0 0 8px ${node.glowColor || node.color}"></span>
+      <span>${node.name}</span>
+      <span class="tt-code">${node.code || ''}</span>
+    </div>
+    <div class="tt-row"><span>所属行业:</span><span>${node.industry}</span></div>
+    <div class="tt-row"><span>企业定位:</span><span style="color:${node.color}">${roleText}</span></div>
+    <div class="tt-row"><span>规模评级:</span><span style="color:${node.tier === 'ST' ? '#F59E0B' : (node.tier === 'MEGA' ? '#6E8CFF' : 'inherit')}">${scaleText}</span></div>
+    <div class="tt-row"><span>产业链连接:</span><span>上游 ${node.upCount} 家 | 下游 ${node.downCount} 家</span></div>
+    ${node.desc ? `<div class="tt-desc">${node.desc}</div>` : ''}
+    <div style="font-size:10px; color:var(--sub-2); margin-top:6px;">🖱️ 点击圆点固定高亮并打开侧边档案</div>
+  `;
+  tt.style.display = 'block';
+  updateNetworkTooltipPos(ev);
+}
+
+function updateNetworkTooltipPos(ev){
+  const tt = document.getElementById('network-tooltip');
+  const shell = document.getElementById('network-shell');
+  if(!tt || !shell) return;
+  const rect = shell.getBoundingClientRect();
+  const x = ev.clientX - rect.left;
+  const y = ev.clientY - rect.top;
+  tt.style.left = `${x}px`;
+  tt.style.top = `${y}px`;
+}
+
+function hideNetworkTooltip(){
+  const tt = document.getElementById('network-tooltip');
+  if(tt) tt.style.display = 'none';
+}
+
+document.getElementById('ov-toggle-inferred').addEventListener('click', (ev) => {
+  ovInferredVisible = !ovInferredVisible;
+  ev.currentTarget.classList.toggle('on', ovInferredVisible);
+  drawNetworkSVG();
+});
+
+/* ==================== VIEW 02: 产业链多层展开 ==================== */
+
+function getDirectUpstream(companyId, limit){
+  const c = COMPANIES[companyId];
+  if(!c || !c.materials) return [];
+  const list = [];
+  c.materials.forEach(m => {
+    (m.suppliers || []).forEach(s => {
+      list.push({
+        id: s.id,
+        name: s.name,
+        share: s.share || 20,
+        type: s.type || 'direct',
+        via: m.name,
+        note: s.note
+      });
+    });
+  });
+  list.sort((a,b) => (b.share || 0) - (a.share || 0));
+  return list.slice(0, limit);
+}
+
+function getDirectUpstream(companyId, limit){
+  const c = COMPANIES[companyId];
+  if(!c || !c.materials) return [];
+  const list = [];
+  const compName = c.name;
+  const compCode = c.code;
+
+  c.materials.forEach(m => {
+    (m.suppliers || []).forEach(s => {
+      // 避免自环：复合型企业自身不作为自身外部供应商
+      if(s.name === compName || s.name === compCode || s.id === compCode || s.id === compName) return;
+      list.push({
+        id: s.id,
+        name: s.name,
+        share: s.share || 20,
+        type: s.type || 'direct',
+        via: m.name,
+        note: s.note
+      });
+    });
+  });
+  list.sort((a,b) => (b.share || 0) - (a.share || 0));
+  return list.slice(0, limit);
+}
+
+function getDirectDownstream(companyId, limit){
+  const c = COMPANIES[companyId];
+  if(!c || !c.products) return [];
+  const list = [];
+  const compName = c.name;
+  const compCode = c.code;
+
+  c.products.forEach(p => {
+    (p.customers || []).forEach(cu => {
+      // 避免自环：复合型企业自身不作为自身外部客户
+      if(cu.name === compName || cu.name === compCode || cu.id === compCode || cu.id === compName) return;
+      list.push({
+        id: cu.id,
+        name: cu.name,
+        share: cu.share || 10,
+        type: cu.type || 'direct',
+        via: p.name,
+        note: cu.note
+      });
+    });
+  });
+  list.sort((a,b) => (b.share || 0) - (a.share || 0));
+  return list.slice(0, limit);
+}
+
+function renderChain(){
+  const center = getCurrentCenter();
+  const depthUp = parseInt(document.getElementById('chain-depth-up').value, 10) || 2;
+  const depthDown = parseInt(document.getElementById('chain-depth-down').value, 10) || 2;
+  const topUp = parseInt(document.getElementById('chain-top-up').value, 10) || 3;
+  const topDown = parseInt(document.getElementById('chain-top-down').value, 10) || 2;
+
+  const upLevels = [];
+  let currentLayer = [center.code || center.name];
+  const visitedUp = new Set([center.name, center.code]);
+
+  for(let d = 1; d <= depthUp; d++){
+    const nextLayer = [];
+    currentLayer.forEach(cId => {
+      const up = getDirectUpstream(resolveCompanyId(cId), topUp);
+      up.forEach(u => {
+        // 避免多层回环与重复展开
+        if(visitedUp.has(u.name) || (u.id && visitedUp.has(u.id))) return;
+        visitedUp.add(u.name);
+        if(u.id) visitedUp.add(u.id);
+        nextLayer.push({...u, parentId: cId, depth: d});
+      });
+    });
+    if(nextLayer.length > 0) upLevels.unshift({level: -d, nodes: nextLayer});
+    currentLayer = nextLayer.map(n => n.name);
+  }
+
+  const downLevels = [];
+  currentLayer = [center.code || center.name];
+  const visitedDown = new Set([center.name, center.code]);
+
+  for(let d = 1; d <= depthDown; d++){
+    const nextLayer = [];
+    currentLayer.forEach(cId => {
+      const down = getDirectDownstream(resolveCompanyId(cId), topDown);
+      down.forEach(dn => {
+        // 避免多层回环与重复展开
+        if(visitedDown.has(dn.name) || (dn.id && visitedDown.has(dn.id))) return;
+        visitedDown.add(dn.name);
+        if(dn.id) visitedDown.add(dn.id);
+        nextLayer.push({...dn, parentId: cId, depth: d});
+      });
+    });
+    if(nextLayer.length > 0) downLevels.push({level: d, nodes: nextLayer});
+    currentLayer = nextLayer.map(n => n.name);
+  }
+
+  const container = document.getElementById('chain-levels');
+  container.innerHTML = '';
+
+  upLevels.forEach(lvl => {
+    const col = el('div', 'chain-level');
+    col.innerHTML = `<div class="chain-level-title up">上游 ${Math.abs(lvl.level)} 阶</div>`;
+    lvl.nodes.forEach((n, idx) => {
+      const isSw = !!COMPANIES[n.name] || !!COMPANIES[n.id];
+      const card = el('div', `chain-node up ${n.type === 'inferred' ? 'inferred' : ''}`);
+      card.id = `cn-up-${lvl.level}-${idx}`;
+      card.innerHTML = `
+        <div class="cn-name">${n.name}</div>
+        <div class="cn-share">供应 ${n.via}</div>
+      `;
+      card.addEventListener('click', () => {
+        if(isSw) switchCenterCompany(n.id || n.name);
+        else openDrawer(n.name, 'supplier', n);
+      });
+      col.appendChild(card);
+    });
+    container.appendChild(col);
+  });
+
+  const centerCol = el('div', 'chain-level center');
+  centerCol.innerHTML = `<div class="chain-level-title center">核心公司</div>`;
+  const hub = el('div', 'chain-hub');
+  hub.id = 'chain-center-hub';
+  hub.innerHTML = `
+    <div class="tick">${center.code || 'CORE'}</div>
+    <h3>${center.name}</h3>
+    <p>${center.desc || '核心产业链枢纽'}</p>
+  `;
+  hub.addEventListener('click', () => openDrawer(center.code, 'company'));
+  centerCol.appendChild(hub);
+  container.appendChild(centerCol);
+
+  downLevels.forEach(lvl => {
+    const col = el('div', 'chain-level');
+    col.innerHTML = `<div class="chain-level-title down">下游 ${lvl.level} 阶</div>`;
+    lvl.nodes.forEach((n, idx) => {
+      const isSw = !!COMPANIES[n.name] || !!COMPANIES[n.id];
+      const card = el('div', `chain-node down ${n.type === 'inferred' ? 'inferred' : ''}`);
+      card.id = `cn-dn-${lvl.level}-${idx}`;
+      card.innerHTML = `
+        <div class="cn-name">${n.name}</div>
+        <div class="cn-share">采购 ${n.via}</div>
+      `;
+      card.addEventListener('click', () => {
+        if(isSw) switchCenterCompany(n.id || n.name);
+        else openDrawer(n.name, 'customer', n);
+      });
+      col.appendChild(card);
+    });
+    container.appendChild(col);
+  });
+
+  requestAnimationFrame(() => drawChainEdges());
+}
+
+function drawChainEdges(){
+  const svg = document.getElementById('chain-edges-svg');
+  const container = document.getElementById('chain-container');
+  if(!svg || !container) return;
+  svg.innerHTML = '';
+}
+
+['chain-depth-up', 'chain-depth-down', 'chain-top-up', 'chain-top-down'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => renderChain());
+});
+
+/* ==================== VIEW 03: 单公司 5 列视图 ==================== */
+
+function renderSingle(){
+  const data = getCurrentCenter();
+
+  const colS = document.getElementById('col-suppliers');
+  const colM = document.getElementById('col-materials');
+  const colC = document.getElementById('col-company');
+  const colP = document.getElementById('col-products');
+  const colCu = document.getElementById('col-customers');
+
+  colS.innerHTML = '<div class="col-title">上游供应商</div>';
+  colM.innerHTML = '<div class="col-title">原材料</div>';
+  colC.innerHTML = '<div class="col-title">核心公司</div>';
+  colP.innerHTML = '<div class="col-title">主营产品</div>';
+  colCu.innerHTML = '<div class="col-title">下游客户</div>';
+
+  const compName = data.name;
+  const compCode = data.code;
+  const seenSups = new Set([compName, compCode]);
+  (data.materials || []).forEach(m => {
+    (m.suppliers || []).forEach(s => {
+      if(s.name === compName || s.name === compCode || s.id === compCode || s.id === compName) return;
+      if(seenSups.has(s.name)) return;
+      seenSups.add(s.name);
+      const isSw = !!COMPANIES[s.name] || !!COMPANIES[s.id];
+      const n = el('div', `node n-supplier ${s.type === 'inferred' ? 'inferred-node' : ''} ${isSw ? 'clickable-hint' : ''}`);
+      n.id = 's-' + s.name;
+      if(s.type === 'inferred' && !singleInferredVisible) n.classList.add('hidden-inferred');
+      n.innerHTML = `
+        <div class="head"><span class="dot"></span><span class="name">${s.name}</span></div>
+        <div class="meta">
+          <span class="tag ${s.type}">${s.type === 'direct' ? '直接披露' : '推断关联'}</span>
+          <span class="share">${s.share ? s.share + '%' : ''}</span>
+        </div>
+      `;
+      n.addEventListener('click', () => {
+        if(isSw) switchCenterCompany(s.id || s.name);
+        else openDrawer(s.name, 'supplier', s);
+      });
+      colS.appendChild(n);
+    });
+
+    const mn = el('div', 'node n-material');
+    mn.id = 'm-' + m.id;
+    mn.innerHTML = `
+      <div class="head"><span class="dot"></span><span class="name">${m.name}</span></div>
+      <div class="meta">
+        <span class="tag direct">成本占比</span>
+        <span class="share">${m.share ? m.share + '%' : '核心采购'}</span>
+      </div>
+    `;
+    mn.addEventListener('click', () => openDrawer(m.id, 'material', m));
+    colM.appendChild(mn);
+  });
+
+  const hub = el('div', 'hub');
+  hub.id = 'hub-node';
+  hub.innerHTML = `
+    <div class="tick">${data.code || 'CORE'}</div>
+    <h2>${data.name}</h2>
+    <p>${data.desc || '主营高科技产业链核心制造与研发'}</p>
+    <div class="mini-block">
+      <div class="mini-title">主营产品 / 原材料构成</div>
+      <div class="stack-bar">
+        <span style="width:45%; background:var(--product);"></span>
+        <span style="width:30%; background:var(--material);"></span>
+        <span style="width:25%; background:var(--line-soft);"></span>
+      </div>
+    </div>
+  `;
+  hub.addEventListener('click', () => openDrawer(data.code, 'company'));
+  colC.appendChild(hub);
+
+  const seenCusts = new Set([compName, compCode]);
+  (data.products || []).forEach(p => {
+    const pn = el('div', 'node n-product');
+    pn.id = 'p-' + p.id;
+    pn.innerHTML = `
+      <div class="head"><span class="dot"></span><span class="name">${p.name}</span></div>
+      <div class="meta">
+        <span class="tag direct">营收占比</span>
+        <span class="share">${p.share ? p.share + '%' : '主营业务'}</span>
+      </div>
+    `;
+    pn.addEventListener('click', () => openDrawer(p.id, 'product', p));
+    colP.appendChild(pn);
+
+    (p.customers || []).forEach(cu => {
+      if(cu.name === compName || cu.name === compCode || cu.id === compCode || cu.id === compName) return;
+      if(seenCusts.has(cu.name)) return;
+      seenCusts.add(cu.name);
+      const isSw = !!COMPANIES[cu.name] || !!COMPANIES[cu.id];
+      const cun = el('div', `node n-customer ${cu.type === 'inferred' ? 'inferred-node' : ''} ${isSw ? 'clickable-hint' : ''}`);
+      cun.id = 'c-' + cu.name;
+      if(cu.type === 'inferred' && !singleInferredVisible) cun.classList.add('hidden-inferred');
+      cun.innerHTML = `
+        <div class="head"><span class="dot"></span><span class="name">${cu.name}</span></div>
+        <div class="meta">
+          <span class="tag ${cu.type}">${cu.type === 'direct' ? '直接披露' : '推断关联'}</span>
+          <span class="share">${cu.share ? cu.share + '%' : ''}</span>
+        </div>
+      `;
+      cun.addEventListener('click', () => {
+        if(isSw) switchCenterCompany(cu.id || cu.name);
+        else openDrawer(cu.name, 'customer', cu);
+      });
+      colCu.appendChild(cun);
+    });
+  });
+
+  requestAnimationFrame(() => drawSingleEdges());
+}
+
+function drawBezier(svg, x1, y1, x2, y2, type, strokeWidth){
+  const dx = Math.abs(x2 - x1) * 0.5;
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  const d = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+  path.setAttribute('d', d);
+  path.setAttribute('fill', 'none');
+  path.setAttribute('stroke', type === 'inferred' ? COLORS.inferred : COLORS.direct);
+  path.setAttribute('stroke-width', strokeWidth || 1.8);
+  if(type === 'inferred'){
+    path.setAttribute('stroke-dasharray', '5 4');
+    path.style.animation = 'dashmove 1.5s linear infinite';
+    path.setAttribute('opacity', '0.85');
+  } else {
+    path.setAttribute('opacity', '0.65');
+  }
+  svg.appendChild(path);
+}
+
+function drawSingleEdges(){
+  const svg = document.getElementById('edges-svg');
+  const container = document.getElementById('diagram-container');
+  if(!svg || !container) return;
+  svg.innerHTML = '';
+
+  const cRect = container.getBoundingClientRect();
+  const hub = document.getElementById('hub-node');
+  if(!hub) return;
+  const hRect = hub.getBoundingClientRect();
+  const hubLeftX = hRect.left - cRect.left;
+  const hubRightX = hRect.right - cRect.left;
+  const hubMidY = hRect.top - cRect.top + hRect.height / 2;
+
+  const data = getCurrentCenter();
+
+  (data.materials || []).forEach(m => {
+    const mn = document.getElementById('m-' + m.id);
+    if(!mn) return;
+    const mr = mn.getBoundingClientRect();
+    const mx1 = mr.left - cRect.left;
+    const mx2 = mr.right - cRect.left;
+    const my = mr.top - cRect.top + mr.height / 2;
+
+    (m.suppliers || []).forEach(s => {
+      if(s.type === 'inferred' && !singleInferredVisible) return;
+      const sn = document.getElementById('s-' + s.name);
+      if(!sn) return;
+      const sr = sn.getBoundingClientRect();
+      drawBezier(svg, sr.right - cRect.left, sr.top - cRect.top + sr.height / 2, mx1, my, s.type, 1.8);
+    });
+
+    drawBezier(svg, mx2, my, hubLeftX, hubMidY, 'direct', Math.max(1.5, (m.share || 30) / 15));
+  });
+
+  (data.products || []).forEach(p => {
+    const pn = document.getElementById('p-' + p.id);
+    if(!pn) return;
+    const pr = pn.getBoundingClientRect();
+    const px1 = pr.left - cRect.left;
+    const px2 = pr.right - cRect.left;
+    const py = pr.top - cRect.top + pr.height / 2;
+
+    drawBezier(svg, hubRightX, hubMidY, px1, py, 'direct', Math.max(1.5, (p.share || 30) / 15));
+
+    (p.customers || []).forEach(cu => {
+      if(cu.type === 'inferred' && !singleInferredVisible) return;
+      const cun = document.getElementById('c-' + cu.name);
+      if(!cun) return;
+      const cur = cun.getBoundingClientRect();
+      drawBezier(svg, px2, py, cur.left - cRect.left, cur.top - cRect.top + cur.height / 2, cu.type, 1.8);
+    });
+  });
+}
+
+document.getElementById('toggle-inferred').addEventListener('click', (ev) => {
+  singleInferredVisible = !singleInferredVisible;
+  ev.currentTarget.classList.toggle('on', singleInferredVisible);
+  document.querySelectorAll('#diagram-container .node.inferred-node').forEach(n => n.classList.toggle('hidden-inferred', !singleInferredVisible));
+  drawSingleEdges();
+});
+
+/* ==================== 抽屉详情 ==================== */
+
+const KIND_LABEL = {supplier:'供应商', material:'原材料', company:'核心公司', product:'产品', customer:'客户'};
+
+function openDrawer(id, kind, rawItem){
+  const drawer = document.getElementById('drawer');
+  const kindEl = document.getElementById('d-kind');
+  const nameEl = document.getElementById('d-name');
+  const subEl = document.getElementById('d-sub');
+  const bodyEl = document.getElementById('d-body');
+  kindEl.textContent = KIND_LABEL[kind];
+  kindEl.style.color = COLORS[kind] || COLORS.company;
+  bodyEl.innerHTML = '';
+
+  const data = getCurrentCenter();
+
+  if(kind === 'company'){
+    nameEl.textContent = data.name;
+    subEl.textContent = `${data.code || ''} · ${data.industry || '产业链核心'}`;
+    bodyEl.appendChild(relSection('核心原材料采购结构', (data.materials || []).map(m => ({name:m.name, share:m.share, type:'direct', note:'公司年报/研报披露的核心原材料成本占比。'}))));
+    bodyEl.appendChild(relSection('主营产品营收结构', (data.products || []).map(p => ({name:p.name, share:p.share, type:'direct', note:'公司年报/研报披露的产品营收占比。'}))));
+  } else if(kind === 'material'){
+    const m = (data.materials || []).find(x => x.id === id || x.name === id) || rawItem;
+    if(!m) return;
+    nameEl.textContent = m.name;
+    subEl.textContent = `占原材料成本 ${m.share || '核心'}% · 研报与财报披露`;
+    bodyEl.appendChild(relSection('该原材料的主要供应商', m.suppliers || []));
+  } else if(kind === 'product'){
+    const p = (data.products || []).find(x => x.id === id || x.name === id) || rawItem;
+    if(!p) return;
+    nameEl.textContent = p.name;
+    subEl.textContent = `占营业收入 ${p.share || '主营'}% · 研报与财报披露`;
+    bodyEl.appendChild(relSection('采购该产品的重点客户', p.customers || []));
+  } else {
+    nameEl.textContent = rawItem ? rawItem.name : id;
+    const isSwitchable = !!COMPANIES[rawItem ? rawItem.name : id] || !!COMPANIES[rawItem ? rawItem.id : id];
+    subEl.textContent = (rawItem && rawItem.type === 'direct' ? '直接披露企业' : '产业链关联推断') + (isSwitchable ? ' · 可点击切换为分析中心' : '');
+    bodyEl.appendChild(relSection('关联说明与证据', [{
+      name: rawItem ? rawItem.name : id,
+      share: rawItem ? rawItem.share : null,
+      type: rawItem ? rawItem.type : 'direct',
+      note: rawItem ? (rawItem.note || '研报与知识图谱自动提取关联') : '研报披露关联'
+    }], true));
+  }
+  drawer.classList.add('open');
+}
+
+function relSection(title, items, noHeaderShare){
+  const wrap = document.createElement('div');
+  wrap.className = 'drawer-section';
+  const st = el('div', 'st', title);
+  wrap.appendChild(st);
+  (items || []).forEach(it => {
+    const row = document.createElement('div');
+    row.className = 'rel-row';
+    row.innerHTML = `
+      <div class="rel-top">
+        <span class="rel-name">${it.name}</span>
+        <span class="rel-share">${noHeaderShare || !it.share ? '' : it.share + '%'}</span>
+      </div>
+      <span class="tag ${it.type || 'direct'}" style="width:fit-content;">${it.type === 'inferred' ? '推断关联' : '直接披露'}</span>
+      <span class="rel-note">${it.note || '研报产业链结构化提取证据。'}</span>
+    `;
+    wrap.appendChild(row);
+  });
+  return wrap;
+}
+
+document.getElementById('drawer-close').addEventListener('click', () => {
+  document.getElementById('drawer').classList.remove('open');
+});
+
+/* ==================== 标签切换与窗口响应 ==================== */
+
+function switchView(viewName){
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.view === viewName));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + viewName));
+
+  // 在全局概览 (overview) tab 时，隐藏顶部的核心公司下拉选框；在 chain / single 时展示
+  const compWrap = document.getElementById('company-selector-wrap');
+  if(compWrap){
+    compWrap.style.display = (viewName === 'overview') ? 'none' : 'flex';
+  }
+
+  requestAnimationFrame(() => {
+    if(viewName === 'overview') renderOverview();
+    else if(viewName === 'chain') renderChain();
+    else if(viewName === 'single') renderSingle();
+  });
+}
+
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => switchView(t.dataset.view));
+});
+
+window.addEventListener('resize', () => {
+  clearTimeout(window.__rt);
+  window.__rt = setTimeout(() => {
+    const activeTab = document.querySelector('.tab.active').dataset.view;
+    if(activeTab === 'overview') drawNetworkSVG();
+    else if(activeTab === 'chain') renderChain();
+    else if(activeTab === 'single') drawSingleEdges();
+  }, 120);
+});
+
+// 启动执行
+loadGraphData();
+</script>
+</body>
+</html>
