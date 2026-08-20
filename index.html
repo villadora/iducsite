@@ -2,13 +2,26 @@
 <html lang="zh-CN">
 <head>
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DX2WCH5L5Y"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  (function(){
+    const isLocal = window.location.hostname === 'localhost' ||
+                    window.location.hostname === '127.0.0.1' ||
+                    window.location.hostname === '0.0.0.0' ||
+                    window.location.hostname.endsWith('.local') ||
+                    window.location.protocol === 'file:' ||
+                    (window.location.port && window.location.port !== '80' && window.location.port !== '443');
+    if (!isLocal) {
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = "https://www.googletagmanager.com/gtag/js?id=G-DX2WCH5L5Y";
+      document.head.appendChild(s);
 
-  gtag('config', 'G-DX2WCH5L5Y');
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-DX2WCH5L5Y');
+    }
+  })();
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -731,9 +744,18 @@
 <script>
 window.__STATIC_EXPORT__ = true;
 
-/* ==================== Google Analytics 4 全站行为与点击事件埋点 ==================== */
+/* ==================== Google Analytics 4 远程站点埋点 (本地环境严格禁用) ==================== */
 function trackGA(eventName, params = {}){
   try {
+    const hostname = window.location.hostname || '';
+    const isLocal = hostname === 'localhost' ||
+                    hostname === '127.0.0.1' ||
+                    hostname === '0.0.0.0' ||
+                    hostname.endsWith('.local') ||
+                    window.location.protocol === 'file:' ||
+                    (window.location.port && window.location.port !== '80' && window.location.port !== '443');
+    if (isLocal) return;
+
     if (typeof window.gtag === 'function') {
       window.gtag('event', eventName, {
         ...params,
