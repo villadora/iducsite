@@ -190,6 +190,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300323",
+    "name": "华灿光电",
+    "industry": "LED芯片",
+    "exchange": "SZ",
+    "product_count": 17,
+    "material_count": 12,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300396",
     "name": "ST迪瑞",
     "industry": "体外诊断(IVD)",
@@ -836,6 +846,16 @@
     "exchange": "SZ",
     "product_count": 8,
     "material_count": 11,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002428",
+    "name": "云南锗业",
+    "industry": "化合物半导体及锗材料",
+    "exchange": "SZ",
+    "product_count": 14,
+    "material_count": 5,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -2780,6 +2800,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "000725",
+    "name": "京东方A",
+    "industry": "半导体显示",
+    "exchange": "SZ",
+    "product_count": 7,
+    "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "000931",
     "name": "中 关 村",
     "industry": "化学制药/商砼/养老医疗",
@@ -3236,6 +3266,16 @@
     "exchange": "SZ",
     "product_count": 7,
     "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002539",
+    "name": "云图控股",
+    "industry": "磷化工及化肥",
+    "exchange": "SZ",
+    "product_count": 6,
+    "material_count": 5,
     "is_subject": true,
     "source": "parsed_cache"
   },
