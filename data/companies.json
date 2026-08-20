@@ -2570,6 +2570,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "000060",
+    "name": "中金岭南",
+    "industry": "工业金属",
+    "exchange": "SZ",
+    "product_count": 8,
+    "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "000544",
     "name": "中原环保",
     "industry": "污水处理/水务/公用事业",

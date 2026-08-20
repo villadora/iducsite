@@ -593,7 +593,7 @@
       <div class="network-hud" id="network-hud">
         <span class="hud-item" id="hud-nodes">加载中...</span>
         <span class="hud-item" id="hud-links"></span>
-        <span class="hud-hint">💡 鼠标滚轮缩放 · 拖拽平移画布 · 点击圆点展开详情</span>
+        <span class="hud-hint">💡 鼠标滚轮缩放 · 拖拽平移画布 · 单击查看档案 · 双击核心公司直达单公司视图</span>
       </div>
       <svg id="network-svg" class="network-svg">
         <defs>
@@ -1627,6 +1627,19 @@ function drawNetworkSVG(){
       drawNetworkSVG();
       openDrawer(node.code || node.name, node.role, node);
     });
+
+    el.addEventListener('dblclick', async (ev) => {
+      ev.stopPropagation();
+      const codeOrName = node.code || node.name;
+      const isCore = node.is_subject || (COMPANIES && (COMPANIES[node.code] || COMPANIES[node.name])) || (ALL_COMPANIES_LIST && ALL_COMPANIES_LIST.some(c => c.code === codeOrName || c.name === codeOrName));
+      if(isCore){
+        const drawer = document.getElementById('drawer');
+        if(drawer) drawer.classList.remove('open');
+        hideNetworkTooltip();
+        await switchCenterCompany(codeOrName);
+        switchView('single');
+      }
+    });
   });
 
   window.addEventListener('mousemove', (ev) => {
@@ -1770,6 +1783,10 @@ function showNetworkTooltip(node, ev){
   const roleText = node.is_subject ? '核心主体研报公司' : (node.role === 'supplier' ? '上游供应商企业' : '下游采购企业');
   const scaleText = node.scaleText || (node.tier === 'ST' ? 'ST风险警示 / 微盘股' : (node.radius >= 22 ? '万亿级全球科技巨头' : '产业链企业'));
 
+  const codeOrName = node.code || node.name;
+  const isCore = node.is_subject || (COMPANIES && (COMPANIES[node.code] || COMPANIES[node.name])) || (ALL_COMPANIES_LIST && ALL_COMPANIES_LIST.some(c => c.code === codeOrName || c.name === codeOrName));
+  const hintText = isCore ? '🖱️ 单击打开侧边档案 · ⚡ 双击直达【单公司视图】深度分析' : '🖱️ 点击圆点固定高亮并打开侧边档案';
+
   tt.innerHTML = `
     <div class="tt-title">
       <span class="tt-dot" style="background:${node.color}; box-shadow:0 0 8px ${node.glowColor || node.color}"></span>
@@ -1781,7 +1798,7 @@ function showNetworkTooltip(node, ev){
     <div class="tt-row"><span>规模评级:</span><span style="color:${node.tier === 'ST' ? '#F59E0B' : (node.tier === 'MEGA' ? '#6E8CFF' : 'inherit')}">${scaleText}</span></div>
     <div class="tt-row"><span>产业链连接:</span><span>上游 ${node.upCount} 家 | 下游 ${node.downCount} 家</span></div>
     ${node.desc ? `<div class="tt-desc">${node.desc}</div>` : ''}
-    <div style="font-size:10px; color:var(--sub-2); margin-top:6px;">🖱️ 点击圆点固定高亮并打开侧边档案</div>
+    <div style="font-size:10px; color:${isCore ? '#6E8CFF' : 'var(--sub-2)'}; margin-top:6px;">${hintText}</div>
   `;
   tt.style.display = 'block';
   updateNetworkTooltipPos(ev);
