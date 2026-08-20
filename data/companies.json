@@ -100,6 +100,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "600641",
+    "name": "先导基电",
+    "industry": "半导体/高端制造",
+    "exchange": "SH",
+    "product_count": 18,
+    "material_count": 12,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002643",
     "name": "万润股份",
     "industry": "功能性材料与生命科学及医药",
@@ -156,6 +166,16 @@
     "exchange": "SH",
     "product_count": 19,
     "material_count": 9,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002371",
+    "name": "北方华创",
+    "industry": "电子-半导体-半导体设备",
+    "exchange": "SZ",
+    "product_count": 12,
+    "material_count": 15,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -436,6 +456,26 @@
     "exchange": "SH",
     "product_count": 22,
     "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "688008",
+    "name": "澜起科技",
+    "industry": "芯片设计",
+    "exchange": "SH",
+    "product_count": 16,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "688268",
+    "name": "华特气体",
+    "industry": "电子化学品Ⅱ / 特种气体 + 普通工业气体",
+    "exchange": "SH",
+    "product_count": 11,
+    "material_count": 11,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -2850,6 +2890,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300604",
+    "name": "长川科技",
+    "industry": "半导体后道测试设备",
+    "exchange": "SZ",
+    "product_count": 6,
+    "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300758",
     "name": "七彩化学",
     "industry": "高性能有机颜料",
@@ -3090,6 +3140,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "688126",
+    "name": "沪硅产业",
+    "industry": "半导体硅片",
+    "exchange": "SH",
+    "product_count": 3,
+    "material_count": 8,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "688173",
     "name": "希荻微",
     "industry": "电子 — 半导体 — 模拟芯片设计",
@@ -3216,6 +3276,16 @@
     "exchange": "SZ",
     "product_count": 4,
     "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "001309",
+    "name": "德明利",
+    "industry": "半导体存储模组",
+    "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 5,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -5160,6 +5230,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "688233",
+    "name": "神工股份",
+    "industry": "半导体硅材料",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "688608",
     "name": "恒玄科技",
     "industry": "电子-半导体-数字芯片设计",
@@ -6193,6 +6273,16 @@
     "code": "600822",
     "name": "上海物贸",
     "industry": "生产资料流通+汽车服务+金属+化工+物流",
+    "exchange": "SH",
+    "product_count": 2,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "688200",
+    "name": "华峰测控",
+    "industry": "半导体测试设备",
     "exchange": "SH",
     "product_count": 2,
     "material_count": 0,
