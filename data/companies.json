@@ -2820,6 +2820,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "600428",
+    "name": "中远海特",
+    "industry": "航运(特种船运输)",
+    "exchange": "SH",
+    "product_count": 8,
+    "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "600508",
     "name": "上海能源",
     "industry": "煤炭",
@@ -4254,6 +4264,16 @@
     "name": "三瑞智能",
     "industry": "动力系统",
     "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "600026",
+    "name": "中远海能",
+    "industry": "航运/能源运输",
+    "exchange": "SH",
     "product_count": 5,
     "material_count": 3,
     "is_subject": true,
