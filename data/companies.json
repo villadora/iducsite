@@ -3900,6 +3900,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "603135",
+    "name": "中重科技",
+    "industry": "专用设备制造业(冶金智能装备)",
+    "exchange": "SH",
+    "product_count": 3,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "603378",
     "name": "*ST亚士",
     "industry": "建筑装饰材料",
