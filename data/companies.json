@@ -90,6 +90,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "688198",
+    "name": "佰仁医疗",
+    "industry": "医疗器械",
+    "exchange": "SH",
+    "product_count": 26,
+    "material_count": 9,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "600249",
     "name": "两面针",
     "industry": "口腔清洁护理及医药制造",
@@ -360,6 +370,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "688793",
+    "name": "倍轻松",
+    "industry": "智能便携按摩器",
+    "exchange": "SH",
+    "product_count": 18,
+    "material_count": 9,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "600309",
     "name": "万华化学",
     "industry": "化学原料及化学制品制造业",
@@ -610,6 +630,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002739",
+    "name": "儒意电影",
+    "industry": "影视院线",
+    "exchange": "SZ",
+    "product_count": 12,
+    "material_count": 10,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300066",
     "name": "三川智慧",
     "industry": "智慧水务",
@@ -700,6 +730,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "688007",
+    "name": "光峰科技",
+    "industry": "激光显示 / 投影行业",
+    "exchange": "SH",
+    "product_count": 15,
+    "material_count": 7,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "688008",
     "name": "澜起科技",
     "industry": "芯片设计",
@@ -756,6 +796,16 @@
     "exchange": "SZ",
     "product_count": 14,
     "material_count": 7,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300699",
+    "name": "光威复材",
+    "industry": "碳纤维及复合材料",
+    "exchange": "SZ",
+    "product_count": 10,
+    "material_count": 11,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -900,6 +950,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300793",
+    "name": "佳禾智能",
+    "industry": "消费电子 ODM",
+    "exchange": "SZ",
+    "product_count": 12,
+    "material_count": 8,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300919",
     "name": "中伟新材",
     "industry": "锂电池前驱体/新能源材料",
@@ -996,6 +1056,16 @@
     "exchange": "SZ",
     "product_count": 6,
     "material_count": 13,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "000973",
+    "name": "佛塑科技",
+    "industry": "高分子功能薄膜",
+    "exchange": "SZ",
+    "product_count": 10,
+    "material_count": 9,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -1490,6 +1560,26 @@
     "source": "parsed_cache"
   },
   {
+    "code": "301103",
+    "name": "何氏眼科",
+    "industry": "眼科医疗服务",
+    "exchange": "SZ",
+    "product_count": 6,
+    "material_count": 11,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "301387",
+    "name": "光大同创",
+    "industry": "消费电子功能性产品",
+    "exchange": "SZ",
+    "product_count": 11,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "301552",
     "name": "科力装备",
     "industry": "汽车零部件",
@@ -1670,6 +1760,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002286",
+    "name": "保龄宝",
+    "industry": "食品配料",
+    "exchange": "SZ",
+    "product_count": 13,
+    "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002309",
     "name": "中利集团",
     "industry": "线缆/光伏",
@@ -1790,6 +1890,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300242",
+    "name": "佳云科技",
+    "industry": "互联网营销",
+    "exchange": "SZ",
+    "product_count": 8,
+    "material_count": 8,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300364",
     "name": "中文在线",
     "industry": "数字内容",
@@ -1806,6 +1916,16 @@
     "exchange": "SZ",
     "product_count": 9,
     "material_count": 7,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300529",
+    "name": "健帆生物",
+    "industry": "医疗器械",
+    "exchange": "SZ",
+    "product_count": 11,
+    "material_count": 5,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -2030,6 +2150,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "603205",
+    "name": "健尔康",
+    "industry": "医用敷料",
+    "exchange": "SH",
+    "product_count": 6,
+    "material_count": 10,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "603389",
     "name": "亚振家居",
     "industry": "家具制造业 / 矿业",
@@ -2123,6 +2253,16 @@
     "code": "000826",
     "name": "*ST启环",
     "industry": "环保运营(环卫/水务/固废/环卫装备)",
+    "exchange": "SZ",
+    "product_count": 8,
+    "material_count": 7,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "000922",
+    "name": "佳电股份",
+    "industry": "电机行业",
     "exchange": "SZ",
     "product_count": 8,
     "material_count": 7,
@@ -2430,6 +2570,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "603363",
+    "name": "傲农生物[",
+    "industry": "农林牧渔",
+    "exchange": "SH",
+    "product_count": 8,
+    "material_count": 7,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "688485",
     "name": "九州一轨",
     "industry": "轨道交通减振降噪与半导体",
@@ -2520,6 +2670,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002294",
+    "name": "信立泰",
+    "industry": "化学制药-化学制剂行业",
+    "exchange": "SZ",
+    "product_count": 8,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002375",
     "name": "亚厦股份",
     "industry": "建筑装饰业",
@@ -2580,6 +2740,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002878",
+    "name": "元隆雅图",
+    "industry": "营销服务",
+    "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 9,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300040",
     "name": "九洲集团",
     "industry": "数字能源与智能配电网",
@@ -2620,6 +2790,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300489",
+    "name": "光智科技",
+    "industry": "红外光学",
+    "exchange": "SZ",
+    "product_count": 10,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300591",
     "name": "万里马",
     "industry": "服装家纺",
@@ -2636,6 +2816,16 @@
     "exchange": "SZ",
     "product_count": 11,
     "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "301102",
+    "name": "兆讯传媒",
+    "industry": "户外广告",
+    "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 9,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -2770,12 +2960,32 @@
     "source": "parsed_cache"
   },
   {
+    "code": "603596",
+    "name": "伯特利",
+    "industry": "汽车零部件",
+    "exchange": "SH",
+    "product_count": 10,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "603721",
     "name": "中广天择",
     "industry": "传媒-影视动漫-影视动漫制作",
     "exchange": "SH",
     "product_count": 10,
     "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "688155",
+    "name": "先惠技术",
+    "industry": "锂电装备及精密结构件",
+    "exchange": "SH",
+    "product_count": 8,
+    "material_count": 6,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -2796,6 +3006,16 @@
     "exchange": "SH",
     "product_count": 7,
     "material_count": 7,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "688659",
+    "name": "元琛科技",
+    "industry": "环保设备",
+    "exchange": "SH",
+    "product_count": 6,
+    "material_count": 8,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -2910,9 +3130,29 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002644",
+    "name": "佛慈制药",
+    "industry": "中成药",
+    "exchange": "SZ",
+    "product_count": 6,
+    "material_count": 7,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002772",
     "name": "众兴菌业",
     "industry": "食用菌种植",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 9,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002973",
+    "name": "侨银股份",
+    "industry": "环境卫生管理",
     "exchange": "SZ",
     "product_count": 4,
     "material_count": 9,
@@ -2960,6 +3200,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300137",
+    "name": "先河环保",
+    "industry": "环境监测",
+    "exchange": "SZ",
+    "product_count": 8,
+    "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300147",
     "name": "*ST香雪",
     "industry": "医药生物-中药Ⅱ-中药Ⅲ",
@@ -2986,6 +3236,16 @@
     "exchange": "SZ",
     "product_count": 6,
     "material_count": 7,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300480",
+    "name": "光力科技",
+    "industry": "半导体封测装备与安全生产监控",
+    "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 8,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -3050,6 +3310,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "301329",
+    "name": "信音电子",
+    "industry": "连接器",
+    "exchange": "SZ",
+    "product_count": 6,
+    "material_count": 7,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "301498",
     "name": "乖宝宠物",
     "industry": "宠物食品",
@@ -3100,6 +3370,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "600184",
+    "name": "光电股份",
+    "industry": "防务光电与光学材料",
+    "exchange": "SH",
+    "product_count": 7,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "600293",
     "name": "三峡新材",
     "industry": "玻璃制造加工",
@@ -3113,6 +3393,16 @@
     "code": "600730",
     "name": "*ST高科",
     "industry": "教育及不动产运营",
+    "exchange": "SH",
+    "product_count": 7,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "600794",
+    "name": "保税科技",
+    "industry": "物流与仓储",
     "exchange": "SH",
     "product_count": 7,
     "material_count": 6,
@@ -3340,6 +3630,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "001206",
+    "name": "依依股份",
+    "industry": "宠物卫生护理用品",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 8,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002112",
     "name": "三变科技",
     "industry": "输配电变压器",
@@ -3390,6 +3690,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002708",
+    "name": "光洋股份",
+    "industry": "汽车零部件",
+    "exchange": "SZ",
+    "product_count": 6,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002748",
     "name": "世龙实业",
     "industry": "化工",
@@ -3426,6 +3736,36 @@
     "exchange": "SZ",
     "product_count": 7,
     "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300136",
+    "name": "信维通信",
+    "industry": "电子信息产业链",
+    "exchange": "SZ",
+    "product_count": 7,
+    "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300181",
+    "name": "佐力药业",
+    "industry": "中药",
+    "exchange": "SZ",
+    "product_count": 6,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300268",
+    "name": "佳沃食品",
+    "industry": "动物蛋白",
+    "exchange": "SZ",
+    "product_count": 6,
+    "material_count": 6,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -3680,6 +4020,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "688450",
+    "name": "光格科技",
+    "industry": "分布式光纤传感",
+    "exchange": "SH",
+    "product_count": 5,
+    "material_count": 7,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "688585",
     "name": "上纬新材",
     "industry": "基础化工 - 塑料 - 合成树脂",
@@ -3830,6 +4180,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002390",
+    "name": "信邦制药",
+    "industry": "医药制造与流通",
+    "exchange": "SZ",
+    "product_count": 8,
+    "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002472",
     "name": "双环传动",
     "industry": "汽车零部件",
@@ -3886,6 +4246,16 @@
     "exchange": "SZ",
     "product_count": 8,
     "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002741",
+    "name": "光华科技",
+    "industry": "电子化学品",
+    "exchange": "SZ",
+    "product_count": 6,
+    "material_count": 5,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -4020,12 +4390,32 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300785",
+    "name": "值得买",
+    "industry": "互联网导购与营销",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 7,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "301031",
     "name": "中熔电气",
     "industry": "电气设备-熔断器",
     "exchange": "SZ",
     "product_count": 6,
     "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "301037",
+    "name": "保立佳",
+    "industry": "化工",
+    "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 6,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -4074,6 +4464,16 @@
     "name": "中远通",
     "industry": "电力设备 / 其他电源设备Ⅱ",
     "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "600048",
+    "name": "保利发展",
+    "industry": "房地产开发与销售",
+    "exchange": "SH",
     "product_count": 5,
     "material_count": 6,
     "is_subject": true,
@@ -4136,6 +4536,16 @@
     "exchange": "SH",
     "product_count": 5,
     "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "600622",
+    "name": "光大嘉宝",
+    "industry": "房地产开发与不动产资管",
+    "exchange": "SH",
+    "product_count": 8,
+    "material_count": 3,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -4276,6 +4686,16 @@
     "exchange": "SH",
     "product_count": 8,
     "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "603558",
+    "name": "健盛集团",
+    "industry": "纺织业",
+    "exchange": "SH",
+    "product_count": 5,
+    "material_count": 6,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -4720,12 +5140,32 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300774",
+    "name": "倍杰特",
+    "industry": "水处理/矿业",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300953",
     "name": "震裕科技",
     "industry": "精密制造",
     "exchange": "SZ",
     "product_count": 6,
     "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "301051",
+    "name": "信濠光电",
+    "industry": "电子元器件",
+    "exchange": "SZ",
+    "product_count": 7,
+    "material_count": 3,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -4806,6 +5246,16 @@
     "exchange": "SH",
     "product_count": 6,
     "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "600728",
+    "name": "佳都科技",
+    "industry": "智慧交通",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 6,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -4910,6 +5360,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "603197",
+    "name": "保隆科技",
+    "industry": "汽车零部件",
+    "exchange": "SH",
+    "product_count": 8,
+    "material_count": 2,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "603257",
     "name": "中国瑞林",
     "industry": "有色金属工程技术服务",
@@ -4946,6 +5406,16 @@
     "exchange": "SH",
     "product_count": 5,
     "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "605266",
+    "name": "健之佳",
+    "industry": "医药零售",
+    "exchange": "SH",
+    "product_count": 8,
+    "material_count": 2,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -5080,6 +5550,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "001325",
+    "name": "元创股份",
+    "industry": "橡胶制品",
+    "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002020",
     "name": "京新药业",
     "industry": "化学制药行业",
@@ -5096,6 +5576,16 @@
     "exchange": "SZ",
     "product_count": 4,
     "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002037",
+    "name": "保利联合",
+    "industry": "民爆及爆破工程",
+    "exchange": "SZ",
+    "product_count": 3,
+    "material_count": 6,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -5153,6 +5643,16 @@
     "code": "002298",
     "name": "中电鑫龙",
     "industry": "智能输配电设备/智慧城市解决方案",
+    "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002524",
+    "name": "光正眼科",
+    "industry": "眼科医疗",
     "exchange": "SZ",
     "product_count": 5,
     "material_count": 4,
@@ -5256,6 +5756,16 @@
     "exchange": "SZ",
     "product_count": 3,
     "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300163",
+    "name": "先锋新材",
+    "industry": "建筑遮阳",
+    "exchange": "SZ",
+    "product_count": 2,
+    "material_count": 7,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -5380,6 +5890,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "301286",
+    "name": "侨源股份",
+    "industry": "工业气体",
+    "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "301368",
     "name": "丰立智能",
     "industry": "通用设备制造业 — 齿轮 + 精密减速器",
@@ -5476,6 +5996,16 @@
     "exchange": "SH",
     "product_count": 3,
     "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "600550",
+    "name": "保变电气",
+    "industry": "电力设备",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 5,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -5586,6 +6116,16 @@
     "exchange": "SH",
     "product_count": 3,
     "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "603328",
+    "name": "依顿电子",
+    "industry": "PCB制造",
+    "exchange": "SH",
+    "product_count": 5,
+    "material_count": 4,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -5800,6 +6340,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "688573",
+    "name": "信宇人",
+    "industry": "锂电设备",
+    "exchange": "SH",
+    "product_count": 3,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "688687",
     "name": "凯因科技",
     "industry": "医药生物 — 化学制药 — 化学制剂",
@@ -5930,6 +6480,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002625",
+    "name": "光启技术",
+    "industry": "超材料",
+    "exchange": "SZ",
+    "product_count": 2,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002647",
     "name": "仁东控股",
     "industry": "第三方支付",
@@ -6010,6 +6570,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300264",
+    "name": "佳创视讯",
+    "industry": "数字电视系统集成",
+    "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300425",
     "name": "中建环能",
     "industry": "环保设备/水务运营",
@@ -6086,6 +6656,16 @@
     "exchange": "SZ",
     "product_count": 3,
     "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300938",
+    "name": "信测标准",
+    "industry": "检验检测",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 4,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -6270,12 +6850,32 @@
     "source": "parsed_cache"
   },
   {
+    "code": "603086",
+    "name": "先达股份",
+    "industry": "农药",
+    "exchange": "SH",
+    "product_count": 6,
+    "material_count": 2,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "603126",
     "name": "中材节能",
     "industry": "节能环保工程/装备制造",
     "exchange": "SH",
     "product_count": 5,
     "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "603217",
+    "name": "元利科技",
+    "industry": "精细化工",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 4,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -6420,6 +7020,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "688805",
+    "name": "健信超导",
+    "industry": "医疗器械零部件",
+    "exchange": "SH",
+    "product_count": 3,
+    "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "000035",
     "name": "中国天楹",
     "industry": "环保（固废处理+新能源）",
@@ -6483,6 +7093,16 @@
     "code": "000928",
     "name": "中钢国际",
     "industry": "建筑工程-专业工程-国际工程(冶金工程EPC)",
+    "exchange": "SZ",
+    "product_count": 3,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "001333",
+    "name": "光华股份",
+    "industry": "化学原料和化学制品制造业",
     "exchange": "SZ",
     "product_count": 3,
     "material_count": 4,
@@ -6660,6 +7280,26 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300673",
+    "name": "佩蒂股份",
+    "industry": "宠物食品",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300735",
+    "name": "光弘科技",
+    "industry": "EMS",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300922",
     "name": "天秦装备",
     "industry": "国防军工/地面兵装",
@@ -6696,6 +7336,16 @@
     "exchange": "SZ",
     "product_count": 7,
     "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "301349",
+    "name": "信德新材",
+    "industry": "锂电池负极材料辅材",
+    "exchange": "SZ",
+    "product_count": 6,
+    "material_count": 1,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -6786,6 +7436,16 @@
     "exchange": "SH",
     "product_count": 7,
     "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "600708",
+    "name": "光明地产",
+    "industry": "房地产开发",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 3,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -7150,6 +7810,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300836",
+    "name": "佰奥智能",
+    "industry": "智能制造装备",
+    "exchange": "SZ",
+    "product_count": 6,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "301082",
     "name": "久盛电气",
     "industry": "电气机械和器材制造业(C38)/电线、电缆、光缆及电工器材制造(C383)",
@@ -7263,6 +7933,16 @@
     "code": "603076",
     "name": "乐惠国际",
     "industry": "液体食品装备与精酿鲜啤",
+    "exchange": "SH",
+    "product_count": 6,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "603707",
+    "name": "健友股份",
+    "industry": "医药制造业",
     "exchange": "SH",
     "product_count": 6,
     "material_count": 0,
@@ -7420,6 +8100,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "001388",
+    "name": "信通电子",
+    "industry": "工业物联网",
+    "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "001395",
     "name": "亚联机械",
     "industry": "人造板生产线装备",
@@ -7480,6 +8170,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002911",
+    "name": "佛燃能源",
+    "industry": "燃气",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 1,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300212",
     "name": "*ST易录",
     "industry": "半导体/高端制造",
@@ -7530,6 +8230,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "301586",
+    "name": "佳力奇",
+    "industry": "航空复材零部件",
+    "exchange": "SZ",
+    "product_count": 3,
+    "material_count": 2,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "600028",
     "name": "中国石化",
     "industry": "一体化炼化",
@@ -7576,6 +8286,16 @@
     "exchange": "SH",
     "product_count": 4,
     "material_count": 1,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "600380",
+    "name": "健康元",
+    "industry": "医药制造业",
+    "exchange": "SH",
+    "product_count": 3,
+    "material_count": 2,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -7723,6 +8443,16 @@
     "code": "000838",
     "name": "*ST发展",
     "industry": "半导体/高端制造",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "001335",
+    "name": "信凯科技",
+    "industry": "有机颜料",
     "exchange": "SZ",
     "product_count": 4,
     "material_count": 0,
@@ -7940,6 +8670,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "600976",
+    "name": "健民集团",
+    "industry": "中药",
+    "exchange": "SH",
+    "product_count": 3,
+    "material_count": 1,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "601068",
     "name": "中铝国际",
     "industry": "有色金属工程服务",
@@ -8010,6 +8750,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "688708",
+    "name": "佳驰科技",
+    "industry": "军工",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "000042",
     "name": "中洲控股",
     "industry": "房地产开发",
@@ -8023,6 +8773,16 @@
     "code": "001314",
     "name": "亿道信息",
     "industry": "消费电子与AI硬件",
+    "exchange": "SZ",
+    "product_count": 3,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002256",
+    "name": "兆新股份",
+    "industry": "光伏运营与精细化工",
     "exchange": "SZ",
     "product_count": 3,
     "material_count": 0,
@@ -8080,9 +8840,29 @@
     "source": "parsed_cache"
   },
   {
+    "code": "301525",
+    "name": "儒竞科技",
+    "industry": "变频空调 + 热泵 + 新能源汽车",
+    "exchange": "SZ",
+    "product_count": 3,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "600163",
     "name": "中闽能源",
     "industry": "公用事业—电力（新能源发电）",
+    "exchange": "SH",
+    "product_count": 3,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "600657",
+    "name": "信达地产",
+    "industry": "房地产",
     "exchange": "SH",
     "product_count": 3,
     "material_count": 0,
@@ -8120,9 +8900,29 @@
     "source": "parsed_cache"
   },
   {
+    "code": "603912",
+    "name": "佳力图",
+    "industry": "数据中心机房精密空调",
+    "exchange": "SH",
+    "product_count": 3,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "688505",
     "name": "复旦张江",
     "industry": "化学制药",
+    "exchange": "SH",
+    "product_count": 3,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "688605",
+    "name": "先锋精科",
+    "industry": "半导体/高端制造",
     "exchange": "SH",
     "product_count": 3,
     "material_count": 0,
@@ -8290,6 +9090,26 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002562",
+    "name": "兄弟科技",
+    "industry": "半导体/高端制造",
+    "exchange": "SZ",
+    "product_count": 0,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300174",
+    "name": "元力股份",
+    "industry": "半导体/高端制造",
+    "exchange": "SZ",
+    "product_count": 0,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300338",
     "name": "*ST开元",
     "industry": "半导体/高端制造",
@@ -8303,6 +9123,16 @@
     "code": "300472",
     "name": "*ST新元",
     "industry": "机械设备-专用设备-其他专用设备",
+    "exchange": "SZ",
+    "product_count": 0,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300695",
+    "name": "兆丰股份",
+    "industry": "半导体/高端制造",
     "exchange": "SZ",
     "product_count": 0,
     "material_count": 0,
