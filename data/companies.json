@@ -240,6 +240,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "688327",
+    "name": "云从科技",
+    "industry": "人工智能",
+    "exchange": "SH",
+    "product_count": 19,
+    "material_count": 9,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002371",
     "name": "北方华创",
     "industry": "电子-半导体-半导体设备",
@@ -800,6 +810,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002053",
+    "name": "云南能投",
+    "industry": "新能源发电及盐业",
+    "exchange": "SZ",
+    "product_count": 13,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002092",
     "name": "中泰化学",
     "industry": "化工/氯碱/煤化工",
@@ -956,6 +976,16 @@
     "exchange": "SZ",
     "product_count": 5,
     "material_count": 13,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "000903",
+    "name": "ST云动",
+    "industry": "汽车-汽车零部件-底盘与发动机系统",
+    "exchange": "SZ",
+    "product_count": 11,
+    "material_count": 7,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -1316,6 +1346,16 @@
     "exchange": "SZ",
     "product_count": 11,
     "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "000878",
+    "name": "云南铜业",
+    "industry": "有色金属冶炼",
+    "exchange": "SZ",
+    "product_count": 8,
+    "material_count": 8,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -1830,6 +1870,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300102",
+    "name": "乾照光电",
+    "industry": "化合物半导体",
+    "exchange": "SZ",
+    "product_count": 13,
+    "material_count": 2,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300435",
     "name": "中泰股份",
     "industry": "深冷设备制造",
@@ -2040,6 +2090,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "000538",
+    "name": "云南白药",
+    "industry": "医药医疗",
+    "exchange": "SZ",
+    "product_count": 12,
+    "material_count": 2,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "000672",
     "name": "上峰材料",
     "industry": "建材",
@@ -2163,6 +2223,16 @@
     "code": "300591",
     "name": "万里马",
     "industry": "服装家纺",
+    "exchange": "SZ",
+    "product_count": 11,
+    "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "301092",
+    "name": "争光股份",
+    "industry": "离子交换与吸附树脂",
     "exchange": "SZ",
     "product_count": 11,
     "material_count": 3,
@@ -2326,6 +2396,16 @@
     "exchange": "SZ",
     "product_count": 6,
     "material_count": 7,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002201",
+    "name": "九鼎新材",
+    "industry": "玻璃纤维及制品、玻璃钢制品",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 9,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -3126,6 +3206,16 @@
     "exchange": "SZ",
     "product_count": 3,
     "material_count": 8,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002242",
+    "name": "九阳股份",
+    "industry": "小家电",
+    "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 6,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -4073,6 +4163,16 @@
     "code": "603110",
     "name": "东方材料",
     "industry": "化工",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "603130",
+    "name": "云中马",
+    "industry": "针织革基布",
     "exchange": "SH",
     "product_count": 4,
     "material_count": 6,
@@ -6956,6 +7056,16 @@
     "exchange": "SZ",
     "product_count": 1,
     "material_count": 1,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002059",
+    "name": "云南旅游",
+    "industry": "旅游服务",
+    "exchange": "SZ",
+    "product_count": 2,
+    "material_count": 0,
     "is_subject": true,
     "source": "parsed_cache"
   },
