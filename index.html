@@ -595,6 +595,11 @@
           <input type="number" id="ov-min-mc" min="0" max="10000" value="10" step="5">
           <span class="unit">亿元</span>
         </div>
+        <div class="ctrl-field" title="过滤连线上直接有明确占比且占比低于该阈值的连线，默认最低为 10%，设为 0% 表示不限占比">
+          <label for="ov-min-share">最低权重</label>
+          <input type="number" id="ov-min-share" min="0" max="100" value="10" step="5">
+          <span class="unit">%</span>
+        </div>
         <div class="toggle-wrap">
           <span>显示推断关联</span>
           <div class="switch" id="ov-toggle-inferred"><div class="knob"></div></div>
@@ -1227,6 +1232,7 @@ function getCompanyScaleProfile(name, code, isSubject){
 
 let ovMinDegree = 3;
 let ovMinMarketCap = 10.0;
+let ovMinShare = 10.0;
 
 /* ==================== 1. 全局网络图数据构建（支持静态站点纯前端内存切片与动态服务两级 Leiden 计算） ==================== */
 async function buildGlobalNetwork(forceRefresh = false){
@@ -1238,8 +1244,10 @@ async function buildGlobalNetwork(forceRefresh = false){
   try {
     const degInput = document.getElementById('ov-min-degree');
     const mcInput = document.getElementById('ov-min-mc');
+    const shareInput = document.getElementById('ov-min-share');
     if(degInput) ovMinDegree = Math.max(1, parseInt(degInput.value, 10) || 3);
     if(mcInput) ovMinMarketCap = Math.max(0, parseFloat(mcInput.value) || 0);
+    if(shareInput) ovMinShare = Math.max(0, parseFloat(shareInput.value) || 0);
 
     let data;
     if(IS_STATIC_MODE){
@@ -1263,7 +1271,14 @@ async function buildGlobalNetwork(forceRefresh = false){
       });
 
       const validIdSet = new Set(filteredNodes.map(n => n.id));
-      const filteredLinks = rawLinks.filter(l => validIdSet.has(l.source) && validIdSet.has(l.target));
+      const filteredLinks = rawLinks.filter(l => {
+        if(!validIdSet.has(l.source) || !validIdSet.has(l.target)) return false;
+        // 如果连线上直接有明确占比(share)，默认不显示权重小于 10% 的连线 (可由 ovMinShare 调整)
+        if(ovMinShare > 0 && l.share !== null && l.share !== undefined && l.share < ovMinShare) {
+          return false;
+        }
+        return true;
+      });
 
       data = {
         nodes: filteredNodes,
@@ -1272,7 +1287,7 @@ async function buildGlobalNetwork(forceRefresh = false){
       };
     } else {
       const incIso = false;
-      const url = `/api/v1/graph/network-data?min_degree=${ovMinDegree}&min_market_cap=${ovMinMarketCap}&include_isolated=${incIso}&refresh=${forceRefresh}`;
+      const url = `/api/v1/graph/network-data?min_degree=${ovMinDegree}&min_market_cap=${ovMinMarketCap}&min_link_share=${ovMinShare}&include_isolated=${incIso}&refresh=${forceRefresh}`;
       try {
         const resp = await fetch(url);
         data = resp.ok ? await resp.json() : null;
@@ -1298,7 +1313,13 @@ async function buildGlobalNetwork(forceRefresh = false){
           return true;
         });
         const validIdSet = new Set(filteredNodes.map(n => n.id));
-        const filteredLinks = rawLinks.filter(l => validIdSet.has(l.source) && validIdSet.has(l.target));
+        const filteredLinks = rawLinks.filter(l => {
+          if(!validIdSet.has(l.source) || !validIdSet.has(l.target)) return false;
+          if(ovMinShare > 0 && l.share !== null && l.share !== undefined && l.share < ovMinShare) {
+            return false;
+          }
+          return true;
+        });
         data = {
           nodes: filteredNodes,
           links: filteredLinks,
@@ -1334,8 +1355,9 @@ async function buildGlobalNetwork(forceRefresh = false){
 
       // 更新 HUD 统计
       if(hudNodes) {
+        const shareFilterTxt = ovMinShare > 0 ? ` · 连线权重≥${ovMinShare}%` : '';
         if(netGraph.nodes.length > 0){
-          hudNodes.textContent = `共 ${netGraph.nodes.length} 家企业 (度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'})`;
+          hudNodes.textContent = `共 ${netGraph.nodes.length} 家企业 (度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'}${shareFilterTxt})`;
         } else {
           hudNodes.textContent = `无匹配企业 (度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'})`;
         }
@@ -1594,16 +1616,20 @@ function drawNetworkSVG(){
 
     const marker = l.type === 'inferred' ? 'url(#net-arr-inf)' : (l.kind === 'supply' ? 'url(#net-arr-sup)' : 'url(#net-arr-cust)');
 
+    const strokeW = isHigh ? 2.5 : (l.share ? Math.max(1.2, Math.min(3.5, l.share / 12)) : (sameSub ? 1.8 : (sameMacro ? 1.3 : 1.0)));
+
     linksHTML += `
       <line class="net-link ${l.kind} ${l.type} ${isHigh ? 'highlighted' : ''} ${isDim ? 'dimmed' : ''}"
             x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}"
             x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"
             stroke="${commColor}"
-            stroke-width="${isHigh ? 2.5 : (sameSub ? 1.8 : (sameMacro ? 1.3 : 1.0))}"
+            stroke-width="${strokeW.toFixed(1)}"
             stroke-opacity="${isHigh ? 0.95 : (sameSub ? 0.65 : (sameMacro ? 0.45 : 0.25))}"
             stroke-dasharray="${sameMacro ? 'none' : '3,3'}"
             marker-end="${marker}"
-            data-link-idx="${idx}" />
+            data-link-idx="${idx}">
+        <title>${l.source} ➔ ${l.target}${l.share ? ` (供需权重 ${l.share}%)` : ''}</title>
+      </line>
     `;
   });
   linksLayer.innerHTML = linksHTML;
@@ -1799,9 +1825,10 @@ function initNetworkInteractions(){
     });
   }
 
-  // 动态筛选：最低度数与最低市值实时响应
+  // 动态筛选：最低度数、最低市值与最低连线权重实时响应
   const degInput = document.getElementById('ov-min-degree');
   const mcInput = document.getElementById('ov-min-mc');
+  const shareInput = document.getElementById('ov-min-share');
 
   let filterDebounce = null;
   const onFilterParamChange = (sourceEvent) => {
@@ -1811,7 +1838,8 @@ function initNetworkInteractions(){
     filterDebounce = setTimeout(async () => {
       trackGA('overview_filter_change', {
         min_degree: ovMinDegree,
-        min_market_cap: ovMinMarketCap
+        min_market_cap: ovMinMarketCap,
+        min_share: ovMinShare
       });
       await renderOverview(false);
     }, 120);
@@ -1825,6 +1853,11 @@ function initNetworkInteractions(){
   if(mcInput){
     mcInput.addEventListener('input', onFilterParamChange);
     mcInput.addEventListener('change', onFilterParamChange);
+  }
+
+  if(shareInput){
+    shareInput.addEventListener('input', onFilterParamChange);
+    shareInput.addEventListener('change', onFilterParamChange);
   }
 
   // 重置视角（自动全屏居中适配）
@@ -2255,7 +2288,8 @@ function drawSingleEdges(){
       const sn = document.getElementById('s-' + s.name);
       if(!sn) return;
       const sr = sn.getBoundingClientRect();
-      drawBezier(svg, sr.right - cRect.left, sr.top - cRect.top + sr.height / 2, mx1, my, s.type, 1.8);
+      const sW = s.share ? Math.max(1.5, Math.min(3.6, s.share / 10)) : 1.8;
+      drawBezier(svg, sr.right - cRect.left, sr.top - cRect.top + sr.height / 2, mx1, my, s.type, sW);
     });
 
     drawBezier(svg, mx2, my, hubLeftX, hubMidY, 'direct', Math.max(1.5, (m.share || 30) / 15));
@@ -2276,7 +2310,8 @@ function drawSingleEdges(){
       const cun = document.getElementById('c-' + cu.name);
       if(!cun) return;
       const cur = cun.getBoundingClientRect();
-      drawBezier(svg, px2, py, cur.left - cRect.left, cur.top - cRect.top + cur.height / 2, cu.type, 1.8);
+      const cW = cu.share ? Math.max(1.5, Math.min(3.6, cu.share / 10)) : 1.8;
+      drawBezier(svg, px2, py, cur.left - cRect.left, cur.top - cRect.top + cur.height / 2, cu.type, cW);
     });
   });
 }
