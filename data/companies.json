@@ -2810,6 +2810,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "301516",
+    "name": "中远通",
+    "industry": "电力设备 / 其他电源设备Ⅱ",
+    "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "600173",
     "name": "卧龙新能",
     "industry": "新能源",
@@ -3096,6 +3106,16 @@
     "exchange": "SZ",
     "product_count": 7,
     "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "000957",
+    "name": "中通客车",
+    "industry": "客车制造",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 6,
     "is_subject": true,
     "source": "parsed_cache"
   },
