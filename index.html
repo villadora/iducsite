@@ -2,13 +2,13 @@
 <html lang="zh-CN">
 <head>
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PE6Q8682K3"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DX2WCH5L5Y"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-PE6Q8682K3');
+  gtag('config', 'G-DX2WCH5L5Y');
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -731,6 +731,18 @@
 <script>
 window.__STATIC_EXPORT__ = true;
 
+/* ==================== Google Analytics 4 全站行为与点击事件埋点 ==================== */
+function trackGA(eventName, params = {}){
+  try {
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', eventName, {
+        ...params,
+        timestamp: Date.now()
+      });
+    }
+  } catch(e) {}
+}
+
 const COLORS = {
   supplier:'#33D6B6', material:'#F2B84B', company:'#6E8CFF', product:'#C58CFF', customer:'#FF8FB0',
   direct:'#33D6B6', inferred:'#F2B84B'
@@ -831,7 +843,7 @@ async function loadGraphData(){
     }
 
     if(currentCenterId){
-      await switchCenterCompany(currentCenterId);
+      await switchCenterCompany(currentCenterId, 'initial_load');
     }
   } catch(e) {
     console.error('Failed to load graph data:', e);
@@ -925,7 +937,12 @@ function setupSearchableCompanySelect(config) {
     input.value = `${name} (${code || '未上市'})`;
     dropdown.classList.remove('open');
     if (clearBtn) clearBtn.style.display = 'inline-block';
-    switchCenterCompany(code);
+    trackGA('search_select_company', {
+      search_input_id: inputId,
+      company_code: code,
+      company_name: name
+    });
+    switchCenterCompany(code, 'search_select');
   }
 
   input.addEventListener('focus', () => {
@@ -1034,12 +1051,20 @@ function populateCompanySelectors(list){
   updateSearchableInputs(currentCenterId);
 }
 
-async function switchCenterCompany(code){
+async function switchCenterCompany(code, triggerSource = 'unknown'){
   currentCenterId = code;
   window.location.hash = code;
 
   // 同步更新可搜索输入框的内容
   updateSearchableInputs(code);
+
+  const comp = ALL_COMPANIES_LIST.find(c => c.code === code || c.name === code) || (COMPANIES && COMPANIES[code]) || {};
+  trackGA('company_view', {
+    company_code: code,
+    company_name: comp.name || code,
+    trigger_source: triggerSource,
+    current_tab: (document.querySelector('.tab.active') || {}).dataset?.view || 'unknown'
+  });
 
   // 若内存中尚未缓存该公司的详细图谱，按需从 API 获取 (动态模式)
   if(!COMPANIES[code] && !IS_STATIC_MODE){
@@ -1626,6 +1651,14 @@ function drawNetworkSVG(){
       netGraph.highlightedNodeId = (netGraph.highlightedNodeId === node.id) ? null : node.id;
       drawNetworkSVG();
       openDrawer(node.code || node.name, node.role, node);
+      trackGA('node_click', {
+        company_name: node.name,
+        company_code: node.code || '',
+        node_role: node.role || '',
+        is_subject: Boolean(node.is_subject),
+        industry: node.industry || '',
+        degree: node.degree || 0
+      });
     });
 
     el.addEventListener('dblclick', async (ev) => {
@@ -1636,7 +1669,12 @@ function drawNetworkSVG(){
         const drawer = document.getElementById('drawer');
         if(drawer) drawer.classList.remove('open');
         hideNetworkTooltip();
-        await switchCenterCompany(codeOrName);
+        trackGA('node_dblclick_jump', {
+          company_name: node.name,
+          company_code: node.code || '',
+          industry: node.industry || ''
+        });
+        await switchCenterCompany(codeOrName, 'node_dblclick');
         switchView('single');
       }
     });
@@ -1731,6 +1769,12 @@ function initNetworkInteractions(){
         focusNode(match);
       }
     });
+
+    searchInput.addEventListener('change', (e) => {
+      if(e.target.value.trim()){
+        trackGA('overview_search', { keyword: e.target.value.trim() });
+      }
+    });
   }
 
   // 动态筛选：最低度数与最低市值实时响应
@@ -1738,11 +1782,15 @@ function initNetworkInteractions(){
   const mcInput = document.getElementById('ov-min-mc');
 
   let filterDebounce = null;
-  const onFilterParamChange = () => {
+  const onFilterParamChange = (sourceEvent) => {
     const hudNodes = document.getElementById('hud-nodes');
     if(hudNodes) hudNodes.textContent = '筛选计算中...';
     if(filterDebounce) clearTimeout(filterDebounce);
     filterDebounce = setTimeout(async () => {
+      trackGA('overview_filter_change', {
+        min_degree: ovMinDegree,
+        min_market_cap: ovMinMarketCap
+      });
       await renderOverview(false);
     }, 120);
   };
@@ -1762,6 +1810,7 @@ function initNetworkInteractions(){
     resetBtn.addEventListener('click', () => {
       netGraph.highlightedNodeId = null;
       netGraph.activeCommunityId = null;
+      trackGA('overview_reset_view');
       startNetworkSimulation(0.35);
       setTimeout(autoFitOverview, 100);
     });
@@ -1823,6 +1872,7 @@ function hideNetworkTooltip(){
 document.getElementById('ov-toggle-inferred').addEventListener('click', (ev) => {
   ovInferredVisible = !ovInferredVisible;
   ev.currentTarget.classList.toggle('on', ovInferredVisible);
+  trackGA('toggle_inferred_overview', { visible: ovInferredVisible });
   drawNetworkSVG();
 });
 
@@ -2012,7 +2062,14 @@ function drawChainEdges(){
 }
 
 ['chain-depth-up', 'chain-depth-down', 'chain-top-up', 'chain-top-down'].forEach(id => {
-  document.getElementById(id).addEventListener('change', () => renderChain());
+  document.getElementById(id).addEventListener('change', (e) => {
+    trackGA('chain_config_change', {
+      param_id: id,
+      param_value: e.target.value,
+      company_code: currentCenterId
+    });
+    renderChain();
+  });
 });
 
 /* ==================== VIEW 03: 单公司 5 列视图 ==================== */
@@ -2206,6 +2263,7 @@ document.getElementById('toggle-inferred').addEventListener('click', (ev) => {
   singleInferredVisible = !singleInferredVisible;
   ev.currentTarget.classList.toggle('on', singleInferredVisible);
   document.querySelectorAll('#diagram-container .node.inferred-node').forEach(n => n.classList.toggle('hidden-inferred', !singleInferredVisible));
+  trackGA('toggle_inferred_single', { visible: singleInferredVisible });
   drawSingleEdges();
 });
 
@@ -2224,6 +2282,13 @@ function openDrawer(id, kind, rawItem){
   bodyEl.innerHTML = '';
 
   const data = getCurrentCenter();
+
+  trackGA('drawer_open', {
+    item_id: id,
+    item_kind: kind,
+    item_name: rawItem ? rawItem.name : id,
+    center_company: data.name
+  });
 
   if(kind === 'company'){
     nameEl.textContent = data.name;
@@ -2284,6 +2349,17 @@ document.getElementById('drawer-close').addEventListener('click', () => {
 /* ==================== 标签切换与窗口响应 ==================== */
 
 function switchView(viewName){
+  const tabTitles = {
+    overview: '01 全图概览',
+    chain: '02 产业链展开',
+    single: '03 单公司视图'
+  };
+  trackGA('tab_switch', {
+    view_name: viewName,
+    tab_title: tabTitles[viewName] || viewName,
+    current_company: currentCenterId
+  });
+
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.view === viewName));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + viewName));
 
