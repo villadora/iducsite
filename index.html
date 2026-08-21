@@ -416,17 +416,31 @@
   .node.n-product .share{color:var(--product);}
   .node.n-customer .share{color:var(--customer);}
 
-  .node.inferred-node{border-style:dashed; opacity:.92;}
-  .node.hidden-inferred{display:none;}
-  .node.clickable-hint{cursor:pointer;}
+  .core-tag{
+    font-size:9.5px; font-family:var(--font-mono); color:var(--company);
+    background:rgba(110,140,255,0.15); border:1px solid rgba(110,140,255,0.35);
+    padding:1px 5px; border-radius:4px; margin-left:auto; font-weight:600;
+  }
+  .node.clickable-hint{cursor:pointer; position:relative;}
   .node.clickable-hint::after{
-    content:"切换";
+    content:"双击切换";
     position:absolute; top:6px; right:6px;
     font-family:var(--font-mono); font-size:9px; color:var(--company);
     background:var(--bg); padding:1px 5px; border-radius:3px;
     opacity:0; transition:opacity .15s; border:1px solid rgba(110,140,255,0.3);
+    pointer-events:none;
   }
-  .node.clickable-hint:hover::after{opacity:1;}
+  .node.clickable-hint:hover::after{opacity:0.95;}
+  .chain-node.clickable-hint{cursor:pointer; position:relative;}
+  .chain-node.clickable-hint::after{
+    content:"双击切换";
+    position:absolute; top:4px; right:4px;
+    font-family:var(--font-mono); font-size:8.5px; color:var(--company);
+    background:var(--bg); padding:1px 4px; border-radius:3px;
+    opacity:0; transition:opacity .15s; border:1px solid rgba(110,140,255,0.3);
+    pointer-events:none;
+  }
+  .chain-node.clickable-hint:hover::after{opacity:0.95;}
 
   .hub{
     background:linear-gradient(180deg, rgba(110,140,255,0.14), rgba(110,140,255,0.05));
@@ -731,7 +745,7 @@
   </div>
 
   <footer>
-    <p>数据源自各上市公司研报与财报自动化抽取，结合产业链实体对齐与 Neo4j 知识图谱图内推断。点击图谱中的企业卡片可直接切换分析中心。⚠️ 大模型与自动化数据整理可能存在幻觉与提取偏差，图谱内容仅供产业链与学术研究参考，不构成任何投资建议，请结合原始公告进行 Double Check 核验。</p>
+    <p>数据源自各上市公司研报与财报自动化抽取，结合产业链实体对齐与 Neo4j 知识图谱图内推断。💡 单击企业卡片查看档案，双击核心公司卡片可直接切换分析中心。⚠️ 大模型与自动化数据整理可能存在幻觉与提取偏差，图谱内容仅供产业链与学术研究参考，不构成任何投资建议，请结合原始公告进行 Double Check 核验。</p>
     <span class="badge">IDUXGRAPH · LIVE GRAPH DATA</span>
   </footer>
 
@@ -798,6 +812,29 @@ function el(tag, cls, text){
   if(cls) e.className = cls;
   if(text !== undefined) e.textContent = text;
   return e;
+}
+
+function isCoreCompany(rawNameOrCode){
+  if(!rawNameOrCode) return false;
+  const s = String(rawNameOrCode).trim();
+  if(COMPANIES && (COMPANIES[s] || Object.values(COMPANIES).some(c => c.name === s || c.code === s))) return true;
+  if(Array.isArray(ALL_COMPANIES_LIST) && ALL_COMPANIES_LIST.some(c => c.code === s || c.name === s)) return true;
+  return false;
+}
+
+function findCoreCompanyId(rawNameOrCode){
+  if(!rawNameOrCode) return null;
+  const s = String(rawNameOrCode).trim();
+  if(COMPANIES && COMPANIES[s]) return s;
+  if(Array.isArray(ALL_COMPANIES_LIST)){
+    const match = ALL_COMPANIES_LIST.find(c => c.code === s || c.name === s);
+    if(match) return match.code || match.name;
+  }
+  if(COMPANIES){
+    const match = Object.values(COMPANIES).find(c => c.name === s || c.code === s);
+    if(match) return match.code || match.name;
+  }
+  return s;
 }
 
 function resolveCompanyId(rawNameOrCode){
@@ -2057,17 +2094,34 @@ function renderChain(){
     const col = el('div', 'chain-level');
     col.innerHTML = `<div class="chain-level-title up">上游 ${Math.abs(lvl.level)} 阶</div>`;
     lvl.nodes.forEach((n, idx) => {
-      const isSw = !!COMPANIES[n.name] || !!COMPANIES[n.id];
-      const card = el('div', `chain-node up ${n.type === 'inferred' ? 'inferred' : ''}`);
+      const isSw = isCoreCompany(n.id || n.name);
+      const targetId = findCoreCompanyId(n.id || n.name);
+      const card = el('div', `chain-node up ${n.type === 'inferred' ? 'inferred' : ''} ${isSw ? 'clickable-hint is-core' : ''}`);
       card.id = `cn-up-${lvl.level}-${idx}`;
+      if(isSw) card.setAttribute('title', '💡 双击直接切换以该企业为核心公司视角 (单击查看档案)');
+      else card.setAttribute('title', '💡 单击查看企业档案');
       card.innerHTML = `
-        <div class="cn-name">${n.name}</div>
+        <div class="cn-name">
+          ${n.name}
+          ${isSw ? '<span class="core-tag" style="margin-left:4px;">主体</span>' : ''}
+        </div>
         <div class="cn-share">供应 ${n.via}</div>
       `;
       card.addEventListener('click', () => {
-        if(isSw) switchCenterCompany(n.id || n.name);
-        else openDrawer(n.name, 'supplier', n);
+        openDrawer(n.name, 'supplier', n);
       });
+      if(isSw){
+        card.addEventListener('dblclick', async (e) => {
+          e.stopPropagation();
+          const drawer = document.getElementById('drawer');
+          if(drawer) drawer.classList.remove('open');
+          trackGA('chain_node_dblclick_switch', {
+            company_name: n.name,
+            company_id: targetId || n.id || ''
+          });
+          await switchCenterCompany(targetId, 'chain_dblclick');
+        });
+      }
       col.appendChild(card);
     });
     container.appendChild(col);
@@ -2090,17 +2144,34 @@ function renderChain(){
     const col = el('div', 'chain-level');
     col.innerHTML = `<div class="chain-level-title down">下游 ${lvl.level} 阶</div>`;
     lvl.nodes.forEach((n, idx) => {
-      const isSw = !!COMPANIES[n.name] || !!COMPANIES[n.id];
-      const card = el('div', `chain-node down ${n.type === 'inferred' ? 'inferred' : ''}`);
+      const isSw = isCoreCompany(n.id || n.name);
+      const targetId = findCoreCompanyId(n.id || n.name);
+      const card = el('div', `chain-node down ${n.type === 'inferred' ? 'inferred' : ''} ${isSw ? 'clickable-hint is-core' : ''}`);
       card.id = `cn-dn-${lvl.level}-${idx}`;
+      if(isSw) card.setAttribute('title', '💡 双击直接切换以该企业为核心公司视角 (单击查看档案)');
+      else card.setAttribute('title', '💡 单击查看企业档案');
       card.innerHTML = `
-        <div class="cn-name">${n.name}</div>
+        <div class="cn-name">
+          ${n.name}
+          ${isSw ? '<span class="core-tag" style="margin-left:4px;">主体</span>' : ''}
+        </div>
         <div class="cn-share">采购 ${n.via}</div>
       `;
       card.addEventListener('click', () => {
-        if(isSw) switchCenterCompany(n.id || n.name);
-        else openDrawer(n.name, 'customer', n);
+        openDrawer(n.name, 'customer', n);
       });
+      if(isSw){
+        card.addEventListener('dblclick', async (e) => {
+          e.stopPropagation();
+          const drawer = document.getElementById('drawer');
+          if(drawer) drawer.classList.remove('open');
+          trackGA('chain_node_dblclick_switch', {
+            company_name: n.name,
+            company_id: targetId || n.id || ''
+          });
+          await switchCenterCompany(targetId, 'chain_dblclick');
+        });
+      }
       col.appendChild(card);
     });
     container.appendChild(col);
@@ -2152,21 +2223,40 @@ function renderSingle(){
       if(s.name === compName || s.name === compCode || s.id === compCode || s.id === compName) return;
       if(seenSups.has(s.name)) return;
       seenSups.add(s.name);
-      const isSw = !!COMPANIES[s.name] || !!COMPANIES[s.id];
-      const n = el('div', `node n-supplier ${s.type === 'inferred' ? 'inferred-node' : ''} ${isSw ? 'clickable-hint' : ''}`);
+      const isSw = isCoreCompany(s.id || s.name);
+      const targetId = findCoreCompanyId(s.id || s.name);
+      const n = el('div', `node n-supplier ${s.type === 'inferred' ? 'inferred-node' : ''} ${isSw ? 'clickable-hint is-core' : ''}`);
       n.id = 's-' + s.name;
+      if(isSw) n.setAttribute('title', '💡 双击直接切换以该企业为核心公司视角 (单击查看档案)');
+      else n.setAttribute('title', '💡 单击查看企业档案');
       if(s.type === 'inferred' && !singleInferredVisible) n.classList.add('hidden-inferred');
       n.innerHTML = `
-        <div class="head"><span class="dot"></span><span class="name">${s.name}</span></div>
+        <div class="head">
+          <span class="dot"></span>
+          <span class="name">${s.name}</span>
+          ${isSw ? '<span class="core-tag" title="已分析核心公司">主体</span>' : ''}
+        </div>
         <div class="meta">
           <span class="tag ${s.type}">${s.type === 'direct' ? '直接披露' : '推断关联'}</span>
           <span class="share">${s.share ? s.share + '%' : ''}</span>
         </div>
       `;
       n.addEventListener('click', () => {
-        if(isSw) switchCenterCompany(s.id || s.name);
-        else openDrawer(s.name, 'supplier', s);
+        openDrawer(s.name, 'supplier', s);
       });
+      if(isSw){
+        n.addEventListener('dblclick', async (e) => {
+          e.stopPropagation();
+          const drawer = document.getElementById('drawer');
+          if(drawer) drawer.classList.remove('open');
+          trackGA('single_supplier_dblclick_switch', {
+            supplier_name: s.name,
+            supplier_id: targetId || s.id || '',
+            from_company: compName
+          });
+          await switchCenterCompany(targetId, 'supplier_dblclick');
+        });
+      }
       colS.appendChild(n);
     });
 
@@ -2219,21 +2309,40 @@ function renderSingle(){
       if(cu.name === compName || cu.name === compCode || cu.id === compCode || cu.id === compName) return;
       if(seenCusts.has(cu.name)) return;
       seenCusts.add(cu.name);
-      const isSw = !!COMPANIES[cu.name] || !!COMPANIES[cu.id];
-      const cun = el('div', `node n-customer ${cu.type === 'inferred' ? 'inferred-node' : ''} ${isSw ? 'clickable-hint' : ''}`);
+      const isSw = isCoreCompany(cu.id || cu.name);
+      const targetId = findCoreCompanyId(cu.id || cu.name);
+      const cun = el('div', `node n-customer ${cu.type === 'inferred' ? 'inferred-node' : ''} ${isSw ? 'clickable-hint is-core' : ''}`);
       cun.id = 'c-' + cu.name;
+      if(isSw) cun.setAttribute('title', '💡 双击直接切换以该企业为核心公司视角 (单击查看档案)');
+      else cun.setAttribute('title', '💡 单击查看企业档案');
       if(cu.type === 'inferred' && !singleInferredVisible) cun.classList.add('hidden-inferred');
       cun.innerHTML = `
-        <div class="head"><span class="dot"></span><span class="name">${cu.name}</span></div>
+        <div class="head">
+          <span class="dot"></span>
+          <span class="name">${cu.name}</span>
+          ${isSw ? '<span class="core-tag" title="已分析核心公司">主体</span>' : ''}
+        </div>
         <div class="meta">
           <span class="tag ${cu.type}">${cu.type === 'direct' ? '直接披露' : '推断关联'}</span>
           <span class="share">${cu.share ? cu.share + '%' : ''}</span>
         </div>
       `;
       cun.addEventListener('click', () => {
-        if(isSw) switchCenterCompany(cu.id || cu.name);
-        else openDrawer(cu.name, 'customer', cu);
+        openDrawer(cu.name, 'customer', cu);
       });
+      if(isSw){
+        cun.addEventListener('dblclick', async (e) => {
+          e.stopPropagation();
+          const drawer = document.getElementById('drawer');
+          if(drawer) drawer.classList.remove('open');
+          trackGA('single_customer_dblclick_switch', {
+            customer_name: cu.name,
+            customer_id: targetId || cu.id || '',
+            from_company: compName
+          });
+          await switchCenterCompany(targetId, 'customer_dblclick');
+        });
+      }
       colCu.appendChild(cun);
     });
   });

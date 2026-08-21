@@ -1330,6 +1330,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "603666",
+    "name": "亿嘉和",
+    "industry": "电力机器人/特种机器人(申万二级:自动化设备)",
+    "exchange": "SH",
+    "product_count": 9,
+    "material_count": 10,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "000016",
     "name": "ST康佳A",
     "industry": "半导体/高端制造",
@@ -4350,6 +4360,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "688698",
+    "name": "伟创电气",
+    "industry": "工业自动化设备",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 9,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "688779",
     "name": "五矿新能",
     "industry": "电池材料",
@@ -7070,6 +7090,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "603416",
+    "name": "信捷电气",
+    "industry": "自动化设备",
+    "exchange": "SH",
+    "product_count": 5,
+    "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "603606",
     "name": "东方电缆",
     "industry": "电力新能源",
@@ -7726,6 +7756,16 @@
     "exchange": "SZ",
     "product_count": 6,
     "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300486",
+    "name": "东杰智能",
+    "industry": "智能物流装备/智能生产系统集成",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 5,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -8853,6 +8893,16 @@
     "code": "300264",
     "name": "佳创视讯",
     "industry": "数字电视系统集成",
+    "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300276",
+    "name": "三丰智能",
+    "industry": "智能制造装备",
     "exchange": "SZ",
     "product_count": 5,
     "material_count": 3,
@@ -10110,6 +10160,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "301112",
+    "name": "信邦智能",
+    "industry": "汽车焊装/总装自动化生产线系统集成",
+    "exchange": "SZ",
+    "product_count": 3,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "301203",
     "name": "国泰环保",
     "industry": "环保-水务及水治理-污泥处理",
@@ -11103,6 +11163,16 @@
     "code": "603223",
     "name": "恒通股份",
     "industry": "港口运营+危化品道路货运+LNG清洁能源",
+    "exchange": "SH",
+    "product_count": 6,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "603275",
+    "name": "众辰科技",
+    "industry": "机械设备 - 自动化设备 - 工控设备",
     "exchange": "SH",
     "product_count": 6,
     "material_count": 0,
