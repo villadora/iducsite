@@ -520,6 +520,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002127",
+    "name": "南极电商",
+    "industry": "品牌授权 + 自营 + 数字营销",
+    "exchange": "SZ",
+    "product_count": 15,
+    "material_count": 9,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300171",
     "name": "东富龙",
     "industry": "制药装备",

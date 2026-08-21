@@ -668,24 +668,11 @@
   <div class="view" id="view-chain">
     <div class="controls">
       <div class="control-row">
-        <div class="ctrl-field" title="快速切换以核心链主龙头为中心的产业链上下游展开">
-          <label for="chain-leader-select">核心链主</label>
-          <select id="chain-leader-select">
-            <option value="">-- 快速选择核心链主 --</option>
+        <div class="ctrl-field" title="选择产业链集群，自动以该集群核心链主为中心展开上下游全链条">
+          <label for="chain-cluster-select">产业链集群</label>
+          <select id="chain-cluster-select">
+            <option value="">-- 选择产业链集群 (默认链主) --</option>
           </select>
-        </div>
-        <div class="ctrl-field">
-          <label for="chain-search-input">中心公司</label>
-          <div class="searchable-select" id="chain-searchable-select">
-            <div class="searchable-input-wrap">
-              <span class="search-icon">🔍</span>
-              <input type="text" class="searchable-input" id="chain-search-input" placeholder="搜索中心公司..." autocomplete="off">
-              <button class="searchable-clear" id="chain-search-clear" type="button" title="清除">×</button>
-            </div>
-            <div class="searchable-dropdown" id="chain-search-dropdown">
-              <div class="searchable-list" id="chain-search-list"></div>
-            </div>
-          </div>
         </div>
         <div class="ctrl-field">
           <label for="chain-depth-up">向上展开</label>
@@ -1104,99 +1091,85 @@ function updateSearchableInputs(code){
   if(!comp || !comp.name) return;
   const label = `${comp.name} (${comp.code || '未上市'})`;
   const inp1 = document.getElementById('company-search-input');
-  const inp2 = document.getElementById('chain-search-input');
   if(inp1) inp1.value = label;
-  if(inp2) inp2.value = label;
 
-  // 同步更新产业链页面的核心链主下拉框选项选中态
-  const chainLeaderSel = document.getElementById('chain-leader-select');
-  if(chainLeaderSel){
-    const matchOpt = Array.from(chainLeaderSel.options).find(o => o.value === code || o.value === comp.name || o.value === comp.code);
-    if(matchOpt){
-      chainLeaderSel.value = matchOpt.value;
-    } else {
-      chainLeaderSel.value = '';
-    }
-  }
+  // 同步更新产业链页面的集群选择器状态
+  syncChainClusterSelectWithCurrentCenter();
 }
 
-function populateChainLeaderSelector(){
-  const sel = document.getElementById('chain-leader-select');
+function populateChainClusterSelector(){
+  const sel = document.getElementById('chain-cluster-select');
   if(!sel) return;
-  const currentVal = sel.value;
-  sel.innerHTML = '<option value="">👑 选择核心链主 (按产业集群与体量)</option>';
+  sel.innerHTML = '<option value="">-- 选择产业链集群 (默认链主) --</option>';
 
-  const leaderCandidates = new Map();
+  const rawComms = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.macro_communities) || [];
+  // 筛选规模 > 10 的主流宏观产业集群，并按规模降序
+  const validComms = rawComms.filter(c => (c.size || (c.members && c.members.length) || 0) > 10);
+  const sortedComms = [...validComms].sort((a, b) => (b.size || 0) - (a.size || 0));
 
-  // 1. 优先从预计算的宏观产业集群中提取核心链主
-  if(STATIC_RAW_NETWORK_DATA && Array.isArray(STATIC_RAW_NETWORK_DATA.macro_communities)){
-    STATIC_RAW_NETWORK_DATA.macro_communities.forEach(c => {
-      if(c.hub && c.size >= 2){
-        const code = c.hub_code || c.hub;
-        if(!leaderCandidates.has(c.hub)){
-          leaderCandidates.set(c.hub, {
-            name: c.hub,
-            code: code,
-            clusterName: c.name,
-            size: c.size,
-            marketCap: c.totalMarketCapCny || 0,
-            isHub: true
-          });
-        }
-      }
-    });
-  }
-
-  // 2. 补充全网核心研报主体及高市值龙头
-  if(Array.isArray(ALL_COMPANIES_LIST)){
-    ALL_COMPANIES_LIST.forEach(c => {
-      const key = c.name || c.code;
-      if(!leaderCandidates.has(key) && !leaderCandidates.has(c.name)){
-        const mc = c.market_cap_cny || 0;
-        const deg = c.degree || 0;
-        if(mc >= 500 || deg >= 15 || c.is_subject){
-          leaderCandidates.set(c.name, {
-            name: c.name,
-            code: c.code || c.name,
-            clusterName: '',
-            size: deg,
-            marketCap: mc,
-            isHub: false
-          });
-        }
-      }
-    });
-  }
-
-  const sortedLeaders = Array.from(leaderCandidates.values()).sort((a, b) => {
-    return (b.size || 0) - (a.size || 0) || (b.marketCap || 0) - (a.marketCap || 0);
-  });
-
-  sortedLeaders.forEach(ld => {
+  sortedComms.forEach(c => {
+    const hub = c.hub || (c.members && c.members[0]) || '';
+    const hubCode = c.hub_code || hub;
     const opt = document.createElement('option');
-    opt.value = ld.code || ld.name;
-    const tag = ld.clusterName ? ` · ${ld.clusterName}` : (ld.size ? ` (${ld.size}家企业)` : '');
-    opt.textContent = `${ld.name}${ld.code && ld.code !== ld.name ? ` (${ld.code})` : ''}${tag}`;
+    opt.value = hubCode || hub;
+    opt.dataset.macroId = String(c.macroId);
+    opt.dataset.hub = hub;
+    opt.dataset.clusterName = c.name;
+    const mcapStr = c.totalMarketCapCny ? ` · ${(c.totalMarketCapCny > 10000 ? (c.totalMarketCapCny/10000).toFixed(1) + '万亿' : c.totalMarketCapCny.toFixed(0) + '亿')}` : '';
+    opt.textContent = `${c.name} (${c.size}家 · 链主: ${hub}${mcapStr})`;
     sel.appendChild(opt);
   });
 
-  // 监听核心链主选择事件
+  // 绑定产业链集群选择事件：选择集群自动以其核心链主为中心展开
   if(!sel.dataset.bound){
     sel.dataset.bound = 'true';
     sel.addEventListener('change', async (e) => {
       const val = e.target.value;
       if(!val) return;
-      trackGA('chain_leader_select_switch', {
-        leader_id: val
+      const selectedOpt = sel.selectedOptions[0];
+      const clusterName = selectedOpt ? selectedOpt.dataset.clusterName : '';
+      const hubName = selectedOpt ? selectedOpt.dataset.hub : '';
+      trackGA('chain_cluster_select_switch', {
+        cluster_name: clusterName,
+        leader_id: val,
+        hub_name: hubName
       });
-      await switchCenterCompany(val, 'chain_leader_select');
+      await switchCenterCompany(val, 'chain_cluster_select');
     });
   }
 
-  if(currentCenterId){
-    const matchOpt = Array.from(sel.options).find(o => o.value === currentCenterId || o.value.includes(currentCenterId));
-    if(matchOpt) sel.value = matchOpt.value;
+  syncChainClusterSelectWithCurrentCenter();
+}
+
+function syncChainClusterSelectWithCurrentCenter(){
+  const sel = document.getElementById('chain-cluster-select');
+  if(!sel || !currentCenterId) return;
+
+  const comp = ALL_COMPANIES_LIST.find(c => c.code === currentCenterId || c.name === currentCenterId) || (COMPANIES && COMPANIES[currentCenterId]) || getCurrentCenter();
+  const cName = comp.name || currentCenterId;
+  const cCode = comp.code || currentCenterId;
+
+  // 1. 尝试直接匹配链主 value
+  const directOpt = Array.from(sel.options).find(o => o.value === cCode || o.value === cName);
+  if(directOpt){
+    sel.value = directOpt.value;
+    return;
   }
+
+  // 2. 若当前公司不是链主，则查找其所属集群并同步选中该集群
+  if(STATIC_RAW_NETWORK_DATA && Array.isArray(STATIC_RAW_NETWORK_DATA.macro_communities)){
+    const matchComm = STATIC_RAW_NETWORK_DATA.macro_communities.find(c => 
+      (c.members || []).includes(cName) || (c.members || []).includes(cCode) || c.hub === cName || c.hub === cCode
+    );
+    if(matchComm){
+      const matchOpt = Array.from(sel.options).find(o => o.dataset.macroId === String(matchComm.macroId));
+      if(matchOpt){
+        sel.value = matchOpt.value;
+        return;
+      }
+    }
+  }
+  sel.value = '';
 }
 
 function populateCompanySelectors(list){
@@ -1209,14 +1182,7 @@ function populateCompanySelectors(list){
     clearBtnId: 'company-search-clear'
   });
 
-  setupSearchableCompanySelect({
-    inputId: 'chain-search-input',
-    dropdownId: 'chain-search-dropdown',
-    listId: 'chain-search-list',
-    clearBtnId: 'chain-search-clear'
-  });
-
-  populateChainLeaderSelector();
+  populateChainClusterSelector();
   updateSearchableInputs(currentCenterId);
 }
 
@@ -1224,7 +1190,7 @@ async function switchCenterCompany(code, triggerSource = 'unknown'){
   currentCenterId = code;
   window.location.hash = code;
 
-  // 同步更新可搜索输入框的内容
+  // 同步更新可搜索输入框与集群选择器的内容
   updateSearchableInputs(code);
 
   const comp = ALL_COMPANIES_LIST.find(c => c.code === code || c.name === code) || (COMPANIES && COMPANIES[code]) || {};
