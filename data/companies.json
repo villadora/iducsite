@@ -10,6 +10,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "600219",
+    "name": "南山铝业",
+    "industry": "半导体/高端制造",
+    "exchange": "SH",
+    "product_count": 32,
+    "material_count": 13,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "301066",
     "name": "万事利",
     "industry": "纺织服饰",
@@ -1050,6 +1060,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300918",
+    "name": "南山智尚",
+    "industry": "纺织服装与新材料",
+    "exchange": "SZ",
+    "product_count": 8,
+    "material_count": 12,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300919",
     "name": "中伟新材",
     "industry": "锂电池前驱体/新能源材料",
@@ -1156,6 +1176,16 @@
     "exchange": "SH",
     "product_count": 9,
     "material_count": 11,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "601900",
+    "name": "南方传媒",
+    "industry": "出版传媒",
+    "exchange": "SH",
+    "product_count": 8,
+    "material_count": 12,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -5216,6 +5246,16 @@
     "exchange": "SZ",
     "product_count": 5,
     "material_count": 7,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "600029",
+    "name": "南方航空",
+    "industry": "航空运输业",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 8,
     "is_subject": true,
     "source": "parsed_cache"
   },
