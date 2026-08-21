@@ -16550,6 +16550,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "688201",
+    "name": "ST信安",
+    "industry": "网络安全/密码安全/数据安全",
+    "exchange": "SH",
+    "product_count": 2,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "688227",
     "name": "品高股份",
     "industry": "计算机/软件/云计算",

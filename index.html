@@ -1367,17 +1367,11 @@ async function buildGlobalNetwork(forceRefresh = false){
         }
       }
       // 纯前端内存极速过滤度数与市值 (毫秒级 In-Browser Filtering)
-      // 1. 筛选仅保留公司数目 > 10 的核心产业集群
-      const rawComms = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.macro_communities) || [];
-      const validComms = rawComms.filter(c => (c.size || (c.members && c.members.length) || 0) > 10);
-      const validCommIdSet = new Set(validComms.map(c => c.macroId));
-
       const rawNodes = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.nodes) || [];
       const rawLinks = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.links) || [];
+      const rawComms = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.macro_communities) || [];
 
       const filteredNodes = rawNodes.filter(n => {
-        // 仅展示所属集群规模 > 10 的企业
-        if(n.macroId !== undefined && !validCommIdSet.has(n.macroId)) return false;
         const deg = (n.degree !== undefined && n.degree !== null) ? n.degree : 0;
         if(deg < ovMinDegree) return false;
         const mc = (n.market_cap_cny !== null && n.market_cap_cny !== undefined) ? n.market_cap_cny : null;
@@ -1398,7 +1392,7 @@ async function buildGlobalNetwork(forceRefresh = false){
       data = {
         nodes: filteredNodes,
         links: filteredLinks,
-        macro_communities: validComms
+        macro_communities: rawComms
       };
     } else {
       const incIso = false;
@@ -1418,14 +1412,11 @@ async function buildGlobalNetwork(forceRefresh = false){
             STATIC_RAW_NETWORK_DATA = null;
           }
         }
-        const rawComms = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.macro_communities) || [];
-        const validComms = rawComms.filter(c => (c.size || (c.members && c.members.length) || 0) > 10);
-        const validCommIdSet = new Set(validComms.map(c => c.macroId));
-
         const rawNodes = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.nodes) || [];
         const rawLinks = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.links) || [];
+        const rawComms = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.macro_communities) || [];
+
         const filteredNodes = rawNodes.filter(n => {
-          if(n.macroId !== undefined && !validCommIdSet.has(n.macroId)) return false;
           const deg = (n.degree !== undefined && n.degree !== null) ? n.degree : 0;
           if(deg < ovMinDegree) return false;
           const mc = (n.market_cap_cny !== null && n.market_cap_cny !== undefined) ? n.market_cap_cny : null;
@@ -1443,7 +1434,7 @@ async function buildGlobalNetwork(forceRefresh = false){
         data = {
           nodes: filteredNodes,
           links: filteredLinks,
-          macro_communities: validComms
+          macro_communities: rawComms
         };
       }
     }
@@ -1473,7 +1464,7 @@ async function buildGlobalNetwork(forceRefresh = false){
       netGraph.nodeMap = nodeMap;
       netGraph.macroCommunities = data.macro_communities || [];
 
-      // 动态填充全局产业集群筛选器下拉列表（仅展示规模 > 10 的宏观集群）
+      // 动态填充全局产业集群筛选器下拉列表
       populateClusterSelector(netGraph.macroCommunities, netGraph.nodes);
 
       // 更新 HUD 统计
@@ -1489,9 +1480,9 @@ async function buildGlobalNetwork(forceRefresh = false){
           }
         }
         if(netGraph.nodes.length > 0){
-          hudNodes.textContent = `共 ${netGraph.nodes.length} 家企业 (仅展示集群规模>10家 | 包含 ${netGraph.macroCommunities.length} 大产业集群 | 度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'}${shareFilterTxt})`;
+          hudNodes.textContent = `共 ${netGraph.nodes.length} 家企业 (度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'}${shareFilterTxt})`;
         } else {
-          hudNodes.textContent = `无匹配企业 (仅展示集群规模>10家 | 度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'})`;
+          hudNodes.textContent = `无匹配企业 (度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'})`;
         }
       }
       if(hudLinks) hudLinks.textContent = `${netGraph.links.length} 条供需直连`;
@@ -1506,7 +1497,7 @@ function populateClusterSelector(macroCommunities, nodes){
   const sel = document.getElementById('ov-cluster-select');
   if(!sel) return;
   const currentVal = sel.value;
-  sel.innerHTML = '<option value="all">🌐 全部主流产业集群 (规模>10家企业)</option>';
+  sel.innerHTML = '<option value="all">🌐 全部产业集群 (全网展示所有企业)</option>';
 
   if(!Array.isArray(macroCommunities) || macroCommunities.length === 0) return;
 
@@ -1519,7 +1510,7 @@ function populateClusterSelector(macroCommunities, nodes){
     });
   }
 
-  // 严格仅展示集群规模 > 10 的宏观产业集群
+  // 筛选规模 > 10 的主流宏观产业集群供用户快速高亮选择，按规模降序
   const validComms = macroCommunities.filter(c => (c.size || (c.members && c.members.length) || 0) > 10);
   const sortedComms = [...validComms].sort((a, b) => (b.size || 0) - (a.size || 0));
 
