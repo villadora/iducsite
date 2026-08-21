@@ -4870,6 +4870,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "001360",
+    "name": "南矿集团",
+    "industry": "机械设备 / 矿山专用设备",
+    "exchange": "SZ",
+    "product_count": 6,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002028",
     "name": "思源电气",
     "industry": "电力设备 / 输变电一次设备 + 智能配网 + 储能",
@@ -6896,6 +6906,16 @@
     "exchange": "SH",
     "product_count": 10,
     "material_count": 1,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "688265",
+    "name": "南模生物",
+    "industry": "基因修饰动物模型/模式动物",
+    "exchange": "SH",
+    "product_count": 6,
+    "material_count": 5,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -10260,6 +10280,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "301355",
+    "name": "南王科技",
+    "industry": "包装印刷",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "301421",
     "name": "波长光电",
     "industry": "精密光学/激光+红外光学",
@@ -10916,6 +10946,16 @@
     "exchange": "SH",
     "product_count": 3,
     "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "000012",
+    "name": "南玻A",
+    "industry": "玻璃玻纤",
+    "exchange": "SZ",
+    "product_count": 3,
+    "material_count": 4,
     "is_subject": true,
     "source": "parsed_cache"
   },
