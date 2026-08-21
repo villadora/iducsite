@@ -1070,6 +1070,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "600360",
+    "name": "华微电子",
+    "industry": "功率半导体",
+    "exchange": "SH",
+    "product_count": 12,
+    "material_count": 8,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "600480",
     "name": "凌云股份",
     "industry": "汽车制造 - 汽车零部件",
@@ -1396,6 +1406,16 @@
     "exchange": "SZ",
     "product_count": 3,
     "material_count": 15,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002035",
+    "name": "华帝股份",
+    "industry": "厨电",
+    "exchange": "SZ",
+    "product_count": 12,
+    "material_count": 6,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -1736,6 +1756,16 @@
     "exchange": "SZ",
     "product_count": 13,
     "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "301235",
+    "name": "华康洁净",
+    "industry": "洁净室系统集成",
+    "exchange": "SZ",
+    "product_count": 12,
+    "material_count": 5,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -4730,6 +4760,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300180",
+    "name": "华峰超纤",
+    "industry": "基础化工-塑料-其他塑料制品",
+    "exchange": "SZ",
+    "product_count": 9,
+    "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300181",
     "name": "佐力药业",
     "industry": "中药",
@@ -5046,6 +5086,16 @@
     "exchange": "SH",
     "product_count": 5,
     "material_count": 7,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "601702",
+    "name": "华峰铝业",
+    "industry": "铝加工",
+    "exchange": "SH",
+    "product_count": 10,
+    "material_count": 2,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -9960,6 +10010,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "605077",
+    "name": "华康股份",
+    "industry": "功能性糖醇",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "688001",
     "name": "华兴源创",
     "industry": "专用设备制造业 / 半导体和光电检测设备",
@@ -13073,6 +13133,16 @@
     "code": "688083",
     "name": "中望软件",
     "industry": "工业软件/CAD/CAE",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 0,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "688151",
+    "name": "华强科技",
+    "industry": "防化军工+医药包装",
     "exchange": "SH",
     "product_count": 4,
     "material_count": 0,
