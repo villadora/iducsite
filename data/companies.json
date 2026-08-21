@@ -340,6 +340,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "688029",
+    "name": "南微医学",
+    "industry": "国产内镜耗材龙头",
+    "exchange": "SH",
+    "product_count": 24,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "688327",
     "name": "云从科技",
     "industry": "人工智能",
