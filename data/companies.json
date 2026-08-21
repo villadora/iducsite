@@ -1850,6 +1850,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300940",
+    "name": "南极光",
+    "industry": "计算机、通信和其他电子设备制造业(C39)/电子-光学光电子-LED",
+    "exchange": "SZ",
+    "product_count": 11,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "301081",
     "name": "严牌股份",
     "industry": "专用设备制造业",
@@ -3826,6 +3836,16 @@
     "exchange": "SH",
     "product_count": 9,
     "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "603280",
+    "name": "南方路机",
+    "industry": "工程机械",
+    "exchange": "SH",
+    "product_count": 6,
+    "material_count": 8,
     "is_subject": true,
     "source": "parsed_cache"
   },
