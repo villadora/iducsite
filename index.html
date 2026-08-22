@@ -1003,9 +1003,10 @@ function renderStats(data){
   const el = document.getElementById('stats');
   if(!el || !data) return;
 
-  const totalComps = data.companies ?? (data.nodes_by_label ? data.nodes_by_label.Company : 0) ?? (Array.isArray(COMPANIES) ? COMPANIES.length : Object.keys(COMPANIES).length) ?? 0;
-  const totalItems = data.items ?? (data.nodes_by_label ? ((data.nodes_by_label.Item || 0) + (data.nodes_by_label.Product || 0) + (data.nodes_by_label.Material || 0)) : 0) ?? 0;
-  const totalDirect = data.relationships ?? data.total_edges ?? 0;
+  // 上市公司主体：严格展示实际深度解析的上市公司核心主体数量 (2,052 家)，而不是包含外部上下游配套企业的 8,842 全网实体
+  const totalComps = data.companies || (Array.isArray(ALL_COMPANIES_LIST) && ALL_COMPANIES_LIST.length > 0 ? ALL_COMPANIES_LIST.length : 0) || (COMPANIES ? (Array.isArray(COMPANIES) ? COMPANIES.length : Object.keys(COMPANIES).length) : 0) || 2052;
+  const totalItems = data.items || (data.nodes_by_label ? ((data.nodes_by_label.Item || 0) + (data.nodes_by_label.Product || 0) + (data.nodes_by_label.Material || 0)) : 0) || 0;
+  const totalDirect = data.relationships || data.total_edges || 0;
 
   el.innerHTML = `
     <div class="stat"><div class="n">${Number(totalComps).toLocaleString()}</div><div class="l">上市公司主体</div></div>
