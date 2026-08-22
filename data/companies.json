@@ -240,6 +240,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "600761",
+    "name": "安徽合力",
+    "industry": "工程机械",
+    "exchange": "SH",
+    "product_count": 19,
+    "material_count": 13,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "603139",
     "name": "康惠股份",
     "industry": "中药Ⅱ(申万)",
@@ -276,6 +286,16 @@
     "exchange": "SH",
     "product_count": 21,
     "material_count": 10,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "688075",
+    "name": "安旭生物",
+    "industry": "体外诊断",
+    "exchange": "SH",
+    "product_count": 24,
+    "material_count": 7,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -446,6 +466,16 @@
     "exchange": "SH",
     "product_count": 24,
     "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "688125",
+    "name": "安达智能",
+    "industry": "智能制造装备",
+    "exchange": "SH",
+    "product_count": 5,
+    "material_count": 23,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -1186,6 +1216,16 @@
     "exchange": "SH",
     "product_count": 11,
     "material_count": 11,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "688393",
+    "name": "安必平",
+    "industry": "体外诊断",
+    "exchange": "SZ",
+    "product_count": 12,
+    "material_count": 10,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -2166,6 +2206,16 @@
     "exchange": "SZ",
     "product_count": 13,
     "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002635",
+    "name": "安洁科技",
+    "industry": "精密功能件/精密结构件",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 14,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -4010,6 +4060,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002978",
+    "name": "安宁股份",
+    "industry": "半导体/高端制造",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 11,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002998",
     "name": "优彩资源",
     "industry": "化学纤维",
@@ -5500,6 +5560,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "688581",
+    "name": "安杰思",
+    "industry": "医疗器械",
+    "exchange": "SH",
+    "product_count": 9,
+    "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "688625",
     "name": "呈和科技",
     "industry": "高分子材料助剂",
@@ -6253,6 +6323,16 @@
     "code": "600316",
     "name": "洪都航空",
     "industry": "航空军工/军工主机厂",
+    "exchange": "SH",
+    "product_count": 8,
+    "material_count": 5,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "600408",
+    "name": "安泰集团",
+    "industry": "黑色金属冶炼及压延加工业",
     "exchange": "SH",
     "product_count": 8,
     "material_count": 5,
@@ -7103,6 +7183,16 @@
     "code": "300285.SZ",
     "name": "山东国瓷功能材料股份有限公司",
     "industry": "电子陶瓷材料",
+    "exchange": "SZ",
+    "product_count": 6,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300286",
+    "name": "安科瑞",
+    "industry": "电力设备 / 电网设备 / 电工仪器仪表",
     "exchange": "SZ",
     "product_count": 6,
     "material_count": 6,
@@ -10480,6 +10570,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "600179",
+    "name": "安通控股",
+    "industry": "内贸集装箱航运物流",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 6,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "600187",
     "name": "*ST国中",
     "industry": "环保-环境治理-水务及水治理",
@@ -11750,6 +11850,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300009",
+    "name": "安科生物",
+    "industry": "医药生物 - 生物制品 - 基因工程药物",
+    "exchange": "SZ",
+    "product_count": 7,
+    "material_count": 2,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300027",
     "name": "ST华谊",
     "industry": "影视娱乐",
@@ -12263,6 +12373,16 @@
     "code": "600195",
     "name": "中牧股份",
     "industry": "兽药/动物保健",
+    "exchange": "SH",
+    "product_count": 5,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "600207",
+    "name": "安彩高科",
+    "industry": "光伏玻璃制造及天然气管道运输",
     "exchange": "SH",
     "product_count": 5,
     "material_count": 4,
@@ -13940,6 +14060,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "300719",
+    "name": "安达维尔",
+    "industry": "航空航天设备制造及服务",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "300775",
     "name": "三角防务",
     "industry": "军工配套",
@@ -14740,6 +14870,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "603839",
+    "name": "安正时尚",
+    "industry": "中高端女装 + 电商代运营",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "603848",
     "name": "好太太",
     "industry": "智能家居",
@@ -14883,6 +15023,16 @@
     "code": "688096",
     "name": "京源环保",
     "industry": "水处理",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "688107",
+    "name": "安路科技",
+    "industry": "半导体/集成电路设计/FPGA芯片",
     "exchange": "SH",
     "product_count": 4,
     "material_count": 4,
@@ -16960,6 +17110,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002136",
+    "name": "安 纳 达",
+    "industry": "化学原料和化学制品制造业",
+    "exchange": "SZ",
+    "product_count": 3,
+    "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002188",
     "name": "中天服务",
     "industry": "物业管理",
@@ -17216,6 +17376,16 @@
     "exchange": "SZ",
     "product_count": 5,
     "material_count": 1,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "300067",
+    "name": "安诺其",
+    "industry": "纺织化学制品(化工-纺织化学制品 / 染料)",
+    "exchange": "SZ",
+    "product_count": 3,
+    "material_count": 3,
     "is_subject": true,
     "source": "parsed_cache"
   },
