@@ -268,6 +268,48 @@
   }
   .btn-ctrl:hover{color:var(--ink); border-color:var(--sub-2); background:var(--line-soft);}
 
+  /* 数据下载下拉组件样式 */
+  .download-dropdown-wrap{
+    position:relative; display:inline-flex; align-items:center;
+  }
+  .btn-download{
+    background:linear-gradient(135deg, rgba(110,140,255,0.12), rgba(51,214,182,0.12));
+    border:1px solid rgba(110,140,255,0.35); color:var(--ink); font-weight:500;
+  }
+  .btn-download:hover{
+    background:linear-gradient(135deg, rgba(110,140,255,0.22), rgba(51,214,182,0.22));
+    border-color:var(--company); box-shadow:0 0 14px rgba(110,140,255,0.25);
+  }
+  .download-menu{
+    position:absolute; right:0; top:calc(100% + 8px);
+    width:320px; background:var(--panel); border:1px solid var(--line);
+    border-radius:10px; box-shadow:0 14px 36px rgba(0,0,0,0.65);
+    padding:8px; z-index:150; display:none; flex-direction:column; gap:4px;
+    backdrop-filter:blur(16px);
+  }
+  .download-menu.open{ display:flex; animation:menuFadeIn 0.15s ease; }
+  @keyframes menuFadeIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+  .download-menu-header{
+    font-size:10.5px; font-weight:600; color:var(--sub-2);
+    padding:4px 8px 6px; text-transform:uppercase; letter-spacing:0.06em;
+    border-bottom:1px solid var(--line-soft); margin-bottom:4px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .download-item{
+    display:flex; align-items:flex-start; gap:10px; padding:8px 10px;
+    border-radius:7px; border:1px solid transparent; background:transparent;
+    color:var(--ink); text-align:left; cursor:pointer; font-family:inherit;
+    transition:all .15s ease; width:100%;
+  }
+  .download-item:hover{
+    background:rgba(255,255,255,0.06); border-color:var(--line-soft);
+  }
+  .download-item .dl-icon{ font-size:16px; margin-top:2px; flex:none; }
+  .download-item .dl-info{ display:flex; flex-direction:column; gap:2px; flex:1; min-width:0; }
+  .download-item .dl-title{ font-size:12.5px; font-weight:500; color:var(--ink); }
+  .download-item .dl-desc{ font-size:10.5px; color:var(--sub-2); line-height:1.4; word-break:break-all; }
+  .header-right-tools{ display:flex; align-items:center; gap:10px; }
+
   /* Node & Link SVG Styles */
   .net-node{cursor:pointer; transition:opacity .2s;}
   .net-node circle.glow-ring{
@@ -570,16 +612,52 @@
       <button class="tab" data-view="single"><span class="tab-num">03</span>单公司视图</button>
     </div>
 
-    <div class="company-selector-wrap" id="company-selector-wrap" style="display:none;">
-      <label for="company-search-input">核心公司</label>
-      <div class="searchable-select" id="company-searchable-select">
-        <div class="searchable-input-wrap">
-          <span class="search-icon">🔍</span>
-          <input type="text" class="searchable-input" id="company-search-input" placeholder="搜索公司名称或股票代码..." autocomplete="off">
-          <button class="searchable-clear" id="company-search-clear" type="button" title="清除">×</button>
+    <div class="header-right-tools">
+      <div class="company-selector-wrap" id="company-selector-wrap" style="display:none;">
+        <label for="company-search-input">核心公司</label>
+        <div class="searchable-select" id="company-searchable-select">
+          <div class="searchable-input-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="searchable-input" id="company-search-input" placeholder="搜索公司名称或股票代码..." autocomplete="off">
+            <button class="searchable-clear" id="company-search-clear" type="button" title="清除">×</button>
+          </div>
+          <div class="searchable-dropdown" id="company-search-dropdown">
+            <div class="searchable-list" id="company-search-list"></div>
+          </div>
         </div>
-        <div class="searchable-dropdown" id="company-search-dropdown">
-          <div class="searchable-list" id="company-search-list"></div>
+      </div>
+
+      <!-- 数据下载下拉按钮 -->
+      <div class="download-dropdown-wrap" id="download-dropdown-wrap">
+        <button class="btn-ctrl btn-download" id="btn-download-main" type="button" title="导出下载图谱与产业链 JSON 数据">
+          <span>📥</span> 数据下载 <span style="font-size:9px; opacity:0.75;">▼</span>
+        </button>
+        <div class="download-menu" id="download-menu">
+          <div class="download-menu-header">
+            <span>导出数据集 (JSON 格式)</span>
+            <span style="font-size:9.5px; opacity:0.6; font-family:var(--font-mono);">JSON Export</span>
+          </div>
+          <button class="download-item" id="dl-current-company" type="button">
+            <span class="dl-icon">🏢</span>
+            <div class="dl-info">
+              <div class="dl-title">当前公司产业链数据 (JSON)</div>
+              <div class="dl-desc" id="dl-cur-desc">导出当前选中公司的上下游供应商、客户、产品及关联明细</div>
+            </div>
+          </button>
+          <button class="download-item" id="dl-network-graph" type="button">
+            <span class="dl-icon">🌐</span>
+            <div class="dl-info">
+              <div class="dl-title">全图网络拓扑与产业集群 (JSON)</div>
+              <div class="dl-desc">导出全网节点坐标、供需直连边与 Leiden 产业集群划分</div>
+            </div>
+          </button>
+          <button class="download-item" id="dl-full-knowledge-base" type="button">
+            <span class="dl-icon">📚</span>
+            <div class="dl-info">
+              <div class="dl-title">全量研报知识图谱库 (JSON)</div>
+              <div class="dl-desc">导出全网 1680+ 家公司结构化产业链完整知识库</div>
+            </div>
+          </button>
         </div>
       </div>
     </div>
@@ -754,8 +832,13 @@
 
 <!-- 侧边详情抽屉 -->
 <div class="drawer" id="drawer">
-  <div class="drawer-close" id="drawer-close">✕</div>
-  <div class="drawer-kind" id="d-kind"></div>
+  <div class="drawer-header-actions" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+    <div class="drawer-kind" id="d-kind" style="margin-bottom:0;"></div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button class="btn-ctrl" id="drawer-btn-download" style="padding:4px 8px; font-size:11px;" title="下载当前企业/实体的 JSON 数据">📥 导出 JSON</button>
+      <div class="drawer-close" id="drawer-close" style="position:static;">✕</div>
+    </div>
+  </div>
   <h3 id="d-name"></h3>
   <div class="drawer-sub" id="d-sub"></div>
   <div id="d-body"></div>
@@ -899,6 +982,7 @@ async function loadGraphData(){
     if(mcData && Object.keys(mcData).length > 0) MARKET_CAPS = mcData;
 
     populateCompanySelectors(compList);
+    initDownloadHandlers();
 
     const hash = window.location.hash.replace('#', '').trim();
     if(hash && compList.find(c => c.code === hash || c.name === hash)){
@@ -2656,6 +2740,7 @@ document.getElementById('toggle-inferred').addEventListener('click', (ev) => {
 /* ==================== 抽屉详情 ==================== */
 
 const KIND_LABEL = {supplier:'供应商', material:'原材料', company:'核心公司', product:'产品', customer:'客户'};
+let currentDrawerEntity = null;
 
 function openDrawer(id, kind, rawItem){
   const drawer = document.getElementById('drawer');
@@ -2681,28 +2766,33 @@ function openDrawer(id, kind, rawItem){
     subEl.textContent = `${data.code || ''} · ${data.industry || '产业链核心'}`;
     bodyEl.appendChild(relSection('核心原材料采购结构', (data.materials || []).map(m => ({name:m.name, share:m.share, type:'direct', note:'公司年报/研报披露的核心原材料成本占比。'}))));
     bodyEl.appendChild(relSection('主营产品营收结构', (data.products || []).map(p => ({name:p.name, share:p.share, type:'direct', note:'公司年报/研报披露的产品营收占比。'}))));
+    currentDrawerEntity = { id: data.code || id, kind: 'company', name: data.name, data: data };
   } else if(kind === 'material'){
     const m = (data.materials || []).find(x => x.id === id || x.name === id) || rawItem;
     if(!m) return;
     nameEl.textContent = m.name;
     subEl.textContent = `占原材料成本 ${m.share || '核心'}% · 研报与财报披露`;
     bodyEl.appendChild(relSection('该原材料的主要供应商', m.suppliers || []));
+    currentDrawerEntity = { id: m.id || m.name, kind: 'material', name: m.name, data: { ...m, centerCompany: data.name } };
   } else if(kind === 'product'){
     const p = (data.products || []).find(x => x.id === id || x.name === id) || rawItem;
     if(!p) return;
     nameEl.textContent = p.name;
     subEl.textContent = `占营业收入 ${p.share || '主营'}% · 研报与财报披露`;
     bodyEl.appendChild(relSection('采购该产品的重点客户', p.customers || []));
+    currentDrawerEntity = { id: p.id || p.name, kind: 'product', name: p.name, data: { ...p, centerCompany: data.name } };
   } else {
     nameEl.textContent = rawItem ? rawItem.name : id;
     const isSwitchable = !!COMPANIES[rawItem ? rawItem.name : id] || !!COMPANIES[rawItem ? rawItem.id : id];
     subEl.textContent = (rawItem && rawItem.type === 'direct' ? '直接披露企业' : '产业链关联推断') + (isSwitchable ? ' · 可点击切换为分析中心' : '');
-    bodyEl.appendChild(relSection('关联说明与证据', [{
+    const relItems = [{
       name: rawItem ? rawItem.name : id,
       share: rawItem ? rawItem.share : null,
       type: rawItem ? rawItem.type : 'direct',
       note: rawItem ? (rawItem.note || '研报与知识图谱自动提取关联') : '研报披露关联'
-    }], true));
+    }];
+    bodyEl.appendChild(relSection('关联说明与证据', relItems, true));
+    currentDrawerEntity = { id: id, kind: kind, name: rawItem ? rawItem.name : id, data: { entity: rawItem || id, relatedTo: data.name, relationships: relItems } };
   }
   drawer.classList.add('open');
 }
@@ -2731,6 +2821,161 @@ function relSection(title, items, noHeaderShare){
 document.getElementById('drawer-close').addEventListener('click', () => {
   document.getElementById('drawer').classList.remove('open');
 });
+
+/* ==================== JSON 数据导出与下载支持 ==================== */
+
+function downloadJson(data, filename){
+  try {
+    const jsonStr = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename || 'iduxgraph_data.json';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 250);
+    trackGA('data_download', { filename: filename });
+  } catch(e) {
+    console.error('Failed to download JSON:', e);
+    alert('下载 JSON 数据失败，请检查浏览器下载权限');
+  }
+}
+
+async function downloadCurrentCompanyJson(){
+  const center = getCurrentCenter();
+  if(!center || !center.name){
+    alert('请先选择一家核心公司');
+    return;
+  }
+  const filename = `${center.name}${center.code ? `_${center.code}` : ''}_产业链数据.json`;
+  downloadJson(center, filename);
+}
+
+async function downloadNetworkGraphJson(){
+  if(STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.nodes && STATIC_RAW_NETWORK_DATA.nodes.length > 0){
+    downloadJson(STATIC_RAW_NETWORK_DATA, '产业链全景网络拓扑与宏观集群.json');
+    return;
+  }
+  try {
+    const resp = await fetch('./data/network-data.json');
+    if(resp.ok){
+      const data = await resp.json();
+      downloadJson(data, '产业链全景网络拓扑与宏观集群.json');
+      return;
+    }
+  } catch(e){}
+
+  try {
+    const resp2 = await fetch('/api/v1/graph/network-data?min_degree=1&min_market_cap=0&min_link_share=0&include_isolated=true');
+    if(resp2.ok){
+      const data2 = await resp2.json();
+      downloadJson(data2, '产业链全景网络拓扑与宏观集群.json');
+      return;
+    }
+  } catch(e){}
+
+  alert('获取网络拓扑数据失败');
+}
+
+async function downloadFullKnowledgeBaseJson(){
+  if(COMPANIES && Object.keys(COMPANIES).length > 200){
+    downloadJson(COMPANIES, '全量产业链知识图谱库.json');
+    return;
+  }
+  try {
+    const resp = await fetch('./data/view-data-all.json');
+    if(resp.ok){
+      const data = await resp.json();
+      downloadJson(data, '全量产业链知识图谱库.json');
+      return;
+    }
+  } catch(e){}
+
+  try {
+    const resp2 = await fetch('./data/companies.json');
+    if(resp2.ok){
+      const data2 = await resp2.json();
+      downloadJson(data2, '产业链核心企业名录.json');
+      return;
+    }
+  } catch(e){}
+
+  if(COMPANIES && Object.keys(COMPANIES).length > 0){
+    downloadJson(COMPANIES, '全量产业链知识图谱库.json');
+  } else {
+    alert('获取全量知识库失败');
+  }
+}
+
+function initDownloadHandlers(){
+  const dlWrap = document.getElementById('download-dropdown-wrap');
+  const dlBtn = document.getElementById('btn-download-main');
+  const dlMenu = document.getElementById('download-menu');
+  const dlCurBtn = document.getElementById('dl-current-company');
+  const dlNetBtn = document.getElementById('dl-network-graph');
+  const dlFullBtn = document.getElementById('dl-full-knowledge-base');
+  const drawerDlBtn = document.getElementById('drawer-btn-download');
+
+  if(dlBtn && dlMenu && !dlBtn.__boundDownload){
+    dlBtn.__boundDownload = true;
+    dlBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dlMenu.classList.toggle('open');
+      const cur = getCurrentCenter();
+      const descEl = document.getElementById('dl-cur-desc');
+      if(descEl && cur && cur.name){
+        descEl.textContent = `导出【${cur.name}${cur.code ? ` (${cur.code})` : ''}】上下游全链条数据`;
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if(dlWrap && !dlWrap.contains(e.target)){
+        dlMenu.classList.remove('open');
+      }
+    });
+  }
+
+  if(dlCurBtn && !dlCurBtn.__boundDownload){
+    dlCurBtn.__boundDownload = true;
+    dlCurBtn.addEventListener('click', () => {
+      if(dlMenu) dlMenu.classList.remove('open');
+      downloadCurrentCompanyJson();
+    });
+  }
+
+  if(dlNetBtn && !dlNetBtn.__boundDownload){
+    dlNetBtn.__boundDownload = true;
+    dlNetBtn.addEventListener('click', () => {
+      if(dlMenu) dlMenu.classList.remove('open');
+      downloadNetworkGraphJson();
+    });
+  }
+
+  if(dlFullBtn && !dlFullBtn.__boundDownload){
+    dlFullBtn.__boundDownload = true;
+    dlFullBtn.addEventListener('click', () => {
+      if(dlMenu) dlMenu.classList.remove('open');
+      downloadFullKnowledgeBaseJson();
+    });
+  }
+
+  if(drawerDlBtn && !drawerDlBtn.__boundDownload){
+    drawerDlBtn.__boundDownload = true;
+    drawerDlBtn.addEventListener('click', () => {
+      if(!currentDrawerEntity){
+        downloadCurrentCompanyJson();
+        return;
+      }
+      const ent = currentDrawerEntity;
+      const filename = `${ent.name || ent.id || '实体'}_${ent.kind || '明细'}_数据.json`;
+      downloadJson(ent.data || ent, filename);
+    });
+  }
+}
 
 /* ==================== 标签切换与窗口响应 ==================== */
 

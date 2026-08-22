@@ -4560,6 +4560,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002195",
+    "name": "岩山科技",
+    "industry": "互联网信息服务",
+    "exchange": "SZ",
+    "product_count": 3,
+    "material_count": 11,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002294",
     "name": "信立泰",
     "industry": "化学制药-化学制剂行业",
@@ -11110,6 +11120,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "002681",
+    "name": "奋达科技",
+    "industry": "消费电子 ODM",
+    "exchange": "SZ",
+    "product_count": 5,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "002685",
     "name": "华东重机",
     "industry": "港机/装备制造",
@@ -13500,6 +13520,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "301123",
+    "name": "奕东电子",
+    "industry": "电子-消费电子-消费电子零部件及组装",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 4,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "301137",
     "name": "哈焊华通",
     "industry": "金属制品/焊接材料",
@@ -15830,6 +15860,16 @@
     "source": "parsed_cache"
   },
   {
+    "code": "603677",
+    "name": "商业分析_奇精机械",
+    "industry": "机械加工/家电零部件",
+    "exchange": "SH",
+    "product_count": 4,
+    "material_count": 3,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
     "code": "603800",
     "name": "洪田股份",
     "industry": "机械设备 — 专用设备 (锂电铜箔装备 + 真空镀膜 + 精密光学)",
@@ -16316,6 +16356,16 @@
     "exchange": "SZ",
     "product_count": 5,
     "material_count": 1,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002261",
+    "name": "拓维信息",
+    "industry": "信息技术服务及软件/智能计算/开源鸿蒙",
+    "exchange": "SZ",
+    "product_count": 4,
+    "material_count": 2,
     "is_subject": true,
     "source": "parsed_cache"
   },
@@ -17566,6 +17616,16 @@
     "exchange": "SZ",
     "product_count": 4,
     "material_count": 1,
+    "is_subject": true,
+    "source": "parsed_cache"
+  },
+  {
+    "code": "002466",
+    "name": "天齐锂业",
+    "industry": "有色金属-能源金属-锂",
+    "exchange": "SZ",
+    "product_count": 3,
+    "material_count": 2,
     "is_subject": true,
     "source": "parsed_cache"
   },
