@@ -678,12 +678,6 @@
           <span class="net-search-icon">🔍</span>
           <input type="text" id="net-search-input" class="net-search-input" placeholder="搜索图谱中任意企业...">
         </div>
-        <div class="ctrl-field" title="快速筛选并高亮选中的宏观产业集群">
-          <label for="ov-cluster-select">产业集群</label>
-          <select id="ov-cluster-select">
-            <option value="all">🌐 全部产业集群 (全网)</option>
-          </select>
-        </div>
         <button class="btn-ctrl" id="net-btn-reset" title="重置缩放与视角">🔄 视角居中</button>
         <div class="ctrl-field" title="过滤连接数(度数)低于该阈值的边缘节点，默认最低为 3 条，可向上调整">
           <label for="ov-min-degree">最低度数</label>
@@ -746,12 +740,6 @@
   <div class="view" id="view-chain">
     <div class="controls">
       <div class="control-row">
-        <div class="ctrl-field" title="选择产业链集群，自动以该集群核心链主为中心展开上下游全链条">
-          <label for="chain-cluster-select">产业链集群</label>
-          <select id="chain-cluster-select">
-            <option value="">-- 选择产业链集群 (默认链主) --</option>
-          </select>
-        </div>
         <div class="ctrl-field">
           <label for="chain-depth-up">向上展开</label>
           <input type="number" id="chain-depth-up" min="1" max="3" value="2">
@@ -1177,84 +1165,6 @@ function updateSearchableInputs(code){
   const label = `${comp.name} (${comp.code || '未上市'})`;
   const inp1 = document.getElementById('company-search-input');
   if(inp1) inp1.value = label;
-
-  // 同步更新产业链页面的集群选择器状态
-  syncChainClusterSelectWithCurrentCenter();
-}
-
-function populateChainClusterSelector(){
-  const sel = document.getElementById('chain-cluster-select');
-  if(!sel) return;
-  sel.innerHTML = '<option value="">-- 选择产业链集群 (默认链主) --</option>';
-
-  const rawComms = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.macro_communities) || [];
-  // 筛选规模 > 10 的主流宏观产业集群，并按规模降序
-  const validComms = rawComms.filter(c => (c.size || (c.members && c.members.length) || 0) > 10);
-  const sortedComms = [...validComms].sort((a, b) => (b.size || 0) - (a.size || 0));
-
-  sortedComms.forEach(c => {
-    const hub = c.hub || (c.members && c.members[0]) || '';
-    const hubCode = c.hub_code || hub;
-    const opt = document.createElement('option');
-    opt.value = hubCode || hub;
-    opt.dataset.macroId = String(c.macroId);
-    opt.dataset.hub = hub;
-    opt.dataset.clusterName = c.name;
-    const mcapStr = c.totalMarketCapCny ? ` · ${(c.totalMarketCapCny > 10000 ? (c.totalMarketCapCny/10000).toFixed(1) + '万亿' : c.totalMarketCapCny.toFixed(0) + '亿')}` : '';
-    opt.textContent = `${c.name} (${c.size}家 · 链主: ${hub}${mcapStr})`;
-    sel.appendChild(opt);
-  });
-
-  // 绑定产业链集群选择事件：选择集群自动以其核心链主为中心展开
-  if(!sel.dataset.bound){
-    sel.dataset.bound = 'true';
-    sel.addEventListener('change', async (e) => {
-      const val = e.target.value;
-      if(!val) return;
-      const selectedOpt = sel.selectedOptions[0];
-      const clusterName = selectedOpt ? selectedOpt.dataset.clusterName : '';
-      const hubName = selectedOpt ? selectedOpt.dataset.hub : '';
-      trackGA('chain_cluster_select_switch', {
-        cluster_name: clusterName,
-        leader_id: val,
-        hub_name: hubName
-      });
-      await switchCenterCompany(val, 'chain_cluster_select');
-    });
-  }
-
-  syncChainClusterSelectWithCurrentCenter();
-}
-
-function syncChainClusterSelectWithCurrentCenter(){
-  const sel = document.getElementById('chain-cluster-select');
-  if(!sel || !currentCenterId) return;
-
-  const comp = ALL_COMPANIES_LIST.find(c => c.code === currentCenterId || c.name === currentCenterId) || (COMPANIES && COMPANIES[currentCenterId]) || getCurrentCenter();
-  const cName = comp.name || currentCenterId;
-  const cCode = comp.code || currentCenterId;
-
-  // 1. 尝试直接匹配链主 value
-  const directOpt = Array.from(sel.options).find(o => o.value === cCode || o.value === cName);
-  if(directOpt){
-    sel.value = directOpt.value;
-    return;
-  }
-
-  // 2. 若当前公司不是链主，则查找其所属集群并同步选中该集群
-  if(STATIC_RAW_NETWORK_DATA && Array.isArray(STATIC_RAW_NETWORK_DATA.macro_communities)){
-    const matchComm = STATIC_RAW_NETWORK_DATA.macro_communities.find(c => 
-      (c.members || []).includes(cName) || (c.members || []).includes(cCode) || c.hub === cName || c.hub === cCode
-    );
-    if(matchComm){
-      const matchOpt = Array.from(sel.options).find(o => o.dataset.macroId === String(matchComm.macroId));
-      if(matchOpt){
-        sel.value = matchOpt.value;
-        return;
-      }
-    }
-  }
-  sel.value = '';
 }
 
 function populateCompanySelectors(list){
@@ -1267,7 +1177,6 @@ function populateCompanySelectors(list){
     clearBtnId: 'company-search-clear'
   });
 
-  populateChainClusterSelector();
   updateSearchableInputs(currentCenterId);
 }
 
@@ -1275,7 +1184,7 @@ async function switchCenterCompany(code, triggerSource = 'unknown'){
   currentCenterId = code;
   window.location.hash = code;
 
-  // 同步更新可搜索输入框与集群选择器的内容
+  // 同步更新可搜索输入框的内容
   updateSearchableInputs(code);
 
   const comp = ALL_COMPANIES_LIST.find(c => c.code === code || c.name === code) || (COMPANIES && COMPANIES[code]) || {};
@@ -1549,21 +1458,9 @@ async function buildGlobalNetwork(forceRefresh = false){
       netGraph.nodeMap = nodeMap;
       netGraph.macroCommunities = data.macro_communities || [];
 
-      // 动态填充全局产业集群筛选器下拉列表
-      populateClusterSelector(netGraph.macroCommunities, netGraph.nodes);
-
       // 更新 HUD 统计
       if(hudNodes) {
         const shareFilterTxt = ovMinShare > 0 ? ` · 连线权重≥${ovMinShare}%` : '';
-        if(netGraph.activeCommunityId !== null){
-          const comm = (netGraph.macroCommunities || []).find(c => c.macroId === netGraph.activeCommunityId);
-          if(comm){
-            const mcapStr = comm.totalMarketCapCny ? (comm.totalMarketCapCny > 10000 ? (comm.totalMarketCapCny/10000).toFixed(2) + ' 万亿元' : comm.totalMarketCapCny.toFixed(1) + ' 亿元') : '—';
-            hudNodes.innerHTML = `🏢 集群: <strong style="color:var(--company);">${comm.name}</strong> (${comm.size} 家企业 | 链主: ${comm.hub})`;
-            if(hudLinks) hudLinks.innerHTML = `💰 总市值: <strong>${mcapStr}</strong> | 内部链路: <strong>${comm.internalLinksCount || 0}</strong> 条`;
-            return;
-          }
-        }
         if(netGraph.nodes.length > 0){
           hudNodes.textContent = `共 ${netGraph.nodes.length} 家企业 (度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'}${shareFilterTxt})`;
         } else {
@@ -1575,41 +1472,6 @@ async function buildGlobalNetwork(forceRefresh = false){
     }
   } catch(e) {
     console.warn('Failed to fetch precomputed network data:', e);
-  }
-}
-
-function populateClusterSelector(macroCommunities, nodes){
-  const sel = document.getElementById('ov-cluster-select');
-  if(!sel) return;
-  const currentVal = sel.value;
-  sel.innerHTML = '<option value="all">🌐 全部产业集群 (全网展示所有企业)</option>';
-
-  if(!Array.isArray(macroCommunities) || macroCommunities.length === 0) return;
-
-  const visibleCounts = {};
-  if(Array.isArray(nodes)){
-    nodes.forEach(n => {
-      if(n.hier && n.hier.macroId !== undefined){
-        visibleCounts[n.hier.macroId] = (visibleCounts[n.hier.macroId] || 0) + 1;
-      }
-    });
-  }
-
-  // 筛选规模 > 10 的主流宏观产业集群供用户快速高亮选择，按规模降序
-  const validComms = macroCommunities.filter(c => (c.size || (c.members && c.members.length) || 0) > 10);
-  const sortedComms = [...validComms].sort((a, b) => (b.size || 0) - (a.size || 0));
-
-  sortedComms.forEach((c, idx) => {
-    const visCount = visibleCounts[c.macroId] || 0;
-    const opt = document.createElement('option');
-    opt.value = String(c.macroId);
-    const mcapStr = c.totalMarketCapCny ? ` · ${(c.totalMarketCapCny > 10000 ? (c.totalMarketCapCny/10000).toFixed(1) + '万亿' : c.totalMarketCapCny.toFixed(0) + '亿')}` : '';
-    opt.textContent = `${c.name || '产业集群 #' + c.macroId} (${c.size}家${visCount < c.size ? ` / 当前${visCount}家` : ''}${mcapStr} · 链主: ${c.hub || '—'})`;
-    sel.appendChild(opt);
-  });
-
-  if(currentVal && Array.from(sel.options).some(o => o.value === currentVal)){
-    sel.value = currentVal;
   }
 }
 
@@ -2141,54 +2003,11 @@ function initNetworkInteractions(){
     shareInput.addEventListener('change', onFilterParamChange);
   }
 
-  // 宏观产业集群筛选器快速切换与高亮响应
-  const clusterSel = document.getElementById('ov-cluster-select');
-  if(clusterSel && !clusterSel.dataset.bound){
-    clusterSel.dataset.bound = 'true';
-    clusterSel.addEventListener('change', (e) => {
-      const val = e.target.value;
-      if(val === 'all'){
-        netGraph.activeCommunityId = null;
-        netGraph.highlightedNodeId = null;
-        const hudNodes = document.getElementById('hud-nodes');
-        const hudLinks = document.getElementById('hud-links');
-        if(hudNodes) {
-          const shareFilterTxt = ovMinShare > 0 ? ` · 连线权重≥${ovMinShare}%` : '';
-          hudNodes.textContent = `共 ${netGraph.nodes.length} 家企业 (度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'}${shareFilterTxt})`;
-        }
-        if(hudLinks) hudLinks.textContent = `${netGraph.links.length} 条供需直连`;
-        trackGA('cluster_filter_clear', {});
-        autoFitOverview();
-      } else {
-        const mid = parseInt(val, 10);
-        netGraph.activeCommunityId = mid;
-        netGraph.highlightedNodeId = null;
-        const comm = (netGraph.macroCommunities || []).find(c => c.macroId === mid);
-        if(comm){
-          const mcapStr = comm.totalMarketCapCny ? (comm.totalMarketCapCny > 10000 ? (comm.totalMarketCapCny/10000).toFixed(2) + ' 万亿元' : comm.totalMarketCapCny.toFixed(1) + ' 亿元') : '—';
-          const hudNodes = document.getElementById('hud-nodes');
-          const hudLinks = document.getElementById('hud-links');
-          if(hudNodes) hudNodes.innerHTML = `🏢 集群: <strong style="color:var(--company);">${comm.name}</strong> (${comm.size} 家企业 | 链主: ${comm.hub})`;
-          if(hudLinks) hudLinks.innerHTML = `💰 总市值: <strong>${mcapStr}</strong> | 内部链路: <strong>${comm.internalLinksCount || 0}</strong> 条`;
-          trackGA('cluster_filter_select', {
-            cluster_id: mid,
-            cluster_name: comm.name,
-            cluster_hub: comm.hub || '',
-            cluster_size: comm.size || 0
-          });
-        }
-        autoFitCluster(mid);
-      }
-      drawNetworkSVG();
-    });
-  }
-
   // 重置视角（自动全屏居中适配）
   if(resetBtn){
     resetBtn.addEventListener('click', () => {
       netGraph.highlightedNodeId = null;
       netGraph.activeCommunityId = null;
-      if(clusterSel) clusterSel.value = 'all';
       const hudNodes = document.getElementById('hud-nodes');
       const hudLinks = document.getElementById('hud-links');
       if(hudNodes) {
