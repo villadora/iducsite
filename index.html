@@ -1370,7 +1370,7 @@ async function buildGlobalNetwork(forceRefresh = false){
         const deg = (n.degree !== undefined && n.degree !== null) ? n.degree : 0;
         if(deg < ovMinDegree) return false;
         const mc = (n.market_cap_cny !== null && n.market_cap_cny !== undefined) ? n.market_cap_cny : null;
-        if(ovMinMarketCap > 0 && mc !== null && mc < ovMinMarketCap) return false;
+        if(ovMinMarketCap > 0 && (mc === null || mc < ovMinMarketCap)) return false;
         return true;
       });
 
