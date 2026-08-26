@@ -268,6 +268,22 @@
   }
   .btn-ctrl:hover{color:var(--ink); border-color:var(--sub-2); background:var(--line-soft);}
 
+  .ov-stats-pill{
+    display:inline-flex; align-items:center; gap:5px;
+    background:rgba(110,140,255,0.08); border:1px solid rgba(110,140,255,0.30);
+    padding:5px 12px; border-radius:8px; font-size:12px; white-space:nowrap;
+  }
+  .ov-stats-pill .stats-label{color:var(--sub-2);}
+  .ov-stats-pill .stats-num{color:var(--company); font-size:14px; font-weight:700; font-family:var(--font-mono);}
+  .ov-stats-pill .stats-unit{color:var(--sub); font-size:11px;}
+
+  .inferred-warning-tag{
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.45);
+    color:#FBBF24; padding:4px 10px; border-radius:6px; font-size:11.5px;
+    line-height:1.4; margin-left:8px;
+  }
+
   /* 数据下载下拉组件样式 */
   .download-dropdown-wrap{
     position:relative; display:inline-flex; align-items:center;
@@ -671,9 +687,13 @@
         <div class="legend-group"><span class="swatch supplier-node"></span><span class="lbl">上游供应商 (青绿)</span></div>
         <div class="legend-group"><span class="swatch customer-node"></span><span class="lbl">下游客户 (粉紫)</span></div>
         <div class="legend-group"><span class="line-sample direct"></span><span class="lbl">直接披露供需 (实线)</span></div>
-        <div class="legend-group"><span class="line-sample inferred"></span><span class="lbl">间接推断关联 (虚线)</span></div>
       </div>
       <div class="network-actions">
+        <div class="ov-stats-pill" id="ov-stats-pill" title="当前画布中加载展示的公司总数">
+          <span class="stats-label">当前展示公司：</span>
+          <strong class="stats-num" id="ov-stat-count">0</strong>
+          <span class="stats-unit">家</span>
+        </div>
         <div class="net-search-wrap">
           <span class="net-search-icon">🔍</span>
           <input type="text" id="net-search-input" class="net-search-input" placeholder="搜索图谱中任意企业...">
@@ -693,10 +713,6 @@
           <label for="ov-min-share">最低权重</label>
           <input type="number" id="ov-min-share" min="0" max="100" value="10" step="5">
           <span class="unit">%</span>
-        </div>
-        <div class="toggle-wrap">
-          <span>显示推断关联</span>
-          <div class="switch" id="ov-toggle-inferred"><div class="knob"></div></div>
         </div>
       </div>
     </div>
@@ -781,11 +797,14 @@
         <div class="legend-group"><span class="swatch product"></span><span class="lbl">产品</span></div>
         <div class="legend-group"><span class="swatch customer"></span><span class="lbl">客户</span></div>
         <div class="legend-group"><span class="line-sample direct"></span><span class="lbl">直接披露</span></div>
-        <div class="legend-group"><span class="line-sample inferred"></span><span class="lbl">产业链推断关联</span></div>
+        <div class="legend-group"><span class="line-sample inferred"></span><span class="lbl">规则推断关联 (虚线)</span></div>
       </div>
-      <div class="toggle-wrap">
-        <span>显示推断关联</span>
+      <div class="toggle-wrap" title="基于上下游品类同名规则自动推断，可能存在跨行业同名误判，需人工判定">
+        <span>显示规则推断关联</span>
         <div class="switch" id="toggle-inferred"><div class="knob"></div></div>
+      </div>
+      <div id="single-inferred-warning" class="inferred-warning-tag" style="display:none;" title="提示：规则推断存在误判风险">
+        ⚠️ 规则推断可能存在跨行业/同名品类误判，需人工判定核实
       </div>
     </div>
 
@@ -1337,6 +1356,43 @@ let ovMinMarketCap = 100.0;
 let ovMinShare = 10.0;
 let currentOverviewFocus = null;
 
+function updateOverviewStatsUI(){
+  const count = (netGraph.nodes && netGraph.nodes.length) || 0;
+  const linksCount = (netGraph.links && netGraph.links.length) || 0;
+
+  // 1. 顶部控制栏当前展示公司数徽标
+  const statEl = document.getElementById('ov-stat-count');
+  if(statEl) statEl.textContent = count.toLocaleString();
+
+  // 2. 画布左上角 HUD 浮层信息
+  const hudNodes = document.getElementById('hud-nodes');
+  const hudLinks = document.getElementById('hud-links');
+  if(hudNodes){
+    if(currentOverviewFocus){
+      hudNodes.innerHTML = `🎯 正在聚焦展示 <strong>【${currentOverviewFocus}】</strong> 产业链生态：共 <strong style="color:var(--company); font-size:13px;">${count.toLocaleString()}</strong> 家直接关联企业 <button class="btn-ctrl" id="net-btn-exit-focus" style="margin-left:8px; padding:2px 8px; font-size:11px; height:22px; line-height:18px; cursor:pointer;">✕ 恢复全网全景</button>`;
+      const exitBtn = document.getElementById('net-btn-exit-focus');
+      if(exitBtn){
+        exitBtn.addEventListener('click', () => {
+          currentOverviewFocus = null;
+          const searchInput = document.getElementById('net-search-input');
+          if(searchInput) searchInput.value = '';
+          renderOverview(false);
+        });
+      }
+    } else {
+      const shareFilterTxt = ovMinShare > 0 ? ` · 权重≥${ovMinShare}%` : '';
+      if(count > 0){
+        hudNodes.innerHTML = `当前展示公司总数：<strong style="color:var(--company); font-size:13px;">${count.toLocaleString()}</strong> 家 (度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'}${shareFilterTxt})`;
+      } else {
+        hudNodes.innerHTML = `当前展示公司总数：<strong style="color:var(--company); font-size:13px;">0</strong> 家 (无匹配企业)`;
+      }
+    }
+  }
+  if(hudLinks){
+    hudLinks.innerHTML = `直连供需链路：<strong style="color:var(--ink);">${linksCount.toLocaleString()}</strong> 条`;
+  }
+}
+
 /* ==================== 1. 全局网络图数据构建（支持静态站点纯前端内存切片与动态服务两级 Leiden 计算） ==================== */
 async function buildGlobalNetwork(forceRefresh = false){
   const shell = document.getElementById('network-shell');
@@ -1459,16 +1515,8 @@ async function buildGlobalNetwork(forceRefresh = false){
       netGraph.nodeMap = nodeMap;
       netGraph.macroCommunities = data.macro_communities || [];
 
-      // 更新 HUD 统计
-      if(hudNodes) {
-        const shareFilterTxt = ovMinShare > 0 ? ` · 连线权重≥${ovMinShare}%` : '';
-        if(netGraph.nodes.length > 0){
-          hudNodes.textContent = `共 ${netGraph.nodes.length} 家企业 (度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'}${shareFilterTxt})`;
-        } else {
-          hudNodes.textContent = `无匹配企业 (度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'})`;
-        }
-      }
-      if(hudLinks) hudLinks.textContent = `${netGraph.links.length} 条供需直连`;
+      // 更新全局概览统计与 HUD
+      updateOverviewStatsUI();
       return;
     }
   } catch(e) {
@@ -1768,11 +1816,13 @@ function setupEgoGraph(data, cx, cy){
 
   initNetworkInteractions();
 
-  // 更新 HUD 统计与还原全网按钮
+  // 更新统计徽标与 HUD
+  const statEl = document.getElementById('ov-stat-count');
+  if(statEl) statEl.textContent = nodes.length.toLocaleString();
   const hudNodes = document.getElementById('hud-nodes');
   const hudLinks = document.getElementById('hud-links');
   if(hudNodes){
-    hudNodes.innerHTML = `🎯 正在展示 <strong>【${centerNode.name}】</strong> 及其直接关联企业：共 ${nodes.length} 家 <button class="btn-ctrl" id="net-btn-exit-focus" style="margin-left:8px; padding:2px 8px; font-size:11px; height:22px; line-height:18px; cursor:pointer;">✕ 恢复全网全景</button>`;
+    hudNodes.innerHTML = `🎯 正在展示 <strong>【${centerNode.name}】</strong> 及其直接关联企业：当前共 <strong style="color:var(--company); font-size:13px;">${nodes.length}</strong> 家 <button class="btn-ctrl" id="net-btn-exit-focus" style="margin-left:8px; padding:2px 8px; font-size:11px; height:22px; line-height:18px; cursor:pointer;">✕ 恢复全网全景</button>`;
     const exitBtn = document.getElementById('net-btn-exit-focus');
     if(exitBtn){
       exitBtn.addEventListener('click', () => {
@@ -1783,7 +1833,7 @@ function setupEgoGraph(data, cx, cy){
       });
     }
   }
-  if(hudLinks) hudLinks.textContent = `${links.length} 条供需直连`;
+  if(hudLinks) hudLinks.innerHTML = `直连链路：<strong style="color:var(--ink);">${links.length}</strong> 条`;
 
   // 物理引擎微调 35 轮以拉开间距与防重叠
   for(let warm = 0; warm < 35; warm++){
@@ -1817,8 +1867,9 @@ async function renderOverview(forceRefresh = false){
     runForceAtlas2Step(alpha, cx, cy);
   }
 
-  // 2. 预热完成后立即全屏居中适配
+  // 2. 预热完成后立即全屏居中适配并刷新企业数量徽标与 HUD
   autoFitOverview();
+  updateOverviewStatsUI();
 
   // 3. 启动平滑微调退火动画
   startNetworkSimulation(0.20);
@@ -2242,12 +2293,15 @@ function hideNetworkTooltip(){
   if(tt) tt.style.display = 'none';
 }
 
-document.getElementById('ov-toggle-inferred').addEventListener('click', (ev) => {
-  ovInferredVisible = !ovInferredVisible;
-  ev.currentTarget.classList.toggle('on', ovInferredVisible);
-  trackGA('toggle_inferred_overview', { visible: ovInferredVisible });
-  drawNetworkSVG();
-});
+const ovToggle = document.getElementById('ov-toggle-inferred');
+if(ovToggle){
+  ovToggle.addEventListener('click', (ev) => {
+    ovInferredVisible = !ovInferredVisible;
+    ev.currentTarget.classList.toggle('on', ovInferredVisible);
+    trackGA('toggle_inferred_overview', { visible: ovInferredVisible });
+    drawNetworkSVG();
+  });
+}
 
 /* ==================== VIEW 02: 产业链多层展开 ==================== */
 
@@ -2717,13 +2771,20 @@ function drawSingleEdges(){
   });
 }
 
-document.getElementById('toggle-inferred').addEventListener('click', (ev) => {
-  singleInferredVisible = !singleInferredVisible;
-  ev.currentTarget.classList.toggle('on', singleInferredVisible);
-  document.querySelectorAll('#diagram-container .node.inferred-node').forEach(n => n.classList.toggle('hidden-inferred', !singleInferredVisible));
-  trackGA('toggle_inferred_single', { visible: singleInferredVisible });
-  drawSingleEdges();
-});
+const toggleInf = document.getElementById('toggle-inferred');
+if(toggleInf){
+  toggleInf.addEventListener('click', (ev) => {
+    singleInferredVisible = !singleInferredVisible;
+    ev.currentTarget.classList.toggle('on', singleInferredVisible);
+    const warnEl = document.getElementById('single-inferred-warning');
+    if(warnEl){
+      warnEl.style.display = singleInferredVisible ? 'inline-flex' : 'none';
+    }
+    document.querySelectorAll('#diagram-container .node.inferred-node').forEach(n => n.classList.toggle('hidden-inferred', !singleInferredVisible));
+    trackGA('toggle_inferred_single', { visible: singleInferredVisible });
+    drawSingleEdges();
+  });
+}
 
 /* ==================== 抽屉详情 ==================== */
 
