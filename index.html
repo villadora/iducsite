@@ -684,9 +684,9 @@
           <input type="number" id="ov-min-degree" min="1" max="50" value="5" step="1">
           <span class="unit">条</span>
         </div>
-        <div class="ctrl-field" title="过滤已知市值低于该阈值的企业，默认最低为 80 亿元，筛选核心骨干企业 (设为 0 表示不限市值)">
+        <div class="ctrl-field" title="过滤已知市值低于该阈值的企业，默认最低为 100 亿元，筛选百亿级核心骨干龙头企业 (设为 0 表示不限市值)">
           <label for="ov-min-mc">最低市值</label>
-          <input type="number" id="ov-min-mc" min="0" max="10000" value="80" step="10">
+          <input type="number" id="ov-min-mc" min="0" max="10000" value="100" step="10">
           <span class="unit">亿元</span>
         </div>
         <div class="ctrl-field" title="过滤连线上直接有明确占比且占比低于该阈值的连线，默认最低为 10%，设为 0% 表示不限占比">
@@ -1333,7 +1333,7 @@ function getCompanyScaleProfile(name, code, isSubject){
 }
 
 let ovMinDegree = 5;
-let ovMinMarketCap = 80.0;
+let ovMinMarketCap = 100.0;
 let ovMinShare = 10.0;
 let currentOverviewFocus = null;
 
