@@ -1414,7 +1414,7 @@ async function buildGlobalNetwork(forceRefresh = false){
           const deg = (n.degree !== undefined && n.degree !== null) ? n.degree : 0;
           if(deg < ovMinDegree) return false;
           const mc = (n.market_cap_cny !== null && n.market_cap_cny !== undefined) ? n.market_cap_cny : null;
-          if(ovMinMarketCap > 0 && (mc === null || mc < ovMinMarketCap)) return false;
+          if(ovMinMarketCap > 0 && mc !== null && mc < ovMinMarketCap) return false;
           return true;
         });
         const validIdSet = new Set(filteredNodes.map(n => n.id));
@@ -1955,9 +1955,35 @@ function initNetworkInteractions(){
         drawNetworkSVG();
         return;
       }
-      const match = netGraph.nodes.find(n => n.name.toLowerCase().includes(q) || n.code.toLowerCase().includes(q));
+      let match = netGraph.nodes.find(n => (n.name && n.name.toLowerCase().includes(q)) || (n.code && n.code.toLowerCase().includes(q)));
       if(match){
         focusNode(match);
+        return;
+      }
+
+      // 若当前画布筛选未命中，检索全量原始底表节点，并自适应调整筛选阈值
+      const rawNodes = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.nodes) || [];
+      const rawMatch = rawNodes.find(n => (n.name && n.name.toLowerCase().includes(q)) || (n.code && n.code.toLowerCase().includes(q)));
+      if(rawMatch){
+        let needRefresh = false;
+        const degInput = document.getElementById('ov-min-degree');
+        const mcInput = document.getElementById('ov-min-mc');
+        if(degInput && rawMatch.degree !== undefined && Number(degInput.value) > rawMatch.degree){
+          degInput.value = Math.max(1, rawMatch.degree);
+          ovMinDegree = Number(degInput.value);
+          needRefresh = true;
+        }
+        if(mcInput && rawMatch.market_cap_cny !== null && rawMatch.market_cap_cny !== undefined && Number(mcInput.value) > rawMatch.market_cap_cny){
+          mcInput.value = 0;
+          ovMinMarketCap = 0;
+          needRefresh = true;
+        }
+        if(needRefresh){
+          renderOverview(false).then(() => {
+            const reMatch = netGraph.nodes.find(n => n.id === rawMatch.id);
+            if(reMatch) focusNode(reMatch);
+          });
+        }
       }
     });
 
@@ -2028,6 +2054,7 @@ function focusNode(node){
   netGraph.transform.x = (netGraph.width / 2) - node.x * netGraph.transform.k;
   netGraph.transform.y = (netGraph.height / 2) - node.y * netGraph.transform.k;
   drawNetworkSVG();
+  openDrawer(node.code || node.name, node.role, node);
 }
 
 function showNetworkTooltip(node, ev){
