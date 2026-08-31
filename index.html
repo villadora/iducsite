@@ -699,6 +699,11 @@
           <input type="text" id="net-search-input" class="net-search-input" placeholder="搜索图谱中任意企业...">
         </div>
         <button class="btn-ctrl" id="net-btn-reset" title="重置缩放与视角">🔄 视角居中</button>
+        <div class="ctrl-field" title="限制全图展示的最大公司数量（在静态阈值筛选后，按关联度与市值综合权重排序展示前 N 只股票），默认展示综合 TOP 500，设为 0 表示不限制">
+          <label for="ov-max-nodes">展示数量</label>
+          <input type="number" id="ov-max-nodes" min="0" max="5000" value="500" step="50">
+          <span class="unit">家</span>
+        </div>
         <div class="ctrl-field" title="过滤连接数(度数)低于该阈值的边缘节点，默认最低为 5 条，可自由调整">
           <label for="ov-min-degree">最低度数</label>
           <input type="number" id="ov-min-degree" min="1" max="50" value="5" step="1">
@@ -1354,6 +1359,7 @@ function getCompanyScaleProfile(name, code, isSubject){
 let ovMinDegree = 5;
 let ovMinMarketCap = 100.0;
 let ovMinShare = 10.0;
+let ovMaxNodes = 500;
 let currentOverviewFocus = null;
 
 function updateOverviewStatsUI(){
@@ -1381,8 +1387,9 @@ function updateOverviewStatsUI(){
       }
     } else {
       const shareFilterTxt = ovMinShare > 0 ? ` · 权重≥${ovMinShare}%` : '';
+      const limitTxt = ovMaxNodes > 0 ? ` · 综合TOP ${ovMaxNodes}` : ' · 数量不限';
       if(count > 0){
-        hudNodes.innerHTML = `当前展示公司总数：<strong style="color:var(--company); font-size:13px;">${count.toLocaleString()}</strong> 家 (度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'}${shareFilterTxt})`;
+        hudNodes.innerHTML = `当前展示公司总数：<strong style="color:var(--company); font-size:13px;">${count.toLocaleString()}</strong> 家 (${limitTxt.slice(3)} · 度数≥${ovMinDegree}${ovMinMarketCap > 0 ? ` · 市值≥${ovMinMarketCap}亿` : ' · 市值不限'}${shareFilterTxt})`;
       } else {
         hudNodes.innerHTML = `当前展示公司总数：<strong style="color:var(--company); font-size:13px;">0</strong> 家 (无匹配企业)`;
       }
@@ -1404,9 +1411,11 @@ async function buildGlobalNetwork(forceRefresh = false){
     const degInput = document.getElementById('ov-min-degree');
     const mcInput = document.getElementById('ov-min-mc');
     const shareInput = document.getElementById('ov-min-share');
+    const maxNodesInput = document.getElementById('ov-max-nodes');
     if(degInput) ovMinDegree = Math.max(1, parseInt(degInput.value, 10) || 5);
     if(mcInput) ovMinMarketCap = Math.max(0, parseFloat(mcInput.value) || 0);
     if(shareInput) ovMinShare = Math.max(0, parseFloat(shareInput.value) || 0);
+    if(maxNodesInput) ovMaxNodes = Math.max(0, parseInt(maxNodesInput.value, 10) || 0);
 
     let data;
     if(IS_STATIC_MODE){
@@ -1422,13 +1431,25 @@ async function buildGlobalNetwork(forceRefresh = false){
       const rawLinks = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.links) || [];
       const rawComms = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.macro_communities) || [];
 
-      const filteredNodes = rawNodes.filter(n => {
+      // 1. 静态阈值过滤：度数与市值
+      let filteredNodes = rawNodes.filter(n => {
         const deg = (n.degree !== undefined && n.degree !== null) ? n.degree : 0;
         if(deg < ovMinDegree) return false;
         const mc = (n.market_cap_cny !== null && n.market_cap_cny !== undefined) ? n.market_cap_cny : null;
         if(ovMinMarketCap > 0 && (mc === null || mc < ovMinMarketCap)) return false;
         return true;
       });
+
+      // 2. 静态阈值筛选后，按关联度(度数)与市值综合排序截取 TOP N (默认 500)
+      if(ovMaxNodes > 0 && filteredNodes.length > ovMaxNodes){
+        filteredNodes.forEach(n => {
+          const deg = (n.degree !== undefined && n.degree !== null) ? n.degree : 0;
+          const mc = (n.market_cap_cny !== null && n.market_cap_cny !== undefined) ? Math.max(0, n.market_cap_cny) : 0;
+          n._composite_score = Math.log(deg + 1) * 2.0 + Math.log(mc + 1) * 1.0;
+        });
+        filteredNodes.sort((a, b) => b._composite_score - a._composite_score);
+        filteredNodes = filteredNodes.slice(0, ovMaxNodes);
+      }
 
       const validIdSet = new Set(filteredNodes.map(n => n.id));
       const filteredLinks = rawLinks.filter(l => {
@@ -1447,7 +1468,7 @@ async function buildGlobalNetwork(forceRefresh = false){
       };
     } else {
       const incIso = false;
-      const url = `/api/v1/graph/network-data?min_degree=${ovMinDegree}&min_market_cap=${ovMinMarketCap}&min_link_share=${ovMinShare}&include_isolated=${incIso}&refresh=${forceRefresh}`;
+      const url = `/api/v1/graph/network-data?min_degree=${ovMinDegree}&min_market_cap=${ovMinMarketCap}&min_link_share=${ovMinShare}&max_nodes=${ovMaxNodes}&include_isolated=${incIso}&refresh=${forceRefresh}`;
       try {
         const resp = await fetch(url);
         data = resp.ok ? await resp.json() : null;
@@ -1467,13 +1488,24 @@ async function buildGlobalNetwork(forceRefresh = false){
         const rawLinks = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.links) || [];
         const rawComms = (STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.macro_communities) || [];
 
-        const filteredNodes = rawNodes.filter(n => {
+        let filteredNodes = rawNodes.filter(n => {
           const deg = (n.degree !== undefined && n.degree !== null) ? n.degree : 0;
           if(deg < ovMinDegree) return false;
           const mc = (n.market_cap_cny !== null && n.market_cap_cny !== undefined) ? n.market_cap_cny : null;
           if(ovMinMarketCap > 0 && mc !== null && mc < ovMinMarketCap) return false;
           return true;
         });
+
+        if(ovMaxNodes > 0 && filteredNodes.length > ovMaxNodes){
+          filteredNodes.forEach(n => {
+            const deg = (n.degree !== undefined && n.degree !== null) ? n.degree : 0;
+            const mc = (n.market_cap_cny !== null && n.market_cap_cny !== undefined) ? Math.max(0, n.market_cap_cny) : 0;
+            n._composite_score = Math.log(deg + 1) * 2.0 + Math.log(mc + 1) * 1.0;
+          });
+          filteredNodes.sort((a, b) => b._composite_score - a._composite_score);
+          filteredNodes = filteredNodes.slice(0, ovMaxNodes);
+        }
+
         const validIdSet = new Set(filteredNodes.map(n => n.id));
         const filteredLinks = rawLinks.filter(l => {
           if(!validIdSet.has(l.source) || !validIdSet.has(l.target)) return false;
@@ -2190,7 +2222,8 @@ function initNetworkInteractions(){
     });
   }
 
-  // 动态筛选：最低度数、最低市值与最低连线权重实时响应
+  // 动态筛选：展示数量、最低度数、最低市值与最低连线权重实时响应
+  const maxNodesInput = document.getElementById('ov-max-nodes');
   const degInput = document.getElementById('ov-min-degree');
   const mcInput = document.getElementById('ov-min-mc');
   const shareInput = document.getElementById('ov-min-share');
@@ -2203,6 +2236,7 @@ function initNetworkInteractions(){
     filterDebounce = setTimeout(async () => {
       currentOverviewFocus = null; // 调整全局筛选时退出单标的聚焦模式
       trackGA('overview_filter_change', {
+        max_nodes: ovMaxNodes,
         min_degree: ovMinDegree,
         min_market_cap: ovMinMarketCap,
         min_share: ovMinShare
@@ -2210,6 +2244,11 @@ function initNetworkInteractions(){
       await renderOverview(false);
     }, 120);
   };
+
+  if(maxNodesInput){
+    maxNodesInput.addEventListener('input', onFilterParamChange);
+    maxNodesInput.addEventListener('change', onFilterParamChange);
+  }
 
   if(degInput){
     degInput.addEventListener('input', onFilterParamChange);
