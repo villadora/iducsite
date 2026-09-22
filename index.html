@@ -688,18 +688,11 @@
             <span>导出数据集 (JSON 格式)</span>
             <span style="font-size:9.5px; opacity:0.6; font-family:var(--font-mono);">JSON Export</span>
           </div>
-          <button class="download-item" id="dl-current-company" type="button">
+          <button class="download-item" id="dl-current-company" type="button" style="display:none;">
             <span class="dl-icon">🏢</span>
             <div class="dl-info">
               <div class="dl-title">当前公司产业链数据 (JSON)</div>
               <div class="dl-desc" id="dl-cur-desc">导出当前选中公司的上下游供应商、客户、产品及关联明细</div>
-            </div>
-          </button>
-          <button class="download-item" id="dl-network-graph" type="button">
-            <span class="dl-icon">🌐</span>
-            <div class="dl-info">
-              <div class="dl-title">全图网络拓扑与产业集群 (JSON)</div>
-              <div class="dl-desc">导出全网节点坐标、供需直连边与 Leiden 产业集群划分</div>
             </div>
           </button>
           <button class="download-item" id="dl-full-knowledge-base" type="button">
@@ -904,8 +897,8 @@
 
 <script>
 window.__STATIC_EXPORT__ = true;
-window.__BUILD_VERSION__ = "1790041735";
-window.__BUILD_TIME_ISO__ = "2026-09-22T01:48:55Z";
+window.__BUILD_VERSION__ = "1790082038";
+window.__BUILD_TIME_ISO__ = "2026-09-22T13:00:38Z";
 
 function staticUrl(url){
   const v = window.__BUILD_VERSION__;
@@ -3107,32 +3100,6 @@ async function downloadCurrentCompanyJson(){
   downloadJson(center, filename);
 }
 
-async function downloadNetworkGraphJson(){
-  if(STATIC_RAW_NETWORK_DATA && STATIC_RAW_NETWORK_DATA.nodes && STATIC_RAW_NETWORK_DATA.nodes.length > 0){
-    downloadJson(STATIC_RAW_NETWORK_DATA, '产业链全景网络拓扑与宏观集群.json');
-    return;
-  }
-  try {
-    const resp = await fetch(staticUrl('./data/network-data.json'), { cache: 'no-cache' });
-    if(resp.ok){
-      const data = await resp.json();
-      downloadJson(data, '产业链全景网络拓扑与宏观集群.json');
-      return;
-    }
-  } catch(e){}
-
-  try {
-    const resp2 = await fetch('/api/v1/graph/network-data?min_degree=1&min_market_cap=0&min_link_share=0&include_isolated=true');
-    if(resp2.ok){
-      const data2 = await resp2.json();
-      downloadJson(data2, '产业链全景网络拓扑与宏观集群.json');
-      return;
-    }
-  } catch(e){}
-
-  alert('获取网络拓扑数据失败');
-}
-
 async function downloadFullKnowledgeBaseJson(){
   if(COMPANIES && Object.keys(COMPANIES).length > 200){
     downloadJson(COMPANIES, '全量产业链知识图谱库.json');
@@ -3168,7 +3135,6 @@ function initDownloadHandlers(){
   const dlBtn = document.getElementById('btn-download-main');
   const dlMenu = document.getElementById('download-menu');
   const dlCurBtn = document.getElementById('dl-current-company');
-  const dlNetBtn = document.getElementById('dl-network-graph');
   const dlFullBtn = document.getElementById('dl-full-knowledge-base');
   const drawerDlBtn = document.getElementById('drawer-btn-download');
 
@@ -3177,10 +3143,16 @@ function initDownloadHandlers(){
     dlBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       dlMenu.classList.toggle('open');
-      const cur = getCurrentCenter();
-      const descEl = document.getElementById('dl-cur-desc');
-      if(descEl && cur && cur.name){
-        descEl.textContent = `导出【${cur.name}${cur.code ? ` (${cur.code})` : ''}】上下游全链条数据`;
+      const isSingleTab = document.getElementById('view-single') && document.getElementById('view-single').classList.contains('active');
+      if(dlCurBtn){
+        dlCurBtn.style.display = isSingleTab ? 'flex' : 'none';
+      }
+      if(isSingleTab){
+        const cur = getCurrentCenter();
+        const descEl = document.getElementById('dl-cur-desc');
+        if(descEl && cur && cur.name){
+          descEl.textContent = `导出【${cur.name}${cur.code ? ` (${cur.code})` : ''}】上下游全链条数据`;
+        }
       }
       const fullDescEl = document.getElementById('dl-full-desc');
       if(fullDescEl){
@@ -3201,14 +3173,6 @@ function initDownloadHandlers(){
     dlCurBtn.addEventListener('click', () => {
       if(dlMenu) dlMenu.classList.remove('open');
       downloadCurrentCompanyJson();
-    });
-  }
-
-  if(dlNetBtn && !dlNetBtn.__boundDownload){
-    dlNetBtn.__boundDownload = true;
-    dlNetBtn.addEventListener('click', () => {
-      if(dlMenu) dlMenu.classList.remove('open');
-      downloadNetworkGraphJson();
     });
   }
 
@@ -3263,6 +3227,12 @@ function switchView(viewName){
   const compWrap = document.getElementById('company-selector-wrap');
   if(compWrap){
     compWrap.style.display = (viewName === 'overview') ? 'none' : 'flex';
+  }
+
+  // 控制数据下载下拉菜单中“当前公司产业链数据”的显隐：只有在单公司视图 (single) 才展示
+  const dlCurBtn = document.getElementById('dl-current-company');
+  if(dlCurBtn){
+    dlCurBtn.style.display = (viewName === 'single') ? 'flex' : 'none';
   }
 
   requestAnimationFrame(() => {
