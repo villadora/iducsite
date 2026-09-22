@@ -706,7 +706,7 @@
             <span class="dl-icon">📚</span>
             <div class="dl-info">
               <div class="dl-title">全量研报知识图谱库 (JSON)</div>
-              <div class="dl-desc">导出全网 1680+ 家公司结构化产业链完整知识库</div>
+              <div class="dl-desc" id="dl-full-desc">导出全网 4,900+ 家公司结构化产业链完整知识库</div>
             </div>
           </button>
         </div>
@@ -1189,6 +1189,11 @@ function renderStats(data){
     <div class="stat"><div class="n">${Number(totalItems).toLocaleString()}</div><div class="l">核心产品与物料</div></div>
     <div class="stat"><div class="n">${Number(totalDirect).toLocaleString()}</div><div class="l">产业链供需链路</div></div>
   `;
+
+  const fullDescEl = document.getElementById('dl-full-desc');
+  if(fullDescEl && totalComps){
+    fullDescEl.textContent = `导出全网 ${Number(totalComps).toLocaleString()} 家公司结构化产业链完整知识库`;
+  }
 }
 
 let ALL_COMPANIES_LIST = [];
@@ -3176,6 +3181,11 @@ function initDownloadHandlers(){
       const descEl = document.getElementById('dl-cur-desc');
       if(descEl && cur && cur.name){
         descEl.textContent = `导出【${cur.name}${cur.code ? ` (${cur.code})` : ''}】上下游全链条数据`;
+      }
+      const fullDescEl = document.getElementById('dl-full-desc');
+      if(fullDescEl){
+        const count = (ALL_COMPANIES_LIST && ALL_COMPANIES_LIST.length) || (COMPANIES ? (Array.isArray(COMPANIES) ? COMPANIES.length : Object.keys(COMPANIES).length) : 0) || 4918;
+        fullDescEl.textContent = `导出全网 ${Number(count).toLocaleString()} 家公司结构化产业链完整知识库`;
       }
     });
 
