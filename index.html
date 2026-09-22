@@ -114,6 +114,22 @@
   .stat .n{font-family:var(--font-mono); font-size:19px; font-weight:700; color:var(--ink); line-height:1;}
   .stat .l{font-size:11px; color:var(--sub-2); margin-top:5px;}
 
+  .build-stamp{
+    align-self:flex-start;
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:8px 12px; display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-mono); font-size:11px; color:var(--sub-2);
+    white-space:nowrap;
+  }
+  .build-stamp .dot{
+    width:7px; height:7px; border-radius:50%; background:var(--accent, #5f8cff);
+    box-shadow:0 0 0 3px rgba(95,140,255,0.18);
+    animation: pulse-dot 2.4s ease-in-out infinite;
+  }
+  .build-stamp .lbl{color:var(--sub);}
+  .build-stamp .val{color:var(--ink); font-weight:600;}
+  @keyframes pulse-dot{ 0%,100%{opacity:1;} 50%{opacity:.45;} }
+
   .header-actions{
     display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;
     gap:16px; margin-bottom:16px;
@@ -265,8 +281,19 @@
     background:var(--panel-2); border:1px solid var(--line); border-radius:8px;
     color:var(--sub); font-family:inherit; font-size:12px; padding:6px 12px;
     cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:6px;
+    text-decoration:none;
   }
   .btn-ctrl:hover{color:var(--ink); border-color:var(--sub-2); background:var(--line-soft);}
+  .btn-github{
+    color:var(--ink); font-weight:500; text-decoration:none;
+  }
+  .btn-github:hover{
+    color:#FFFFFF; border-color:var(--sub-2); background:rgba(255,255,255,0.06);
+    box-shadow:0 0 12px rgba(255,255,255,0.08);
+  }
+  .btn-github svg{
+    display:block; flex-shrink:0; fill:currentColor;
+  }
 
   .ov-stats-pill{
     display:inline-flex; align-items:center; gap:5px;
@@ -621,6 +648,14 @@
     <div class="stats" id="stats"></div>
   </header>
 
+  <div class="build-stamp-wrap" id="build-stamp-wrap" style="display:flex; justify-content:flex-end; margin:-8px 0 14px;">
+    <div class="build-stamp" id="build-stamp" title="数据快照生成时间（站点每次重新导出时自动刷新）">
+      <span class="dot"></span>
+      <span class="lbl">数据更新于</span>
+      <span class="val" id="build-stamp-val">—</span>
+    </div>
+  </div>
+
   <div class="header-actions">
     <div class="tabs" id="tabs">
       <button class="tab active" data-view="overview"><span class="tab-num">01</span>全图概览</button>
@@ -676,6 +711,14 @@
           </button>
         </div>
       </div>
+
+      <!-- GitHub 源代码仓库链接 -->
+      <a href="https://github.com/villadora/iduxgraph" target="_blank" rel="noopener noreferrer" class="btn-ctrl btn-github" id="btn-github-link" title="在 GitHub 上查看源代码与项目主页">
+        <svg height="15" width="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        <span>GitHub</span>
+      </a>
     </div>
   </div>
 
@@ -837,7 +880,10 @@
 
   <footer>
     <p>数据源自各上市公司研报与财报自动化抽取，结合产业链实体对齐与 Neo4j 知识图谱图内推断。💡 单击企业卡片查看档案，双击核心公司卡片可直接切换分析中心。⚠️ 大模型与自动化数据整理可能存在幻觉与提取偏差，图谱内容仅供产业链与学术研究参考，不构成任何投资建议，请结合原始公告进行 Double Check 核验。</p>
-    <span class="badge">IDUXGRAPH · LIVE GRAPH DATA</span>
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+      <span class="badge" id="footer-build-stamp" data-empty="true">BUILD —</span>
+      <span class="badge">IDUXGRAPH · LIVE GRAPH DATA</span>
+    </div>
   </footer>
 
 </div>
@@ -858,6 +904,39 @@
 
 <script>
 window.__STATIC_EXPORT__ = true;
+window.__BUILD_VERSION__ = "1789996779";
+window.__BUILD_TIME_ISO__ = "2026-09-21T13:19:39Z";
+
+function staticUrl(url){
+  const v = window.__BUILD_VERSION__;
+  if(!v) return url;
+  const sep = url.includes('?') ? '&' : '?';
+  return `${url}${sep}v=${encodeURIComponent(v)}`;
+}
+
+/* ==================== 数据快照更新时间（构建时由 export_site.py 注入） ==================== */
+(function applyBuildTimeStamp(){
+  const iso = window.__BUILD_TIME_ISO__;
+  if(!iso) return;  // 非静态导出模式（动态 API 模式）不渲染
+  const d = new Date(iso);
+  if(!isNaN(d.getTime())){
+    const pad = (n) => String(n).padStart(2, '0');
+    const stamp = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    const headerEl = document.getElementById('build-stamp-val');
+    if(headerEl){
+      headerEl.textContent = stamp;
+      headerEl.setAttribute('datetime', d.toISOString());
+    }
+    const headerWrap = document.getElementById('build-stamp-wrap');
+    if(headerWrap) headerWrap.style.display = '';
+    const footerEl = document.getElementById('footer-build-stamp');
+    if(footerEl){
+      footerEl.textContent = `BUILD ${stamp}`;
+      footerEl.removeAttribute('data-empty');
+      footerEl.setAttribute('datetime', d.toISOString());
+    }
+  }
+})();
 
 /* ==================== Google Analytics 4 远程站点埋点 (本地环境严格禁用) ==================== */
 function trackGA(eventName, params = {}){
@@ -944,23 +1023,115 @@ function resolveCompanyId(rawNameOrCode){
 }
 
 function getCurrentCenter(){
-  return COMPANIES[currentCenterId] || Object.values(COMPANIES)[0] || {
+  if (COMPANIES && currentCenterId) {
+    if (COMPANIES[currentCenterId]) return COMPANIES[currentCenterId];
+    // 尝试在 ALL_COMPANIES_LIST 中按 code、name 或 file_code 匹配查找
+    const cMeta = (ALL_COMPANIES_LIST || []).find(c => c.code === currentCenterId || c.name === currentCenterId || c.file_code === currentCenterId);
+    if (cMeta) {
+      if (cMeta.code && COMPANIES[cMeta.code]) return COMPANIES[cMeta.code];
+      if (cMeta.name && COMPANIES[cMeta.name]) return COMPANIES[cMeta.name];
+      if (cMeta.file_code && COMPANIES[cMeta.file_code]) return COMPANIES[cMeta.file_code];
+    }
+    // 尝试遍历 COMPANIES 匹配内部 code / name / id
+    for (const k in COMPANIES) {
+      const item = COMPANIES[k];
+      if (item && (item.code === currentCenterId || item.name === currentCenterId || item.id === currentCenterId)) {
+        return item;
+      }
+    }
+    // 若当前指定了公司但无三视图拆解，返回该公司卡片，绝不静默跳转到无关公司
+    if (currentCenterId && currentCenterId !== 'empty') {
+      return {
+        id: currentCenterId,
+        code: (cMeta && cMeta.code) || currentCenterId,
+        name: (cMeta && cMeta.name) || currentCenterId,
+        desc: `${(cMeta && cMeta.name) || currentCenterId} 暂未收录详细上下游拆解数据。`,
+        materials: [],
+        products: []
+      };
+    }
+  }
+  return Object.values(COMPANIES)[0] || {
     id:'empty', name:'暂无数据', code:'', desc:'', materials:[], products:[]
   };
 }
 
+async function loadCompanyViewData(targetId){
+  if(!targetId || targetId === 'empty') return null;
+
+  // 1. 若内存缓存中已包含完整三视图拆解，直接返回 (0ms)
+  if(COMPANIES && COMPANIES[targetId] && COMPANIES[targetId].materials){
+    return COMPANIES[targetId];
+  }
+
+  // 2. 匹配 ALL_COMPANIES_LIST 元信息
+  const cMeta = (ALL_COMPANIES_LIST || []).find(c =>
+    c.code === targetId || c.name === targetId || c.file_code === targetId
+  );
+  if(cMeta){
+    if(cMeta.code && COMPANIES[cMeta.code] && COMPANIES[cMeta.code].materials) return COMPANIES[cMeta.code];
+    if(cMeta.name && COMPANIES[cMeta.name] && COMPANIES[cMeta.name].materials) return COMPANIES[cMeta.name];
+    if(cMeta.file_code && COMPANIES[cMeta.file_code] && COMPANIES[cMeta.file_code].materials) return COMPANIES[cMeta.file_code];
+  }
+
+  // 关键防线：纯静态模式下，只有存在于 ALL_COMPANIES_LIST 中的主体公司才有分片文件
+  // 外部/未上市/海外的客户与供应商（如 NGG、NVDA、苹果、华为等）没有独立分片，直接返回 null，杜绝 404
+  if(IS_STATIC_MODE && !cMeta){
+    return null;
+  }
+
+  const targetCode = (cMeta && cMeta.code) || targetId;
+  const fileName = (cMeta && cMeta.view_file) || `${encodeURIComponent(targetCode)}.json`;
+
+  try {
+    let vdata = null;
+    if(IS_STATIC_MODE){
+      // 静态模式：按需拉取单公司微文件分片（5KB~20KB），首屏无需下载 42MB 大包
+      const resp = await fetch(staticUrl(`./data/company_views/${fileName}`), { cache: 'no-cache' });
+      if(resp.ok){
+        vdata = await resp.json();
+      } else if(cMeta && cMeta.file_code && cMeta.file_code !== targetCode){
+        const altFile = `${encodeURIComponent(cMeta.file_code)}.json`;
+        const resp2 = await fetch(staticUrl(`./data/company_views/${altFile}`), { cache: 'no-cache' });
+        if(resp2.ok) vdata = await resp2.json();
+      }
+    } else {
+      // 动态模式：请求 FastAPI
+      const resp = await fetch('/api/v1/companies/' + encodeURIComponent(targetCode) + '/view-data');
+      if(resp.ok) vdata = await resp.json();
+    }
+
+    if(vdata){
+      // 写入内存多维字典
+      COMPANIES[targetId] = vdata;
+      if(vdata.code) COMPANIES[vdata.code] = vdata;
+      if(vdata.name) COMPANIES[vdata.name] = vdata;
+      if(cMeta){
+        if(cMeta.code) COMPANIES[cMeta.code] = vdata;
+        if(cMeta.file_code) COMPANIES[cMeta.file_code] = vdata;
+        if(cMeta.name) COMPANIES[cMeta.name] = vdata;
+      }
+      return vdata;
+    }
+  } catch(e){
+    console.warn('Failed to load company view shard for:', targetId, e);
+  }
+
+  return null;
+}
+
 async function loadGraphData(){
   try {
-    let statsRes = null, compList = [], mcData = {}, allViewData = null;
+    let statsRes = null, compList = [], mcData = {};
 
     if (IS_STATIC_MODE) {
-      const [sRes, cList, mData, vData] = await Promise.all([
-        fetch('./data/stats.json').then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch('./data/companies.json').then(r => r.ok ? r.json() : []).catch(() => []),
-        fetch('./data/market-caps.json').then(r => r.ok ? r.json() : {}).catch(() => ({})),
-        fetch('./data/view-data-all.json').then(r => r.ok ? r.json() : null).catch(() => null)
+      // 首屏仅加载轻量元信息（总载荷 ~400KB），彻底消除 42MB 同步下载瓶颈
+      const [sRes, cList, mData] = await Promise.all([
+        fetch(staticUrl('./data/stats.json'), { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(staticUrl('./data/companies.json'), { cache: 'no-cache' }).then(r => r.ok ? r.json() : []).catch(() => []),
+        fetch(staticUrl('./data/market-caps.json'), { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}))
       ]);
-      statsRes = sRes; compList = cList || []; mcData = mData || {}; allViewData = vData;
+      statsRes = sRes; compList = cList || []; mcData = mData || {};
     } else {
       try {
         const [sRes, cList, mData] = await Promise.all([
@@ -972,22 +1143,13 @@ async function loadGraphData(){
       } catch(e) {}
 
       if (!statsRes && (!compList || compList.length === 0)) {
-        const [sRes, cList, mData, vData] = await Promise.all([
-          fetch('./data/stats.json').then(r => r.ok ? r.json() : null).catch(() => null),
-          fetch('./data/companies.json').then(r => r.ok ? r.json() : []).catch(() => []),
-          fetch('./data/market-caps.json').then(r => r.ok ? r.json() : {}).catch(() => ({})),
-          fetch('./data/view-data-all.json').then(r => r.ok ? r.json() : null).catch(() => null)
+        const [sRes, cList, mData] = await Promise.all([
+          fetch(staticUrl('./data/stats.json'), { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null),
+          fetch(staticUrl('./data/companies.json'), { cache: 'no-cache' }).then(r => r.ok ? r.json() : []).catch(() => []),
+          fetch(staticUrl('./data/market-caps.json'), { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}))
         ]);
-        statsRes = sRes; compList = cList || []; mcData = mData || {}; allViewData = vData;
+        statsRes = sRes; compList = cList || []; mcData = mData || {};
       }
-    }
-
-    if(allViewData && allViewData.companies) {
-      COMPANIES = allViewData.companies;
-    } else if(!IS_STATIC_MODE) {
-      fetch('/api/v1/graph/view-data/all').then(r => r.ok ? r.json() : null).then(d => {
-        if(d && d.companies) COMPANIES = d.companies;
-      }).catch(() => {});
     }
 
     if(statsRes) renderStats(statsRes);
@@ -997,7 +1159,9 @@ async function loadGraphData(){
     initDownloadHandlers();
 
     const hash = window.location.hash.replace('#', '').trim();
-    if(hash && compList.find(c => c.code === hash || c.name === hash)){
+    if(hash && compList.find(c => c.code === hash || c.name === hash || c.file_code === hash)){
+      currentCenterId = hash;
+    } else if(hash && COMPANIES && (COMPANIES[hash] || Object.values(COMPANIES).some(c => c.code === hash || c.name === hash))){
       currentCenterId = hash;
     } else if(compList.length > 0){
       currentCenterId = compList[0].code || compList[0].name;
@@ -1219,13 +1383,8 @@ async function switchCenterCompany(code, triggerSource = 'unknown'){
     current_tab: (document.querySelector('.tab.active') || {}).dataset?.view || 'unknown'
   });
 
-  // 若内存中尚未缓存该公司的详细图谱，按需从 API 获取 (动态模式)
-  if(!COMPANIES[code] && !IS_STATIC_MODE){
-    try {
-      const vdata = await fetch('/api/v1/companies/' + encodeURIComponent(code) + '/view-data').then(r => r.ok ? r.json() : null);
-      if(vdata) COMPANIES[code] = vdata;
-    } catch(e){}
-  }
+  // 统一异步按需拉取公司分片数据（纯静态按需微文件 / 动态 API 服务通用，毫秒级响应并持久化内存）
+  await loadCompanyViewData(code);
 
   // 重新渲染当前活动的视图
   const activeTab = document.querySelector('.tab.active').dataset.view;
@@ -1421,7 +1580,7 @@ async function buildGlobalNetwork(forceRefresh = false){
     if(IS_STATIC_MODE){
       if(!STATIC_RAW_NETWORK_DATA){
         try {
-          STATIC_RAW_NETWORK_DATA = await fetch('./data/network-data.json').then(r => r.ok ? r.json() : null);
+          STATIC_RAW_NETWORK_DATA = await fetch(staticUrl('./data/network-data.json'), { cache: 'no-cache' }).then(r => r.ok ? r.json() : null);
         } catch(e) {
           STATIC_RAW_NETWORK_DATA = null;
         }
@@ -1479,7 +1638,7 @@ async function buildGlobalNetwork(forceRefresh = false){
       if(!data || !Array.isArray(data.nodes)){
         if(!STATIC_RAW_NETWORK_DATA){
           try {
-            STATIC_RAW_NETWORK_DATA = await fetch('./data/network-data.json').then(r => r.ok ? r.json() : null);
+            STATIC_RAW_NETWORK_DATA = await fetch(staticUrl('./data/network-data.json'), { cache: 'no-cache' }).then(r => r.ok ? r.json() : null);
           } catch(e) {
             STATIC_RAW_NETWORK_DATA = null;
           }
@@ -1756,7 +1915,7 @@ async function renderOverviewForCompany(centerId){
   // 1. 若本地已缓存全量数据，毫秒级直接计算 1 阶自我中心网络
   if(!STATIC_RAW_NETWORK_DATA && IS_STATIC_MODE){
     try {
-      STATIC_RAW_NETWORK_DATA = await fetch('./data/network-data.json').then(r => r.ok ? r.json() : null);
+      STATIC_RAW_NETWORK_DATA = await fetch(staticUrl('./data/network-data.json'), { cache: 'no-cache' }).then(r => r.ok ? r.json() : null);
     } catch(e){}
   }
 
@@ -2949,7 +3108,7 @@ async function downloadNetworkGraphJson(){
     return;
   }
   try {
-    const resp = await fetch('./data/network-data.json');
+    const resp = await fetch(staticUrl('./data/network-data.json'), { cache: 'no-cache' });
     if(resp.ok){
       const data = await resp.json();
       downloadJson(data, '产业链全景网络拓扑与宏观集群.json');
@@ -2975,7 +3134,7 @@ async function downloadFullKnowledgeBaseJson(){
     return;
   }
   try {
-    const resp = await fetch('./data/view-data-all.json');
+    const resp = await fetch(staticUrl('./data/view-data-all.json'), { cache: 'no-cache' });
     if(resp.ok){
       const data = await resp.json();
       downloadJson(data, '全量产业链知识图谱库.json');
@@ -2984,7 +3143,7 @@ async function downloadFullKnowledgeBaseJson(){
   } catch(e){}
 
   try {
-    const resp2 = await fetch('./data/companies.json');
+    const resp2 = await fetch(staticUrl('./data/companies.json'), { cache: 'no-cache' });
     if(resp2.ok){
       const data2 = await resp2.json();
       downloadJson(data2, '产业链核心企业名录.json');
@@ -3061,6 +3220,14 @@ function initDownloadHandlers(){
       const ent = currentDrawerEntity;
       const filename = `${ent.name || ent.id || '实体'}_${ent.kind || '明细'}_数据.json`;
       downloadJson(ent.data || ent, filename);
+    });
+  }
+
+  const ghLink = document.getElementById('btn-github-link');
+  if(ghLink && !ghLink.__boundClick){
+    ghLink.__boundClick = true;
+    ghLink.addEventListener('click', () => {
+      trackGA('github_click', { url: ghLink.href });
     });
   }
 }
