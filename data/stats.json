@@ -1,8 +1,8 @@
 {
-  "total_nodes": 25520,
-  "total_edges": 61805,
-  "companies": 5068,
-  "items": 122091,
-  "relationships": 139909,
-  "macro_communities": 20010
+  "total_nodes": 37914,
+  "total_edges": 84198,
+  "companies": 5437,
+  "items": 174017,
+  "relationships": 193950,
+  "macro_communities": 28209
 }
